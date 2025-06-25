@@ -1,0 +1,45 @@
+@use "sass:color";
+
+@import "../_def";
+@import "./main/header";
+@import "./main/userLogin";
+@import "./main/userRegister";
+@import "./main/musicSearch";
+@import "./main/musicRegister";
+@import "./main/userMusicRegister";
+@import "./main/player";
+@import "./main/menu";
+
+#main {
+  @include flex(column, stretch, flex-start);
+  width: 25rem;
+  backdrop-filter: blur(0.5rem);
+  background-color: color.adjust($global-color-background, $alpha: -0.125);
+  color: $global-color-text;
+
+   > .content {
+     @include flex(column, stretch, flex-start, .875rem);
+     display: none;
+     flex-grow: 1;
+     flex-shrink: 1;
+     padding: 0 3rem 1.5rem 3rem;
+
+     &[data-mt-visible] {
+       display: flex;
+     }
+
+     > .title {
+       font-size: 1.5rem;
+       font-weight: 400;
+       margin-bottom: 0.5rem;
+     }
+   }
+}
+
+@media  screen and (max-width: 37.5rem) {
+  #main {
+    width: auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+}

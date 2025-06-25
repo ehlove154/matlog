@@ -1,0 +1,53 @@
+@use "sass:color";
+@import "../../_def";
+
+[data-mt-object="button"] {
+  @mixin effect($background-color, $factor) {
+    background-color: $background-color;
+
+    &:hover {
+      background-color: color.adjust($background-color, $lightness: $factor);
+    }
+
+    &:active {
+      background-color: color.adjust($background-color, $lightness: $factor * 2);
+    }
+
+    border-radius: 0.5rem;
+  }
+
+  @include  flex(row, center, center, 0.5rem);
+  cursor: pointer;
+  padding: 0.625rem 0.75rem;
+  transition-duration: 175ms;
+  transition-property: background-color;
+  transition-timing-function: ease;
+
+  &[data-mt-color="green"] {
+    @include effect(#178f77, -2.5%);
+    color: #fafafa;
+  }
+
+  &[data-mt-color="gray"] {
+    @include effect(#707b7c, -2.5%);
+    color: #fafafa;
+  }
+
+  &[data-mt-color="red"] {
+    @include effect(#e74c3c, -2.5%);
+    color: #fafafa;
+  }
+
+  &[data-mt-color="simple"] {
+    background-color: transparent;
+    border: 0.0625rem solid $global-color-border-lighten-20;
+    border-radius: 999rem;
+    font-size: 0.875rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+    &:hover {
+      border-color: $global-color-border-lighten-30;
+    }
+  }
+}

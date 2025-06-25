@@ -1,0 +1,39 @@
+@use "sass:color";
+@import "../../_def";
+
+[data-mt-object="field"] {
+  border-radius: 0.5rem;
+  background-color: color.adjust($global-color-background, $alpha: -0.25);
+  border: 0.0625rem solid $global-color-border;
+  color: $global-color-text-darken-20;
+  padding: 0.5rem 0.75rem;
+  transition-duration: 175ms;
+  transition-property: color, border-color;
+  transition-timing-function: ease;
+
+  &:hover {
+    border-color: $global-color-border-hover;
+    color: $global-color-text-darken-10;
+  }
+
+  &:focus {
+    border-color: $global-color-border-focus;
+    color: $global-color-text;
+  }
+
+  &[data-mt-color="simple"] {
+    background-color: transparent;
+    border-radius: 0;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    padding-left: 0;
+    padding-right: 0;
+    border-bottom-color: $global-color-border-lighten-20;
+
+    &:hover,
+    &:focus {
+      border-bottom-color: $global-color-border-lighten-30;
+    }
+  }
+}

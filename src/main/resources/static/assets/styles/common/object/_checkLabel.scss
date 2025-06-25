@@ -1,0 +1,26 @@
+@use "sass:color";
+
+@import "../../_def";
+
+[data-mt-object="checkLabel"] {
+  @include flex(row, center, flex-start, 0.5rem);
+  cursor: pointer;
+
+  > [data-mt-component~="checkLabel.input"] {
+    display: none;
+
+    &:checked ~ [data-mt-component="checkLabel.box"] {
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAeUlEQVR4nO2SQQrAIAwE/USlfaI+tx4ECez+xOKhFxGxmNIenLNOyGaNWSyeICIWgHtTHkhmAF5VnlLaAJxFTjIC2Jfc/DcWAK40YrAtofe2Jfe9jzIjb61O8lDPvDUkaR+0jgIzsQxuktWrWA2J6vIbEbFqsSw+4QLCyxLD1g0mAQAAAABJRU5ErkJggg==");
+      border-color: $global-color-border-lighten-30;
+    }
+  }
+
+  > [data-mt-component~="checkLabel.box"] {
+    @include fixedSize(1.125rem);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 75%;
+    border: 0.0625rem solid $global-color-border-lighten-10;
+    border-radius: 0.25rem;
+  }
+}
