@@ -13,7 +13,9 @@ import com.yjb.jiujitsumembership.results.ResultTuple;
 import com.yjb.jiujitsumembership.results.user.LoginResult;
 import com.yjb.jiujitsumembership.results.user.RegisterResult;
 import com.yjb.jiujitsumembership.utils.CryptoUtils;
+import com.yjb.jiujitsumembership.vos.PageVo;
 import com.yjb.jiujitsumembership.vos.UserListVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,6 +30,7 @@ public class UserService {
     private final GymMapper gymMapper;
     private final PromotionHistoryService promotionHistoryService;
 
+    @Autowired
     public UserService(UserMapper userMapper, GymMapper gymMapper, PromotionHistoryService promotionHistoryService) {
         this.userMapper = userMapper;
         this.gymMapper = gymMapper;
@@ -302,56 +305,6 @@ public class UserService {
                 .build();
     }
 
-
-//    public ResultTuple<UserEntity> userInfoModify(String targetEmail, String belt, Integer stripe, LocalDate promotion) {
-//        UserEntity targetUser = this.userMapper.selectByEmail(targetEmail);
-//        if (targetUser == null || targetUser.isDelete() || targetUser.isSuspended()) {
-//            return ResultTuple.<UserEntity>builder().result(CommonResult.FAILURE).build();
-//        }
-//
-//        if (belt == null || belt.isBlank()) {
-//            return ResultTuple.<UserEntity>builder().result(CommonResult.FAILURE).build();
-//        }
-//
-//        if (promotion != null && promotion.isAfter(LocalDate.now())) {
-//            return ResultTuple.<UserEntity>builder().result(CommonResult.FAILURE).build();
-//        }
-//
-//        PromotionHistoryEntity history = new PromotionHistoryEntity();
-//        history.setUserEmail(targetEmail);
-//        history.setBeltCode(belt.trim());
-//        history.setStripeCount(stripe != null ? stripe : 0);
-//        history.setPromotedAt(promotion != null ? promotion : LocalDate.now());
-//
-//        this.userMapper.insertPromotionHistory(history);
-//        this.userMapper.updateUserBeltAndPromotion(targetEmail, belt.trim(), history.getPromotedAt());
-//
-//        return ResultTuple.<UserEntity>builder().result(CommonResult.SUCCESS).build();
-//    }
-
-
-
-//    public ResultTuple<UserEntity> userInfoModify(String email, String belt, int stripe, LocalDate promotionDate) {
-//        UserEntity user = this.userMapper.selectByEmail(email);
-//        if (user == null) {
-//            System.out.println("해당 이메일의 유저가 존재하지 않습니다: " + email);
-//            return ResultTuple.<UserEntity>builder().result(CommonResult.FAILURE).build();
-//        }
-//
-//        System.out.printf("업데이트 전 -> 벨트: %s, 스트라이프: %d, 승급일: %s\n",
-//                user.getBelt(), user.getStripe(), user.getLastPromotionAt());
-//
-//        user.setBelt(belt);
-//        user.setStripe(stripe);
-//        user.setLastPromotionAt(promotionDate);
-//
-//        userMapper.update(user);
-//
-//        System.out.println("업데이트 완료");
-//
-//        return ResultTuple.<UserEntity>builder().result(CommonResult.SUCCESS).build();
-//    }
-
     public ResultTuple<UserEntity> userInfoModify(String targetEmail, String belt, int stripe, LocalDate promotion) {
         UserEntity targetUser = userMapper.selectByEmail(targetEmail);
         if (targetUser == null) {
@@ -373,8 +326,49 @@ public class UserService {
                 .build();
     }
 
+    public Result deleteUser(UserEntity signedUser, String targetEmail) {
+        if (signedUser == null || !"MASTER".equalsIgnoreCase(signedUser.getUserRole())) {
+            System.out.println("deleteUser failure 1");
+            return CommonResult.FAILURE;
+        }
+        if (targetEmail == null || targetEmail.isBlank()) {
+            return CommonResult.FAILURE;
+        }
 
+        UserEntity targetUser = this.userMapper.selectByEmail(targetEmail);
+        if (targetUser == null || targetUser.isDelete()) {
+            return CommonResult.FAILURE;
+        }
 
+        targetUser.setDelete(true);
+        targetUser.setModifiedAt(LocalDateTime.now());
+        int affected = this.userMapper.updateIsDeleted(targetEmail, true);
+        return affected > 0 ? CommonResult.SUCCESS : CommonResult.FAILURE;
+    }
+
+    public PageVo getUserPageVo(String email, int page) {
+        int totalCount = this.userMapper.countForUser(email);
+        return new PageVo(10, page, totalCount);
+    }
+
+    public List<UserListVo> getUsersByPage(String email, PageVo pageVo) {
+        if (pageVo.totalCount == 0) {
+            return List.of();
+        }
+        return this.userMapper.selectForUserPage(email, pageVo.dbOffset, pageVo.rowCount);
+    }
+
+    public PageVo getSearchPageVo(String email, String name, int page) {
+        int totalCount = this.userMapper.countForUserSearch(email, name);
+        return new PageVo(10, page, totalCount);
+    }
+
+    public List<UserListVo> searchUsers(String email, String name, PageVo pageVo) {
+        if (pageVo.totalCount == 0) {
+            return List.of();
+        }
+        return this.userMapper.searchForUserPage(email, name, pageVo.dbOffset, pageVo.rowCount);
+    }
 
     public List<UserEntity> getAllUsersForAdmin() {
         return null;

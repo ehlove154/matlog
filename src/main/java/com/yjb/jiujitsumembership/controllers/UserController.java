@@ -9,6 +9,7 @@ import com.yjb.jiujitsumembership.results.CommonResult;
 import com.yjb.jiujitsumembership.results.Result;
 import com.yjb.jiujitsumembership.results.ResultTuple;
 import com.yjb.jiujitsumembership.services.UserService;
+import com.yjb.jiujitsumembership.vos.PageVo;
 import com.yjb.jiujitsumembership.vos.UserListVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -158,6 +159,8 @@ public class UserController {
     @RequestMapping(value = "/myPage", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String getMyPage(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
                             @SessionAttribute(value = "userDto", required = false) UserDto userDto,
+                            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                            @RequestParam(value = "name", required = false) String name,
                             Model model) {
 
         if (signedUser == null) {
@@ -174,9 +177,19 @@ public class UserController {
         }
         model.addAttribute("gym", gym);
 
-        // 사용자 상세 정보 조회
-        List<UserListVo> userList = this.userMapper.selectForUser(signedUser.getEmail());
-        model.addAttribute("userList", userList != null ? userList : List.of());
+        PageVo pageVo;
+        List<UserListVo> userList;
+        if (name != null && !name.isBlank()) {
+            pageVo = this.userService.getSearchPageVo(signedUser.getEmail(), name, page);
+            userList = this.userService.searchUsers(signedUser.getEmail(), name, pageVo);
+            model.addAttribute("keyword", name);
+        } else {
+            pageVo = this.userService.getUserPageVo(signedUser.getEmail(), page);
+            userList = this.userService.getUsersByPage(signedUser.getEmail(), pageVo);
+        }
+
+        model.addAttribute("userList", userList);
+        model.addAttribute("pageVo", pageVo);
 
         return "user/myPage";
     }

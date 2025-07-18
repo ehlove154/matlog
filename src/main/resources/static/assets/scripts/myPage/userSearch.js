@@ -1,6 +1,6 @@
 // TODO 1. 회원리스트 띄우기 --- 완료
-//  2. 벨트, 승급일 수정 가능하게 --- 미완 (th:value email 값이 ''로 출력 됨)
-//  3. 회원정보 삭제 시 db에는 남아있지만 화면에는 미출력
+//  2. 벨트, 승급일 수정 가능하게 --- 완료
+//  3. 회원정보 삭제 시 db에는 남아있지만 화면에는 미출력 --- 완료
 //  4. 회원권 만료 기간에 따른 버튼 색 변화 (회원권 1주일 남을 시 만료 임박) --- 완료
 //  5. 한페이지 당 최대 10명
 //  6. 회원 이름으로 검색
@@ -134,7 +134,7 @@
                     const $buttonRow = $infoRow.previousElementSibling;
                     if (!$buttonRow) return;
 
-                    const email = $buttonRow.querySelector('[data-mt-name="email"]')?.value?.trim();
+                    const email = $buttonRow.dataset.email?.trim();
                     const index = $buttonRow.dataset.index;
                     if (!email || index === undefined) {
                         dialog.showSimpleOk('회원 정보 수정', '이메일 또는 인덱스 정보가 없습니다.');
@@ -225,11 +225,11 @@
 
                                 const $infoRow = e.target.closest('tr');
                                 const $buttonRow = $infoRow.previousElementSibling;
-                                const email = $buttonRow.querySelector('[data-mt-name="email"]')?.value?.trim();
+                                const email = $buttonRow.dataset.email?.trim();
 
                                 const xhr = new XMLHttpRequest();
                                 const formData = new FormData();
-                                formData.append('email', email); // ✅ 삭제할 유저의 email 필요
+                                formData.append('target', email); // ✅ 삭제할 유저의 email 필요
 
                                 xhr.onreadystatechange = () => {
                                     if (xhr.readyState !== XMLHttpRequest.DONE) return;
@@ -248,7 +248,7 @@
                                     }
                                 };
 
-                                xhr.open('POST', '/user/myPage/userSearch/delete'); // ❗ 백엔드에 맞게 수정
+                                xhr.open('DELETE', '/user/myPage/userSearch/delete');
                                 xhr.send(formData);
                             }
                         }
@@ -256,5 +256,46 @@
                 });
             });
         });
+
+        const $pageContainer = document.querySelector('.page-container');
+        if ($pageContainer) {
+            $pageContainer.addEventListener('click', (e) => {
+                const $page = e.target.closest('a.page');
+                if ($page) {
+                    e.preventDefault();
+                    const page = $page.getAttribute('data-page');
+                    if (page) {
+                        const nameInput = document.querySelector('input[name="name"]');
+                        const params = new URLSearchParams();
+                        if (nameInput && nameInput.value.trim()) {
+                            params.set('name', nameInput.value.trim());
+                        }
+                        params.set('page', page);
+                        window.location.search = `?${params.toString()}`;
+                    }
+                }
+            });
+        }
+        const $searchContainer = document.querySelector('[data-mt-name="search-container"]');
+        if ($searchContainer) {
+            const $input = $searchContainer.querySelector('input[name="name"]');
+            const $button = $searchContainer.querySelector('button');
+            const doSearch = () => {
+                const keyword = $input ? $input.value.trim() : '';
+                const params = new URLSearchParams();
+                if (keyword) params.set('name', keyword);
+                window.location.href = `/user/myPage?${params.toString()}`;
+            };
+            $button?.addEventListener('click', (e) => {
+                e.preventDefault();
+                doSearch();
+            });
+            $input?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    doSearch();
+                }
+            });
+        }
     }
 }

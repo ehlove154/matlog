@@ -33,6 +33,14 @@ public interface UserMapper {
 
     List<UserListVo> selectForUser(@Param(value = "email")String email);
 
+    List<UserListVo> searchForUserPage(@Param("email") String email,
+                                       @Param("name") String name,
+                                       @Param("offset") int offset,
+                                       @Param("limit") int limit);
+
+    int countForUserSearch(@Param("email") String email,
+                           @Param("name") String name);
+
     MembershipEntity selectByCode(@Param(value = "membershipCode")String membershipCode);
 
     int updateMembershipDate(UserListVo userListVo);
@@ -40,4 +48,13 @@ public interface UserMapper {
     int updateUserBeltAndPromotion(@Param(value = "email")String email,
                                    @Param(value = "belt") String belt,
                                    @Param(value = "promotion")LocalDate promotion);
+
+    int updateIsDeleted(@Param(value = "email") String email,
+                        @Param(value = "isDeleted")boolean isDeleted);
+
+    List<UserListVo> selectForUserPage(@Param("email") String email,
+                                       @Param("offset") int offset,
+                                       @Param("limit") int limit);
+
+    int countForUser(@Param("email") String email);
 }

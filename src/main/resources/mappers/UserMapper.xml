@@ -48,6 +48,20 @@
         where `email` = #{email}
     </update>
 
+    <update id="updateIsDeleted" parameterType="map">
+        update`jiujitsu`.`users`
+        set `is_delete` = #{isDeleted},
+            `modified_at` = now()
+        where `email` = #{email}
+    </update>
+
+    <select id="countForUser" resultType="java.lang.Integer">
+        select count(0)
+        from `jiujitsu`.`users` as `U`
+        where `U`.`is_delete` = 0
+          and `U`.`gym_id` = (select `gym_id` from `jiujitsu`.`users` where `email` = #{email})
+    </select>
+
     <select id="selectByEmail" resultType="com.yjb.jiujitsumembership.entities.UserEntity">
         select `email`                   as `email`,
                `password`                as `password`,
@@ -103,7 +117,8 @@
 
     <select id="selectAllForAdmin" resultType="com.yjb.jiujitsumembership.vos.UserListVo">
         <![CDATA[
-        SELECT `U`.`name`                                                  AS `name`,
+        SELECT `U`.`email`                                                 AS `email`,
+               `U`.`name`                                                  AS `name`,
                `U`.`contact`                                               AS `contact`,
                CONCAT(`U`.`address_primary`, ' ', `U`.`address_secondary`) AS `address`,
                CASE
@@ -120,7 +135,7 @@
                    ELSE '수강 중'
                    END                                                     AS `status`,
                `M`.`display_text`                                          AS `membershipName`,
-               `U`.`membership_expire_date`                                           AS `expireDate`
+               `U`.`membership_expire_date`                                AS `expireDate`
         FROM `jiujitsu`.`users` AS `U`
                  JOIN `jiujitsu`.`belts` AS `B` ON `U`.`belt` = `B`.`belt_code`
                  JOIN `jiujitsu`.`memberships` AS `M` ON `U`.`membership` = `M`.`membership_code`
@@ -148,6 +163,119 @@
     </select>
 
     <select id="selectForUser" resultType="com.yjb.jiujitsumembership.vos.UserListVo">
+        <![CDATA[
+        SELECT `U`.`email`                                               AS `email`,
+               `U`.`name`                                                AS `name`,
+               `U`.`contact`                                             AS `contact`,
+               CONCAT(U.`address_primary`, ' ', `U`.`address_secondary`) AS `address`,
+               CASE
+                   WHEN IFNULL(`PH`.`stripeCount`, 0) = 0 THEN CONCAT(`B`.`display_text`, ' 무그랄')
+                   ELSE CONCAT(`B`.`display_text`, ' ', `PH`.`stripeCount`, '그랄')
+                   END                                                   AS `beltWithStripe`,
+               `U`.`belt`                                                AS `belt`,
+               `PH`.`stripeCount`                                        AS `stripe`,
+               `U`.`membership`                                          as `membership`,
+               `U`.`created_at`                                          AS `createdAt`,
+               `PH`.`promotedAt`                                         AS `promotionDate`,
+               `AM`.`thisMonthCount`                                     AS `monthlyAttendance`,
+               `AM`.`totalCount`                                         AS `totalAttendance`,
+               `AM`.`recentAttendance`                                   AS `recentAttendance`,
+               CASE
+                   WHEN DATEDIFF(`U`.`membership_expire_date`, CURDATE()) < 0 THEN '회원권 만료'
+                   WHEN DATEDIFF(`U`.`membership_expire_date`, CURDATE()) <= 7 THEN '만료임박'
+                   ELSE '수강 중'
+                   END                                                   AS `status`,
+               `M`.`display_text`                                        AS `membershipName`,
+               `U`.`membership_expire_date`                              AS `expireDate`
+        FROM `jiujitsu`.`users` `U`
+                 JOIN `jiujitsu`.`belts` `B` ON `U`.`belt` = `B`.`belt_code`
+                 JOIN `jiujitsu`.`memberships` `M` ON `U`.`membership` = `M`.`membership_code`
+                 JOIN `jiujitsu`.`gyms` `G` ON `U`.`gym_id` = `G`.`gym_id`
+                 LEFT JOIN (SELECT `user_email`,
+                                   MAX(`promoted_at`)  AS `promotedAt`,
+                                   MAX(`stripe_count`) AS `stripeCount`
+                            FROM `jiujitsu`.`promotion_histories`
+                            GROUP BY `user_email`) `PH` ON `U`.`email` = `PH`.`user_email`
+                 LEFT JOIN (SELECT `user_email`,
+                                   COUNT(*)           AS `totalCount`,
+                                   MAX(`attended_at`) AS `recentAttendance`,
+                                   SUM(CASE
+                                           WHEN `is_attended` = 1
+                                               AND MONTH(`attended_at`) = MONTH(CURDATE())
+                                               AND YEAR(`attended_at`) = YEAR(CURDATE())
+                                               THEN 1
+                                           ELSE 0
+                                       END)           AS `thisMonthCount`
+                            FROM `jiujitsu`.`class_reservations`
+                            WHERE `is_attended` = 1
+                            GROUP BY `user_email`) `AM` ON `U`.`email` = `AM`.`user_email`
+        WHERE `U`.`is_delete` = 0
+          AND `U`.`gym_id` = (SELECT `gym_id` FROM `jiujitsu`.`users` WHERE `email` = #{email})
+        ]]>
+    </select>
+
+    <select id="selectByCode" resultType="com.yjb.jiujitsumembership.entities.MembershipEntity">
+        select `membership_code` as `membershipCode`,
+               `display_text`    as `displayText`,
+               `duration_month`  as `durationMonth`,
+               `price`           as `price`
+        from `jiujitsu`.`memberships`
+        where `membership_code` = #{membershipCode}
+    </select>
+
+    <select id="selectForUserPage" resultType="com.yjb.jiujitsumembership.vos.UserListVo">
+<![CDATA[
+        SELECT `U`.`name`                                                AS `name`,
+               `U`.`contact`                                             AS `contact`,
+               CONCAT(U.`address_primary`, ' ', `U`.`address_secondary`) AS `address`,
+               CASE
+                   WHEN IFNULL(`PH`.`stripeCount`, 0) = 0 THEN CONCAT(`B`.`display_text`, ' 무그랄')
+                   ELSE CONCAT(`B`.`display_text`, ' ', `PH`.`stripeCount`, '그랄')
+                   END                                                   AS `beltWithStripe`,
+               `U`.`belt`                                                AS `belt`,
+               `PH`.`stripeCount`                                        AS `stripe`,
+               `U`.`membership`                                          as `membership`,
+               `U`.`created_at`                                          AS `createdAt`,
+               `PH`.`promotedAt`                                         AS `promotionDate`,
+               `AM`.`thisMonthCount`                                     AS `monthlyAttendance`,
+               `AM`.`totalCount`                                         AS `totalAttendance`,
+               `AM`.`recentAttendance`                                   AS `recentAttendance`,
+               CASE
+                   WHEN DATEDIFF(`U`.`membership_expire_date`, CURDATE()) < 0 THEN '회원권 만료'
+                   WHEN DATEDIFF(`U`.`membership_expire_date`, CURDATE()) <= 7 THEN '만료임박'
+                   ELSE '수강 중'
+                   END                                                   AS `status`,
+               `M`.`display_text`                                        AS `membershipName`,
+               `U`.`membership_expire_date`                              AS `expireDate`
+        FROM `jiujitsu`.`users` `U`
+                 JOIN `jiujitsu`.`belts` `B` ON `U`.`belt` = `B`.`belt_code`
+                 JOIN `jiujitsu`.`memberships` `M` ON `U`.`membership` = `M`.`membership_code`
+                 JOIN `jiujitsu`.`gyms` `G` ON `U`.`gym_id` = `G`.`gym_id`
+                 LEFT JOIN (SELECT `user_email`,
+                                   MAX(`promoted_at`)  AS `promotedAt`,
+                                   MAX(`stripe_count`) AS `stripeCount`
+                            FROM `jiujitsu`.`promotion_histories`
+                            GROUP BY `user_email`) `PH` ON `U`.`email` = `PH`.`user_email`
+                 LEFT JOIN (SELECT `user_email`,
+                                   COUNT(*)           AS `totalCount`,
+                                   MAX(`attended_at`) AS `recentAttendance`,
+                                   SUM(CASE
+                                           WHEN `is_attended` = 1
+                                               AND MONTH(`attended_at`) = MONTH(CURDATE())
+                                               AND YEAR(`attended_at`) = YEAR(CURDATE())
+                                               THEN 1
+                                           ELSE 0
+                                       END)           AS `thisMonthCount`
+                            FROM `jiujitsu`.`class_reservations`
+                            WHERE `is_attended` = 1
+                            GROUP BY `user_email`) `AM` ON `U`.`email` = `AM`.`user_email`
+        WHERE `U`.`is_delete` = 0
+          AND `U`.`gym_id` = (SELECT `gym_id` FROM `jiujitsu`.`users` WHERE `email` = #{email})
+        LIMIT #{limit} OFFSET #{offset}
+        ]]>
+    </select>
+
+    <select id="searchForUserPage" resultType="com.yjb.jiujitsumembership.vos.UserListVo">
         <![CDATA[
         SELECT
             `U`.`name` AS `name`,
@@ -200,15 +328,16 @@
         ) `AM` ON `U`.`email` = `AM`.`user_email`
         WHERE `U`.`is_delete` = 0
           AND `U`.`gym_id` = (SELECT `gym_id` FROM `jiujitsu`.`users` WHERE `email` = #{email})
+          AND `U`.`name` LIKE CONCAT('%', #{name}, '%')
+        LIMIT #{limit} OFFSET #{offset}
         ]]>
     </select>
 
-    <select id="selectByCode" resultType="com.yjb.jiujitsumembership.entities.MembershipEntity">
-        select `membership_code` as `membershipCode`,
-               `display_text`    as `displayText`,
-               `duration_month`  as `durationMonth`,
-               `price`           as `price`
-        from `jiujitsu`.`memberships`
-        where `membership_code` = #{membershipCode}
+    <select id="countForUserSearch" resultType="java.lang.Integer">
+        select count(0)
+        from `jiujitsu`.`users` as `U`
+        where `U`.`is_delete` = 0
+          and `U`.`gym_id` = (select `gym_id` from `jiujitsu`.`users` where `email` = #{email})
+          and `U`.`name` like concat('%', #{name}, '%')
     </select>
 </mapper>

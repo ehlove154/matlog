@@ -1,10 +1,9 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<div data-mt-visible th:fragment="userSearch" data-mt-name="userSearch" data-mt-component="column">
+<div th:fragment="userSearch" data-mt-name="userSearch" data-mt-component="column">
     <h2 class="title">회원 조회</h2>
     <label data-mt-object="label" data-mt-name="search-container" data-mt-component="row">
-        <input required autocomplete="off" maxlength="5" minlength="1" name="name" placeholder="회원 이름으로 검색해 주세요."
-               type="text" data-mt-object="field" data-mt-component="label.field" data-mt-stretch>
+        <input required autocomplete="off" maxlength="5" minlength="1" name="name" placeholder="회원 이름으로 검색해 주세요." type="text" data-mt-object="field" data-mt-component="label.field" data-mt-stretch th:value="${keyword}">
         <button type="submit">
             <img src="/assets/images/myPage/search.png" alt="" class="icon">
         </button>
@@ -134,19 +133,17 @@
             </tbody>
         </table>
     </div>
-    <ul class="list">
+    <ul class="list" th:if="${#lists.isEmpty(userList)}">
         <li class="message empty" data-mt-reference="message" data-mt-name="empty">검색 결과가 없습니다.</li>
     </ul>
     <div class="page-container">
-        <a href="#" class="previous">
+        <a th:href="@{'/user/myPage'(page=${pageVo.page - 1}, name=${keyword})}" class="previous" th:classappend="${pageVo.page == 1}? 'disabled'">
             <img src="/assets/images/previous.png" alt="" class="icon">
         </a>
-        <a href="#" class="page">1</a>
-        <a href="#" class="page -selected">2</a>
-        <a href="#" class="page">3</a>
-        <a href="#" class="page">4</a>
-        <a href="#" class="page">5</a>
-        <a href="#" class="next">
+        <th:block th:each="i : ${#numbers.sequence(1, pageVo.maxPage)}">
+            <a th:href="@{'/user/myPage'(page=${i}, name=${keyword})}" th:text="${i}" th:classappend="${i == pageVo.page}? 'page -selected':'page'" th:data-page="${i}"></a>
+        </th:block>
+        <a th:href="@{'/user/myPage'(page=${pageVo.page + 1}, name=${keyword})}" class="next" th:classappend="${pageVo.page == pageVo.maxPage}? 'disabled'">
             <img src="/assets/images/next.png" alt="" class="icon">
         </a>
     </div>

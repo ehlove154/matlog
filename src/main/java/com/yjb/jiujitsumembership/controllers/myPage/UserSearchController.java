@@ -1,6 +1,8 @@
 package com.yjb.jiujitsumembership.controllers.myPage;
 
 import com.yjb.jiujitsumembership.entities.UserEntity;
+import com.yjb.jiujitsumembership.results.CommonResult;
+import com.yjb.jiujitsumembership.results.Result;
 import com.yjb.jiujitsumembership.results.ResultTuple;
 import com.yjb.jiujitsumembership.services.UserService;
 import org.json.JSONObject;
@@ -51,6 +53,15 @@ public class UserSearchController {
     @ResponseBody
     public String deleteUser(@SessionAttribute(value = "signedUser", required = false)UserEntity signedUser,
                              @RequestParam(value = "target", required = false)String targetEmail) {
-        return null;
+        JSONObject response = new JSONObject();
+
+        if (signedUser == null) {
+            response.put("result", CommonResult.FAILURE_SESSION_EXPIRED.nameToLower());
+            return response.toString();
+        }
+
+        Result result = this.userService.deleteUser(signedUser, targetEmail);
+        response.put("result", result.nameToLower());
+        return response.toString();
     }
 }
