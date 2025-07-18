@@ -2,17 +2,16 @@
 
 @import "../_def";
 @import "./main/header";
-@import "./main/userLogin";
-@import "./main/userRegister";
-@import "./main/musicSearch";
-@import "./main/musicRegister";
-@import "./main/userMusicRegister";
-@import "./main/player";
-@import "./main/menu";
+@import "./main/timeTable";
+@import "./main/book";
+@import "./main/register";
+@import "./main/login";
+@import "./main/recover";
+@import "./main/myPage/myPage";
 
 #main {
   @include flex(column, stretch, flex-start);
-  width: 25rem;
+  width: 100%;
   backdrop-filter: blur(0.5rem);
   background-color: color.adjust($global-color-background, $alpha: -0.125);
   color: $global-color-text;

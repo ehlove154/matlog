@@ -1,0 +1,230 @@
+@use "sass:color";
+
+@import "../../../_def";
+
+#main > #myPageForm {
+  @include flex(column, center, flex-start, 1rem);
+  margin: auto;
+  width: 90%;
+
+  > .container {
+    @include flex(row, center, flex-start, 1rem);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+
+    > .content-container {
+      width: 45rem;
+
+      > .title {
+        font-size: 1.7rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+      }
+
+      > [data-mt-name="userModify"] {
+        display: none;
+        width: 100%;
+
+        > .title {
+          font-size: 1.2rem;
+          font-weight: 400;
+          margin-bottom: 1rem;
+        }
+
+        &[data-mt-visible] {
+          display: block;
+        }
+
+        > [data-mt-object="label"] {
+          @include flex(column, stretch, center, 0.325rem);
+          margin-bottom: 1rem;
+
+          > [data-mt-component="label.caption"] {
+            color: $global-color-border-lighten-30;
+            font-size: 0.9rem;
+            font-weight: 400;
+          }
+
+          > [data-mt-component="label.description"] {
+            margin-bottom: 0;
+          }
+
+          > [data-mt-component="label.row"] {
+
+            > [name="birth"] {
+              flex-grow: 1;
+            }
+
+            > input {
+              flex-grow: 1;
+            }
+
+            > .gender-wrapper {
+              background-color: #ffffff;
+              border: 0.0625rem solid #e0e2e4;
+              border-radius: 0.25rem;
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              grid-template-rows: 1fr;
+              overflow: hidden;
+              flex-grow: 1;
+
+              > label {
+                @include flex(row, center, center);
+                cursor: pointer;
+                padding: 0 0.625rem;
+
+                &:has(> input:checked) {
+                  background-color: $global_color-primary;
+
+                  > span {
+                    color: $global_color-accent;
+                  }
+                }
+
+                + input {
+                  border-left: 0.0625rem solid #e0e2e4;
+                }
+
+                > input {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          > .belt-container {
+            background-color: #ffffff;
+            border: 0.0625rem solid #e0e2e4;
+            border-radius: 0.25rem;
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: 9fr;
+            overflow: hidden;
+
+            > label {
+              @include flex(row, center, center);
+              cursor: pointer;
+              padding: 0.625rem 0;
+
+              &:has(> input:checked) {
+                background-color: $global_color-primary;
+
+                > span {
+                  color: $global_color-accent;
+                }
+              }
+
+              + input {
+                border-left: 0.0625rem solid #e0e2e4;
+              }
+
+              > input {
+                display: none;
+              }
+            }
+
+            &:has(input:checked) + .common-container {
+              display: flex;
+            }
+          }
+
+          > .common-container {
+            @include flex(column, center, center, 2rem);
+            background-color: #ffffff;
+            border: 0.0625rem solid #e0e2e4;
+            border-radius: 0.25rem;
+            width: 100%;
+            padding: 2rem;
+            display: none;
+
+            > .stripe-wrapper {
+              background-color: #ffffff;
+              border: 0.0625rem solid #e0e2e4;
+              border-radius: 0.25rem;
+              display: grid;
+              grid-template-columns: repeat(5, 1fr);
+              grid-template-rows: 5fr;
+              overflow: hidden;
+              width: 90%;
+
+              > label {
+                @include flex(row, center, center);
+                cursor: pointer;
+                padding: 0.625rem 0;
+
+                &:has(> input:checked) {
+                  background-color: $global_color-primary;
+
+                  > span {
+                    color: $global_color-accent;
+                  }
+                }
+
+                + input {
+                  border-left: 0.0625rem solid #e0e2e4;
+                }
+
+                > input {
+                  display: none;
+                }
+              }
+            }
+
+            > .promotion-wrapper {
+              @include flex(column, center, center, 0.325rem);
+              width: 70%;
+
+              > label {
+                @include flex(column, stretch, flex-start, 0.325rem);
+                width: 100%;
+
+                > [data-mt-component="label.caption"] {
+                  color: $global-color-border-lighten-30;
+                  font-size: 0.9rem;
+                  font-weight: 400;
+                }
+
+                > [name="promotion"] {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+
+        > .button-container {
+          @include flex(row, center, center, 1rem);
+          margin-top: 1.5rem;
+
+          > [data-mt-object="button"] {
+            padding: 0.8rem 1.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 40rem) {
+  #main > #myPageForm > .container > .content-container > [data-mt-name="userModify"] > [data-mt-object="label"] {
+    > span {
+      > [name="belt"] {
+        width: 50%;
+      }
+    }
+
+    > .belt-container {
+      grid-template-columns: repeat(5, 2fr);
+      grid-template-rows: 5fr;
+    }
+  }
+
+  > .common-container {
+    > .stripe-wrapper {
+      grid-template-columns: repeat(3, 2fr);
+      grid-template-rows: 3fr;
+    }
+  }
+}

@@ -23,31 +23,65 @@
   transition-property: background-color;
   transition-timing-function: ease;
 
+  &[data-mt-color="navy"] {
+    @include effect($global_color-primary-lighten-20, -2.5%);
+    color: $global_color-accent-lighten-10;
+    border-radius: 999rem;
+    font-size: 0.875rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
   &[data-mt-color="green"] {
-    @include effect(#178f77, -2.5%);
+    @include effect(#52c41a, -2.5%);
     color: #fafafa;
+    border-radius: 999rem;
+    font-size: 0.875rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   &[data-mt-color="gray"] {
     @include effect(#707b7c, -2.5%);
     color: #fafafa;
+    border-radius: 999rem;
+    font-size: 0.875rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   &[data-mt-color="red"] {
-    @include effect(#e74c3c, -2.5%);
+    @include effect(#ff4d4f, -2.5%);
     color: #fafafa;
+    border-radius: 999rem;
+    font-size: 0.875rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   &[data-mt-color="simple"] {
-    background-color: transparent;
-    border: 0.0625rem solid $global-color-border-lighten-20;
+    background-color: revert;
+    border: 0.0625rem solid revert;
     border-radius: 999rem;
     font-size: 0.875rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 
     &:hover {
-      border-color: $global-color-border-lighten-30;
+      border-color: revert;
+    }
+  }
+
+  &[disabled] {
+    background-color: $global-color-border-lighten-60;
+    color: $global-color-border-lighten-30;
+    cursor: default;
+
+    &:hover,
+    &:active {
+      background-color: $global-color-border-lighten-60;
+      color: $global-color-border-lighten-30;
+      cursor: default;
     }
   }
 }

@@ -1,4 +1,4 @@
-package com.yjb.meltube.utils;
+package com.yjb.jiujitsumembership.utils;
 
 import lombok.experimental.UtilityClass;
 

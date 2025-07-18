@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div data-mt-name="userModify" th:fragment="userModify">
+    <h2 class="title">회원정보 수정</h2>
+    <label data-mt-object="label" data-mt-name="email" for="infoEmail">
+        <span data-mt-component="label.caption">이메일</span>
+        <input readonly required autocomplete="email" maxlength="100" minlength="8" name="email" type="email" data-mt-object="field" data-mt-component="label.field" id="infoEmail" th:value="${session.signedUser.getEmail()}">
+        <!-- TODO th:value -->
+    </label>
+    <label data-mt-object="label" data-mt-name="password" for="infoCurrentPassword">
+        <span data-mt-component="label.caption">현재 비밀번호</span>
+        <input required autocomplete="off" maxlength="127" minlength="8" name="password"
+               placeholder="현재 비밀번호를 입력해 주세요." type="password" data-mt-object="field"
+               data-mt-component="label.field" id="infoCurrentPassword">
+        <span data-mt-component="label.warning"><!--warning--></span>
+    </label>
+    <label data-mt-object="label" data-mt-name="newPassword" for="infoNewPassword">
+        <span data-mt-component="label.caption">신규 비밀번호</span>
+        <input autocomplete="off" maxlength="127" minlength="8" name="newPassword" placeholder="신규 비밀번호를 입력해 주세요." type="password" data-mt-object="field"  data-mt-component="label.field" id="infoNewPassword">
+        <span data-mt-component="label.warning"><!--warning--></span>
+        <span data-mt-component="label.description">알파벳, 숫자, 공백을 제외한 특수기호를 이용하며 8자 이상을 입력해 주세요.</span>
+    </label>
+    <label data-mt-object="label" data-mt-name="newPasswordCheck">
+        <span data-mt-component="label.caption">신규 비밀번호 확인</span>
+        <input autocomplete="off" maxlength="127" minlength="8" name="newPasswordCheck" placeholder="비밀번호를 한 번 더 입력해 주세요." type="password" data-mt-object="field" data-mt-component="label.field" id="infoNewPasswordCheck">
+        <span data-mt-component="label.warning"><!--warning--></span>
+    </label>
+    <label data-mt-object="label" data-mt-name="name" for="infoName">
+        <span data-mt-component="label.caption">이름</span>
+        <input readonly required autocomplete="off" maxlength="5" minlength="2" name="name" type="text"
+               data-mt-object="field" data-mt-component="label.field" id="infoName" th:value="${session.signedUser.getName()}">
+        <!-- TODO th:value -->
+        <span data-mt-component="label.warning"><!--warning--></span>
+    </label>
+    <label data-mt-object="label" data-mt-name="birth" for="infoBirth">
+        <span data-mt-component="label.caption">생년월일 / 성별</span>
+        <span data-mt-component="label.row">
+            <input readonly required autocomplete="off" name="birth" type="date" data-mt-object="field" data-mt-component="label.field" id="infoBirth" data-mt-stretch th:value="${session.signedUser.getBirth()}">
+            <!-- TODO th:value -->
+            <span class="gender-wrapper" data-mt-stretch>
+                <label data-mt-object="label" data-mt-name="gender" for="infoGender">
+                    <input disabled name="gender" type="radio" data-mt-object="field" data-mt-component="label.field" value="F" id="infoGender" th:checked="${session.signedUser != null and session.signedUser.gender == 'F'}"><!-- TODO th:value -->
+                    <span data-mt-component="label.caption">여</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="gender">
+                    <input disabled name="gender" type="radio" data-mt-object="field" data-mt-component="label.field" value="M" id="infoGenderM" th:checked="${session.signedUser != null and session.signedUser.gender == 'M'}"><!-- TODO th:value -->
+                    <span data-mt-component="label.caption">남</span>
+                </label>
+            </span>
+        </span>
+        <span data-mt-component="label.warning"><!--warning--></span>
+    </label>
+    <label data-mt-object="label" data-mt-name="contact" for="infoCurrentContact">
+        <span data-mt-component="label.caption">현재 연락처</span>
+        <input required readonly data-mt-object="field" data-mt-component="label.field" maxlength="11" minlength="10"  name="contact" type="tel" id="infoCurrentContact" th:value="${session.signedUser.getContact()}"><!-- TODO th:value -->
+    </label>
+    <label data-mt-object="label" data-mt-name="newContact" for="infoNewContact">
+        <span data-mt-component="label.caption">신규 연락처</span>
+        <span data-mt-component="label.row">
+            <input data-mt-object="field" data-mt-component="label.field" maxlength="11" minlength="10" name="newContact" placeholder="'-'없이 숫자만 입력해 주세요." type="tel" id="infoNewContact">
+            <button data-mt-object="button" type="button" data-mt-color="navy" data-mt-name="contactCheck">본인인증</button>
+        </span>
+        <span data-mt-component="label.row">
+            <input disabled data-mt-object="field" data-mt-component="label.field" maxlength="6" minlength="6" name="newContactCode" placeholder="000000" type="text">
+            <button disabled data-mt-object="button" type="button" data-mt-color="navy" data-mt-name="contactCodeCheck">인증번호 확인</button>
+        </span>
+        <span data-mt-component="label.warning"><!--warning--></span>
+    </label>
+    <label data-mt-object="label" data-mt-name="address">
+        <span data-mt-component="label.caption">주소</span>
+        <span data-mt-component="label.row">
+            <input disabled required data-mt-object="field" data-mt-component="label.field" maxlength="5" minlength="5" name="addressPostal" placeholder="우편번호 (주소 찾기 버튼을 클릭해 주세요.)" th:value="${session.signedUser.getAddressPostal()}">
+            <button data-mt-object="button" data-mt-color="navy" name="addressFindButton" type="button">주소 찾기</button>
+        </span>
+        <input disabled required data-mt-object="field" data-mt-component="label.field" maxlength="100" minlength="10" name="addressPrimary" placeholder="기본 주소 (주소 찾기 버튼을 클릭해 주세요.)" type="text" th:value="${session.signedUser.getAddressPrimary()}">
+        <input data-mt-object="field" data-mt-component="label.field" maxlength="100" minlength="0" name="addressSecondary" placeholder="상세 주소 (건물 이름, 동, 호)" type="text" th:value="${session.signedUser.getAddressSecondary()}">
+        <span data-mt-component="label.warning"><!--warning--></span>
+    </label>
+    <label data-mt-object="label" data-mt-name="gymName">
+        <span data-mt-component="label.caption">체육관</span>
+        <input readonly data-mt-object="field" data-mt-component="label.field" maxlength="10" minlength="0" name="gymName" type="text" th:value="${session.userDto.getGymName()}">
+        <span data-mt-component="label.description">체육관에 대한 변경사항은 지도자에게 문의해 주세요.</span>
+    </label>
+    <label data-mt-object="label" data-mt-name="belt">
+        <span data-mt-component="label.caption">벨트</span>
+        <span data-mt-component="label.row">
+            <input readonly data-mt-object="field" data-mt-component="label.field" maxlength="10" minlength="0" name="belt" type="text" th:value="${session.userDto.beltWithStripe}">
+            <input readonly required autocomplete="off" name="promotion" type="date" data-mt-object="field" data-mt-component="label.field" data-mt-stretch th:value="${session.signedUser.getLastPromotionAt()}">
+            </span>
+        <span data-mt-component="label.description">벨트및 승급일에 대한 변경사항은 지도자만 변경 가능합니다.</span>
+    </label>
+    <div class="button-container">
+        <button name="back" type="button" data-mt-object="button" data-mt-color="gray">돌아가기</button>
+        <button type="submit" data-mt-object="button" data-mt-color="navy">회원정보 수정</button>
+    </div>
+</div>
+</html>

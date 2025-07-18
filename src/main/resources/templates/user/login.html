@@ -1,0 +1,52 @@
+<!doctype html> <!--http://localhost:8080/user/login-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MatLog | 로그인</title>
+    <link rel="shortcut icon" href="/assets/images/shortcut_icon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/styles/common.min.css">
+    <link rel="stylesheet" href="/assets/styles/index.min.css">
+    <script src="/assets/scripts/common.js" type="module"></script>
+    <script defer src="/assets/scripts/user/login.js" type="module"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/loading :: loading}"></th:block>
+<th:block th:replace="~{/fragments/loading :: dialog}"></th:block>
+<main id="main">
+    <th:block th:replace="~{/fragments/header :: header}"></th:block>
+    <form novalidate id="loginForm">
+        <h2 class="title">로그인</h2>
+        <label data-mt-object="label" data-mt-name="email">
+            <span data-mt-component="label.caption">이메일</span>
+            <input required autocomplete="email" maxlength="100" minlength="8" name="email"
+                   placeholder="matlog@sample.com" type="email" data-mt-object="field"
+                   data-mt-component="label.field">
+            <span data-mt-component="label.warning" data-mt-valid>이메일을 입력해 주세요.</span>
+        </label>
+        <label data-mt-object="label" data-mt-name="password">
+            <span data-mt-component="label.caption">비밀번호</span>
+            <input required autocomplete="off" maxlength="127" minlength="8" name="password"
+                   placeholder="비밀번호를 입력해 주세요." type="password" data-mt-object="field" data-mt-component="label.field">
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <label data-mt-object="checkLabel">
+            <input data-mt-component="checkLabel.input"  data-mt-name="remember" type="checkbox" name="remember">
+            <span data-mt-component="checkLabel.box"></span>
+            <span data-mt-component="label.caption">이메일을 기억할까요?</span>
+        </label>
+        <button data-mt-object="button" data-mt-color="navy" type="submit">로그인</button>
+        <ul class="menu">
+            <li class="item">
+                <span class="caption">아직 계정이 없으신가요?</span>
+                <a href="/user/register" class="link">회원가입</a>
+            </li>
+            <li class="item">
+                <span class="caption">계정 정보를 분실하셨나요?</span>
+                <a href="/user/recover" class="link">계정 복구</a>
+            </li>
+        </ul>
+    </form>
+</main>
+</body>
+</html>

@@ -2,17 +2,21 @@
 
 #main > .header {
   @include flex(row, center, flex-start, 0.75rem);
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: $global-color-primary;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
 
   > .logo {
-    @include fixedSize(1.5rem);
+    @include fixedSize(2.3rem);
     object-fit: contain;
     object-position: center;
   }
 
   > .menu {
-    @include fixedSize(1.25rem);
+    @include fixedSize(1.5rem);
     cursor: pointer;
 
     > .icon {

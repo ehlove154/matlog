@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/")
-public class ReservationController {
+public class BookController {
 
-    @RequestMapping(value = "/reservation", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @RequestMapping(value = "/book", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String getIndex() {
-        return "home/index";
+        return "/book";
     }
 }

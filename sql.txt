@@ -1,0 +1,119 @@
+create schema `jiujitsu`;
+
+create table `jiujitsu`.`belts`
+(
+    `belt_code`    varchar(20) not null,
+    `display_text` varchar(25) not null,
+    constraint primary key (`belt_code`)
+);
+
+create table `jiujitsu`.`stripes`
+(
+    `stripe_id`    int         not null auto_increment,
+    `belt_code`    varchar(20) not null,
+    `stripe_count` tinyint     not null,
+    `display_text` varchar(10) not null,
+    constraint primary key (`stripe_id`),
+    constraint foreign key (`belt_code`) references `jiujitsu`.`belts` (`belt_code`) on update cascade on delete cascade
+);
+
+create table `jiujitsu`.`memberships`
+(
+    `membership_code` varchar(5) not null,
+    `display_text`    varchar(5) not null,
+    `join_date`       date       not null default now(),
+    `expire_date`     date       not null default now(),
+    constraint primary key (`membership_code`)
+);
+
+create table `jiujitsu`.`days`
+(
+    `days_code`    varchar(5) not null,
+    `display_text` varchar(5) not null,
+    constraint primary key (`days_code`)
+);
+
+create table `jiujitsu`.`gyms`
+(
+    `gym_id`            int unsigned not null auto_increment,
+    `user_email`        varchar(100) not null,
+    `gym_name`          varchar(30)  not null,
+    `is_active`         boolean      not null default false,
+    `address_postal`    varchar(5)   not null,
+    `address_primary`   varchar(100) not null,
+    `address_secondary` varchar(100) not null,
+    `created_at`        datetime     not null default now(),
+    `modified_at`       datetime     not null default now(),
+    constraint primary key (`gym_id`),
+    constraint foreign key (`user_email`) references `jiujitsu`.`users` (`email`) on update cascade on delete cascade
+);
+
+create table `jiujitsu`.`users`
+(
+    `email`                   varchar(100)                       not null,
+    `password`                varchar(127)                       not null,
+    `name`                    varchar(10)                        not null,
+    `birth`                   date                               not null,
+    `gender`                  enum ('F', 'M')                    not null,
+    `contact`                 varchar(9)                         not null,
+    `address_postal`          varchar(5)                         not null,
+    `address_primary`         varchar(100)                       not null,
+    `address_secondary`       varchar(100)                       not null,
+    `belt`                    varchar(20)                        not null,
+    `gym_id`                  int unsigned                       not null,
+    `last_signed_at`          datetime                           null     default null comment '마지막 로그인 일시',
+    `last_signed_ua`          varchar(512)                       null     default null comment '마지막 로그인 유저 에이전트',
+    `membership`              varchar(5)                         not null,
+    `user_role`               enum ('ADMIN', 'MASTER', 'MEMBER') not null,
+    `is_delete`               boolean                            not null default false,
+    `is_suspended`            boolean                            not null default false,
+    `created_at`              datetime                           not null default now(),
+    `modified_at`             datetime                           not null default now(),
+    `last_promotion_at`       datetime                           null     default null,
+    constraint primary key (`email`),
+    constraint unique (`contact`),
+    constraint foreign key (`belt`) references `jiujitsu`.`belts` (`belt_code`) on delete cascade on update cascade,
+    constraint foreign key (`membership`) references `jiujitsu`.`memberships` (`membership_code`) on update cascade on delete cascade,
+    constraint foreign key (`gym_id`) references `jiujitsu`.`gyms` (`gym_id`) on delete cascade on update cascade
+);
+
+create table `jiujitsu`.`classes`
+(
+    `class_id`   int unsigned not null auto_increment,
+    `class_name` varchar(100) not null ,
+    `user_email` varchar(100) not null,
+    `coach`      varchar(5)   not null,
+    `start_time` time         not null default current_time,
+    `end_time`   time         not null default current_time,
+    `day`        varchar(5)   not null,
+    `gym_id`     int unsigned not null,
+    constraint primary key (`class_id`),
+    constraint foreign key (`user_email`) references `jiujitsu`.`users` (`email`) on update cascade on update cascade,
+    constraint foreign key (`day`) references `jiujitsu`.`days` (`days_code`) on delete cascade on update cascade,
+    constraint foreign key (`gym_id`) references `jiujitsu`.`gyms` (`gym_id`) on delete cascade on update cascade
+);
+
+create table `jiujitsu`.`class_reservations`
+(
+    `reservation_id` int unsigned not null auto_increment,
+    `user_email`     varchar(100) not null,
+    `class_id`       int unsigned not null,
+    `reserved_at`    datetime     not null default now(),
+    `is_attended`    boolean      not null default false,
+    `attended_at`    datetime     not null default now(),
+    constraint primary key (`reservation_id`),
+    constraint foreign key (`user_email`) references `jiujitsu`.`users` (`email`) on update cascade on delete cascade,
+    constraint foreign key (`class_id`) references `jiujitsu`.`classes` (`class_id`) on update cascade on delete cascade
+);
+
+create table `jiujitsu`.`promotion_histories`
+(
+    `promotion_id` int unsigned not null auto_increment,
+    `user_email`   varchar(100) not null,
+    `belt_code`    varchar(20)  not null,
+    `stripe_count` tinyint not null default 0,
+    `promoted_at`  date         not null default current_date,
+    constraint primary key (`promotion_id`),
+    constraint foreign key (`user_email`) references `jiujitsu`.`users` (`email`) on update cascade on delete cascade,
+    constraint foreign key (`belt_code`) references `jiujitsu`.`belts` (`belt_code`) on update cascade on delete cascade
+);

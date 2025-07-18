@@ -1,0 +1,103 @@
+@use "sass:color";
+
+@import "../../../_def";
+
+#main > #myPageForm {
+
+  > .container {
+
+    > .content.menu {
+      @include flex(column, center, flex-start, 1rem);
+      background-color: $global_color-primary-lighten-5;
+      color: $global_color-accent;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin-right: 1rem;
+      height: 100%;
+      width: 13rem;
+
+      > .list {
+
+        & + .list {
+          border-top: 0.0625rem solid rgba(255, 241, 207, .2);
+          padding-top: 0.5rem;
+          width: 85%;
+          text-align: center;
+        }
+
+        > .item {
+          margin: 1rem;
+          font-size: 1rem;
+          cursor: pointer;
+
+          &:hover {
+            color: $global_color-accent-lighten-5;
+          }
+
+          &:active {
+            color: $global_color-accent-lighten-20;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 60rem) {
+  #main > #myPageForm .container {
+    flex-direction: column;
+
+    > .content.menu {
+      width: auto;
+      height: auto;
+      background: #fff;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding: 0.5rem 0;
+      position: sticky;
+      top: 4rem;
+      z-index: 10;
+      overflow-x: auto;
+      margin: auto;
+      gap: 0.3rem;
+      box-shadow: 0 0.125rem 0.5rem #eeecee;
+
+      > .list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        width: 100%;
+        padding: 0 1rem;
+
+        & + .list {
+          border-top: none;
+        }
+
+        &::-webkit-scrollbar {
+          display: none; // 모바일 UX용 스크롤 숨김
+        }
+
+        > .item {
+          flex: 0 0 auto;
+          padding: 0.5rem 0.75rem;
+          font-size: 0.875rem;
+          white-space: nowrap;
+          text-align: center;
+          color: #222;
+          margin: 0;
+
+          &:hover {
+            color: $global_color-primary-lighten-20;
+          }
+
+          &.active,
+          &:active {
+            font-weight: bold;
+            border-bottom: 2px solid #222;
+          }
+        }
+      }
+    }
+  }
+}

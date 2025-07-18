@@ -1,0 +1,296 @@
+@use "sass:color";
+
+@import "../../../_def";
+
+#main > #myPageForm > .container > .content-container {
+  width: auto;
+  transition: width 175ms;
+
+  > [data-mt-name="sessionReservation"] {
+    display: none;
+    width: 100%;
+    gap: 1rem;
+
+    > .title {
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    &[data-mt-visible] {
+      display: flex;
+    }
+
+    > .summaryBar {
+      background-color: $global-color-background;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.125rem 0.5rem #eeecee;
+      padding: 1rem 1.5rem;
+      border: 0.0625rem solid $global-color-border-lighten-70;
+
+      > .title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+      }
+
+      > [data-mt-component="row"] {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 2rem;
+
+        > [data-mt-component="column"] {
+
+          &:not(:last-child) {
+            border-right: 0.0625rem solid $global-color-border-lighten-70;
+            padding-right: 2rem;
+          }
+
+          > [data-mt-component="div.caption"] {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 0.375rem;
+          }
+
+          > [data-mt-component="div.description"] {
+            font-size: 1.2rem;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    > .filterBar > [data-mt-object="label"] {
+      justify-content: space-between;
+
+      > [name="datePiker"] {
+        background-color: $global-color-background;
+        border: 0.0625rem solid $global-color-border-lighten-70;
+        box-shadow: 0 0.125rem 0.5rem #eeecee;
+      }
+
+      > .taps-wrapper {
+        background-color: $global-color-background;
+        border: 0.0625rem solid $global-color-border-lighten-70;
+        box-shadow: 0 0.125rem 0.5rem #eeecee;
+        border-radius: 0.25rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 1fr;
+        overflow: hidden;
+        font-size: 0.85rem;
+
+
+        > label {
+          @include flex(row, center, center);
+          cursor: pointer;
+          padding: 0 0.625rem;
+
+          &:has(> input:checked) {
+            background-color: $global_color-primary;
+
+            > span {
+              color: $global_color-accent;
+            }
+          }
+
+          + input {
+            border-left: 0.0625rem solid #e0e2e4;
+          }
+
+          > input {
+            display: none;
+          }
+
+          &:not(:last-child) {
+            border-right: 0.0625rem solid $global-color-border-lighten-70;
+            margin-right: -0.5rem;
+          }
+        }
+      }
+    }
+
+    > .sessionList {
+      > .container {
+        display: grid;
+        grid-template-columns: repeat(4, 3fr);
+        grid-template-rows: 4fr;
+        gap: 1rem;
+        margin: auto;
+        justify-items: start;
+
+        > .session-container {
+          width: 10.5rem;
+          background-color: $global-color-background;
+          border: 0.0625rem solid $global-color-border-lighten-70;
+          box-shadow: 0 0.125rem 0.5rem #eeecee;
+          border-radius: 0.5rem;
+          gap: 1rem;
+          padding: 0.6rem;
+
+          > .content {
+            > .class {
+              font-size: 1rem;
+              font-weight: 500;
+              margin-bottom: 0.5rem;
+            }
+
+            > .date,
+            > .time {
+              font-size: 0.6rem;
+              color: $global-color-border-lighten-50;
+              margin-bottom: 0.2rem;
+            }
+
+            > .coach {
+              font-size: 0.8rem;
+              color: $global-color-border-lighten-10;
+              margin-top: 0.3rem;
+              font-weight: 400;
+            }
+          }
+
+          > .button-container {
+            > [name="cancel"] {
+              width: 4rem;
+              font-size: 0.65rem;
+            }
+
+            > [name="done"] {
+              cursor: default;
+              border: 0.0625rem solid $global-color-border-lighten-70;
+              font-size: 0.65rem;
+            }
+
+            > [name="pending"] {
+              cursor: default;
+              font-size: 0.65rem;
+            }
+          }
+        }
+      }
+
+      > .list {
+        text-align: center;
+        font-size: 1.2rem;
+        color: $global-color-border-lighten-40;
+        display: none;
+      }
+
+      > .page-container {
+        @include flex(row, center, center, 0.375rem);
+        margin-top: 1.5rem;
+
+        > .previous > .icon {
+          margin-right: 0.5rem;
+          width: 1rem;
+        }
+
+        > .next > .icon {
+          margin-left: 0.5rem;
+          width: 1rem;
+        }
+
+        > .page {
+          @include flex(row, center, center);
+          width: 2rem;
+          height: 2rem;
+          background-color: $global-color-background;
+          border: 0.0625rem solid #e0e0e0;
+          border-radius: 999rem;
+          cursor: pointer;
+
+          &:hover {
+            background-color: $global_color-primary-lighten-20;
+            border-color: $global_color-primary-lighten-20;
+            color: $global_color-accent-lighten-20;
+          }
+
+          &:active {
+            background-color: $global_color-primary-lighten-30;
+            border-color: $global_color-primary-lighten-30;
+            color: $global_color-accent-lighten-30;
+          }
+
+          &.-selected {
+            background-color: $global_color-primary-lighten-10;
+            border-color: $global_color-primary-lighten-10;
+            color: $global_color-accent-lighten-5;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 80rem) {
+  #main > #myPageForm > .container > .content-container {
+
+    > [data-mt-name="sessionReservation"] > .sessionList > .container {
+      grid-template-columns: repeat(3, 3fr);
+
+      > .session-container {
+        width: 13rem;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 60rem) {
+  #main > #myPageForm > .container > .content-container {
+    width: 45rem;
+  }
+}
+
+@media screen and (max-width: 50rem) {
+  #main > #myPageForm > .container > .content-container {
+    width: 38rem;
+
+    > [data-mt-name="sessionReservation"] {
+      > .sessionList > .container {
+        grid-template-columns: repeat(2, 3fr);
+
+        > .session-container {
+          width: 15rem;
+        }
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 40rem) {
+  #main > #myPageForm > .container > .content-container {
+    width: 25rem;
+
+    > [data-mt-name="sessionReservation"] {
+
+      > .summaryBar > [data-mt-component="row"] {
+        gap: 0.5rem;
+
+        > [data-mt-component="column"] {
+          &:not(:last-child) {
+            padding-right: 0.5rem;
+          }
+
+          > [data-mt-component="div.caption"] {
+            font-size: 0.8rem;
+          }
+
+          > [data-mt-component="div.description"] {
+            font-size: 1rem;
+          }
+        }
+      }
+
+      > .sessionList > .container {
+
+        > .session-container {
+          width: 10rem;
+        }
+      }
+    }
+  }
+}

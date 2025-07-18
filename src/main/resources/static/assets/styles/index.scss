@@ -7,58 +7,6 @@ body {
   //background: linear-gradient(225deg, #d8d428 0%, #3db66f 25%, #246984 50%, $global-color-background 100%);
 }
 
-#gradient {
-  top: 0;
-  right: 0;
-  width: 200vw;
-  height: 200vh;
-  background: $global-color-background;
-  background: radial-gradient(circle, #893d6c 0%, #624393 50%, $global-color-background 100%);
-  position: fixed;
-  margin: -100vh -100vw;
-}
-
-#intro {
-  @include flex(column, center, center, 1rem);
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: $global-color-background;
-  opacity: 0;
-  pointer-events: none;
-  transition-duration: 175ms;
-  transition-property: opacity;
-  transition-timing-function: ease;
-  position: fixed;
-  z-index: 9;
-
-  &[data-mt-visible] {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  &[data-mt-phase="1"] {
-    > .logo {
-      top: 0;
-      opacity: 1;
-    }
-  }
-
-  > .logo {
-    @include fixedSize(5rem);
-    top: 0.5rem;
-    object-fit: contain;
-    object-position: center;
-    opacity: 0;
-    pointer-events: none;
-    position: relative;
-    transition-duration: 175ms;
-    transition-property: top, opacity;
-    transition-timing-function: ease;
-  }
-}
-
 #loading {
   @include fixedSize(100%);
   @include flex(column, center, center, 1.5rem);
@@ -119,12 +67,4 @@ body {
     font-weight: 200;
     transition-delay: 125ms;
   }
-}
-
-#youtubePlayer {
-  @include fixedSize(5rem);
-  bottom: 0;
-  opacity: 0; // 나중에 숨기기
-  pointer-events: none;
-  position: fixed;
 }

@@ -11,14 +11,30 @@
   transition-property: color, border-color;
   transition-timing-function: ease;
 
+  &[readonly],
+  &[disabled] {
+    cursor: default;
+    border: 0.0625rem solid $global-color-border-lighten-80;
+    flex-grow: 1;
+
+    &:hover,
+    &:focus {
+      border-color: $global-color-border-lighten-80;
+      color: $global-color-text-darken-30;
+      box-shadow: 0 0.125rem 0.5rem #eeecee;
+    }
+  }
+
   &:hover {
     border-color: $global-color-border-hover;
     color: $global-color-text-darken-10;
+    box-shadow: 0 0.125rem 0.5rem #eeecee;
   }
 
   &:focus {
     border-color: $global-color-border-focus;
     color: $global-color-text;
+    box-shadow: 0 0.125rem 0.5rem #eeecee;
   }
 
   &[data-mt-color="simple"] {

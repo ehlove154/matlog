@@ -1,0 +1,245 @@
+@use "sass:color";
+
+@import "../../_def";
+
+#main > #timetableForm {
+  @include flex(column, stretch, flex-start, 0.5rem);
+  padding: 0 0 5rem 0;
+
+  > .title-container {
+    @include flex(column, stretch, flex-start, 1rem);
+    position: sticky;
+    top: 2rem;
+    left: 0;
+    z-index: 9;
+    background-color: $global-color-background;
+    width: 100%;
+    padding-left: 7rem;
+    padding-top: 1.5rem;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    box-shadow: 0 0.00625rem 1rem #d4d4d4;
+
+    > .title {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+
+    > .day {
+      @include flex(row, stretch, flex-start, 0.5rem);
+      margin-bottom: 1rem;
+
+      > button {
+        padding: 0.5rem;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 999rem;
+        width: 3rem;
+        aspect-ratio: 1/1;
+        border: 0.0625rem solid $global_color-primary-lighten-30;
+
+        &:hover {
+          background-color: $global_color-primary-lighten-40;
+          color: $global_color-accent-lighten-20;
+        }
+
+        &:active {
+          background-color: $global_color-primary-lighten-20;
+          color: $global_color-accent;
+        }
+
+        &:active + .week {
+          margin-bottom: 0;
+        }
+
+        &:active ~ .day {
+          width: 1.55rem;
+          height: 1.55rem;
+          text-align: center;
+          align-content: center;
+          margin: auto;
+          font-size: 0.7rem;
+        }
+
+
+        > .week {
+          font-size: 1rem;
+          font-weight: 500;
+          margin-bottom: 0.5rem;
+        }
+
+        > .day {
+          font-size: 0.7rem;
+          text-align: center;
+          align-content: center;
+        }
+      }
+    }
+  }
+
+
+  > .timetable {
+    margin: auto;
+    @include flex(row, stretch, flex-start, 1rem);
+    flex-wrap: nowrap;
+    overflow-x: hidden;
+    display: none;
+
+    &[data-mt-visible] {
+      display: flex;
+    }
+
+    > [data-mt-name="weeklySession"] {
+      @include flex(column, stretch, flex-start, 1rem);
+      width: 20rem;
+      flex: 0 0 20rem;
+
+      > .session-container {
+        @include flex(column, stretch, flex-start, 0.5rem);
+        width: 100%;
+
+        > .start-time {
+          @include flex(row, stretch, flex-start, 0.5rem);
+
+          > .box {
+            border-top: 0.03rem solid $global-color-border-lighten-70;
+            width: 80%;
+            margin: auto;
+          }
+        }
+
+        > .content {
+          @include flex(column, center, center, 0.35rem);
+          border: 0.0625rem solid $global-color-border-lighten-80;
+          width: 95%;
+          border-radius: 0.5rem;
+          padding: 1rem;
+          margin: auto;
+          cursor: pointer;
+
+          > .class {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+          }
+
+          > .time,
+          > .coach {
+            font-size: 0.8rem;
+            color: $global-color-border-lighten-50;
+          }
+
+          &:hover {
+            border: 0.0625rem solid $global-color-border-lighten-50;
+            background-color: $global_color-primary-lighten-70;
+
+            > .class {
+              color: $global_color-accent-lighten-20;
+            }
+
+            > .time,
+            > .coach {
+              color: $global_color-accent-lighten-30;
+            }
+          }
+
+          &:active {
+            border: 0.0625rem solid $global-color-border-lighten-20;
+            background-color: $global_color-primary-lighten-50;
+
+            > .class {
+              color: $global_color-accent-lighten-5;
+            }
+
+            > .time,
+            > .coach {
+              color: $global_color-accent-lighten-10;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  > .message.init {
+    margin: 5rem auto;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+    color: $global-color-border-lighten-60;
+    line-height: 2;
+    display: none;
+
+    &[data-mt-visible] {
+      display: block;
+    }
+  }
+}
+
+@media screen and (max-width: 100rem) {
+  #main > #timetableForm > .timetable {
+    width: calc(4 * 20rem + 3 * 1rem);
+
+    > [data-mt-name="weeklySession"]:nth-child(n+5) {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 80rem) {
+  #main > #timetableForm > .timetable {
+    width: calc(3 * 20rem + 2 * 1rem);
+
+    > [data-mt-name="weeklySession"] {
+      display: none;
+
+      &:nth-child(-n+3) {
+        display: flex;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 60rem) {
+  #main > #timetableForm {
+    > .timetable {
+      width: calc(2 * 20rem + 1 * 1rem);
+
+      > [data-mt-name="weeklySession"] {
+        display: none;
+
+        &:nth-child(-n+2) {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+
+    > .message.init {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media screen and (max-width: 40rem) {
+  #main > #timetableForm {
+
+    > .title-container {
+      padding-left: 5rem;
+    }
+
+    > .timetable {
+      justify-content: center;
+      width: 20rem;
+
+      > [data-mt-name="weeklySession"] {
+        display: none;
+
+        &:nth-child(1) {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
-package com.yjb.meltube.interceptors;
+package com.yjb.jiujitsumembership.interceptors;
 
 
-import com.yjb.meltube.entities.UserEntity;
-import com.yjb.meltube.mappers.UserMapper;
+import com.yjb.jiujitsumembership.entities.UserEntity;
+import com.yjb.jiujitsumembership.mappers.UserMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class DevInterceptor implements HandlerInterceptor {
 //                    .nickname("admin")
 //                    .build();
 
-            UserEntity signedUser = this.userMapper.selectByEmail("admin@sample.com");
+            UserEntity signedUser = this.userMapper.selectByEmail("master@matlog.com");
             request.getSession().setAttribute("signedUser", signedUser);
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);

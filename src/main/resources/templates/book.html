@@ -1,0 +1,102 @@
+<!doctype html> <!--http://localhost:8080/book-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MatLog | 수업 예약</title>
+    <link rel="shortcut icon" href="/assets/images/shortcut_icon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/styles/common.min.css">
+    <link rel="stylesheet" href="/assets/styles/index.min.css">
+    <script src="/assets/scripts/common.js" type="module"></script>
+    <script defer src="/assets/scripts/index/book.js" type="module"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/loading :: loading}"></th:block>
+<th:block th:replace="~{/fragments/loading :: dialog}"></th:block>
+<main id="main">
+    <th:block th:replace="~{/fragments/header :: header}"></th:block>
+    <form novalidate id="bookForm">
+        <div class="container">
+            <div class="info">
+                <h2 class="title">주짓수 4층</h2>
+                <div class="date">2025-06-25</div>
+                <div class="day">수요일</div>
+                <div class="time">10:30 - 11:30 (60min)</div>
+                <div class="coach">코치 : 백유정</div>
+            </div>
+            <div class="list-container">
+                <ul class="bookList">
+                    <li class="item">
+                        <img src="/assets/images/user/belt/white4.png" alt="" class="icon">
+                        <span class="caption">백유정</span>
+                        <button type="button" data-mt-color="gray" data-mt-object="button" data-mt-visible>미출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/white2.png" alt="" class="icon">
+                        <span class="caption">이정형</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/white.png" alt="" class="icon">
+                        <span class="caption">김종현</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/blue3.png" alt="" class="icon">
+                        <span class="caption">최민호</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/yellow4.png" alt="" class="icon">
+                        <span class="caption">이태민</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/white.png" alt="" class="icon">
+                        <span class="caption">김기범</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/purple3.png" alt="" class="icon">
+                        <span class="caption">이수혁</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/white.png" alt="" class="icon">
+                        <span class="caption">망곰이</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/orange2.png" alt="" class="icon">
+                        <span class="caption">호랭이</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                    <li class="item">
+                        <img src="/assets/images/user/belt/orange4.png" alt="" class="icon">
+                        <span class="caption">코코</span>
+                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
+                    </li>
+                </ul>
+                <ul class="list">
+                    <li class="message empty" data-mt-reference="message" data-mt-name="empty">예약자가 없습니다.</li>
+                </ul>
+                <div class="page-container">
+                    <a href="#" class="previous">
+                        <img src="/assets/images/previous.png" alt="" class="icon">
+                    </a>
+                    <a href="#" class="page -selected">1</a>
+                    <a href="#" class="page">2</a>
+                    <a href="#" class="page">3</a>
+                    <a href="#" class="page">4</a>
+                    <a href="#" class="page">5</a>
+                    <a href="#" class="next">
+                        <img src="/assets/images/next.png" alt="" class="icon">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <button data-mt-object="button" type="submit" data-mt-color="green">예약하기</button>
+    </form>
+</main>
+</body>
+</html>

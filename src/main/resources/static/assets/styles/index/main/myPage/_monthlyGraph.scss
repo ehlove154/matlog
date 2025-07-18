@@ -1,0 +1,244 @@
+@use "sass:color";
+@import "../../../_def";
+
+.blind {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.vertical_chart_box {
+  position: relative;
+  padding: 2.5rem 1.5rem 3.5rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.5rem #eeecee;
+  border: 0.0625rem solid $global-color-border-lighten-70;
+
+  > .title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .chart_box {
+    position: relative;
+    padding-left: 20px;
+    box-sizing: border-box;
+    height: 200px;
+    overflow: visible; // 툴팁 보이도록
+  }
+
+  .axis_y {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    height: 100%;
+    font-size: 12px;
+    color: #4a4a4a;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 5px;
+      bottom: 0;
+      right: 0;
+      width: 1px;
+      background: #d3d3d3;
+    }
+  }
+
+  .axis_x {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    border-bottom: 1px solid #d3d3d3;
+    overflow: visible;
+
+    .item {
+      position: relative;
+      flex: 1;
+      overflow: visible; // 툴팁이 부모 잘림 없이 보이게
+
+      // 툴팁
+      &::after {
+        content: attr(data-count) "회";
+        position: absolute;
+        bottom: calc(100% + 0.5rem);
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.25rem 0.5rem;
+        white-space: nowrap;
+        font-size: 0.7rem;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.75);
+        border-radius: 0.25rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.15s ease-in-out;
+        z-index: 10;
+      }
+      &:hover::after {
+        opacity: 1;
+      }
+
+      .text_box {
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        white-space: nowrap;
+      }
+
+      .bar_wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        height: 100%;
+        overflow: hidden; // 막대만 잘라내기
+      }
+
+      .bar {
+        width: 35px;
+        background: $global_color-accent-lighten-10;
+        border: 0.0625rem solid #eeecee;
+        border-radius: 3px 3px 0 0;
+        transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
+        position: relative;
+
+        &:hover {
+          background: $global_color-accent;
+          border-color: $global-color-border-lighten-70;
+          box-shadow: 0 0.125rem 0.5rem $global-color-border-lighten-70;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 40rem) {
+  .vertical_chart_box {
+    padding: 2rem 1rem;
+    overflow: visible; // 툴팁과 라벨이 잘리지 않도록
+    box-shadow: 0 0.125rem 0.5rem #eeecee;
+    border-radius: 0.5rem;
+    border: 1px solid $global-color-border-lighten-70;
+
+    > .title {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart_box {
+      position: relative;
+      overflow: visible;
+      height: 200px;
+      width: 100%;
+      box-sizing: border-box;
+      padding-left: 2rem; // y축 공간 확보
+    }
+
+    .axis_y {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 2rem;
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #4a4a4a;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 1px;
+        background: #d3d3d3;
+      }
+    }
+
+    .axis_x {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      border-bottom: 1px solid #d3d3d3;
+      overflow: visible;
+
+      .item {
+        flex: 1 1 auto;
+        position: relative;
+        text-align: center;
+
+        &::after {
+          content: attr(data-count) "회";
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          padding: 0.2rem 0.4rem;
+          font-size: 0.65rem;
+          color: #fff;
+          background-color: rgba(0, 0, 0, 0.75);
+          border-radius: 0.25rem;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.15s ease-in-out;
+          z-index: 10;
+          white-space: nowrap;
+        }
+
+        &:hover::after {
+          opacity: 1;
+        }
+
+        .text_box {
+          font-size: 0.7rem;
+          margin-top: 0.3rem;
+          white-space: nowrap;
+        }
+
+        .bar_wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: flex-end;
+          height: 100%;
+          overflow: visible;
+        }
+
+        .bar {
+          width: 100%;
+          max-width: 30px;
+          background: $global_color-accent-lighten-10;
+          border: 1px solid #eeecee;
+          border-radius: 3px 3px 0 0;
+          transition: background 0.15s, box-shadow 0.15s;
+
+          &:hover {
+            background: $global_color-accent;
+            box-shadow: 0 0.125rem 0.5rem $global-color-border-lighten-70;
+          }
+        }
+      }
+    }
+  }
+}

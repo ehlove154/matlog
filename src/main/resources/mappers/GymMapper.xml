@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjb.jiujitsumembership.mappers.GymMapper">
+    <insert id="insert" parameterType="com.yjb.jiujitsumembership.entities.GymEntity"
+            useGeneratedKeys="true"
+            keyProperty="gymId"
+            keyColumn="gymId">
+        insert into `jiujitsu`.`gyms` (`gym_id`, `user_email`, `gym_name`, `is_active`, `address_postal`,
+                                       `address_primary`, `address_secondary`, `created_at`, `modified_at`)
+        values (#{gymId}, #{userEmail}, #{gymName}, #{isActive}, #{addressPostal}, #{addressPrimary},
+                #{addressSecondary}, #{createdAt}, #{modifiedAt})
+    </insert>
+
+    <update id="update">
+        update `jiujitsu`.`gyms`
+        set `gym_name`          = #{gym.gymName},
+            `is_active`         = #{gym.isActive},
+            `address_postal`    = #{gym.addressPostal},
+            `address_primary`   = #{gym.addressPrimary},
+            `address_secondary` = #{gym.addressSecondary}
+        where `gym_id` = #{gym.gymId}
+        limit 1
+    </update>
+
+    <select id="findById" resultType="com.yjb.jiujitsumembership.entities.GymEntity">
+        select `gym_id`            as `gymId`,
+               `user_email`        as `userEmail`,
+               `gym_name`          as `gymName`,
+               `is_active`         as `isActive`,
+               `address_postal`    as `addressPostal`,
+               `address_primary`   as `addressPrimary`,
+               `address_secondary` as `addressSecondary`,
+               `created_at`        as `createdAt`,
+               `modified_at`       as `modifiedAt`
+        from `jiujitsu`.`gyms`
+        where `gym_id` = #{gymId}
+    </select>
+
+    <select id="findAllActive" resultType="com.yjb.jiujitsumembership.entities.GymEntity">
+        select `gym_id`            as `gymId`,
+               `user_email`        as `userEmail`,
+               `gym_name`          as `gymName`,
+               `is_active`         as `isActive`,
+               `address_postal`    as `addressPostal`,
+               `address_primary`   as `addressPrimary`,
+               `address_secondary` as `addressSecondary`,
+               `created_at`        as `createdAt`,
+               `modified_at`       as `modifiedAt`
+        from `jiujitsu`.`gyms`
+        where `is_active` = true
+    </select>
+    <select id="selectByEmail" resultType="com.yjb.jiujitsumembership.entities.GymEntity">
+        select `gym_id`            as `gymId`,
+               `user_email`        as `userEmail`,
+               `gym_name`          as `gymName`,
+               `is_active`         as `isActive`,
+               `address_postal`    as `addressPostal`,
+               `address_primary`   as `addressPrimary`,
+               `address_secondary` as `addressSecondary`,
+               `created_at`        as `createdAt`,
+               `modified_at`       as `modifiedAt`
+        from `jiujitsu`.`gyms`
+        where `user_email` = #{email}
+    </select>
+</mapper>

@@ -1,0 +1,128 @@
+@use "sass:color";
+
+@import "../../../_def";
+#main > #myPageForm > .container > .content-container > [data-mt-name="gymInfo"] {
+  gap: 1rem;
+  display: none;
+  width: 30rem;
+
+  &[data-mt-visible] {
+    display: flex;
+    margin: auto;
+  }
+
+  > .title {
+    font-size: 1.2rem;
+    font-weight: 400;
+  }
+
+  > [data-mt-name="nameAndActive"] {
+    align-items: flex-end;
+
+    > .name-wrapper {
+      width: 65%;
+
+      > [data-mt-component="label.caption"] {
+        font-size: 0.8rem;
+      }
+    }
+
+    > .active-wrapper {
+      background-color: #ffffff;
+      border: 0.0625rem solid #e0e2e4;
+      border-radius: 0.25rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 1fr;
+      overflow: hidden;
+      flex-grow: 1;
+
+      > label {
+        @include flex(row, center, center);
+        cursor: pointer;
+        padding: 0.65rem;
+
+        &:has(> input:checked) {
+          background-color: $global_color-primary;
+
+          > span {
+            color: $global_color-accent;
+          }
+        }
+
+        + input {
+          border-left: 0.0625rem solid #e0e2e4;
+        }
+
+        > input {
+          display: none;
+        }
+      }
+    }
+  }
+  > [data-mt-name="address"] {
+
+    > [data-mt-component="label.caption"] {
+      font-size: 0.8rem;
+    }
+
+    > [data-mt-component="label.row"] {
+      > [name="addressPostal"] {
+        flex-grow: 1;
+      }
+    }
+  }
+
+  > .button-container {
+    justify-content: center;
+
+    > button {
+      width: 5rem;
+      padding: 0.7rem;
+    }
+  }
+}
+
+@media screen and (max-width: 60rem) {
+  #main > #myPageForm > .container > .content-container > [data-mt-name="gymInfo"] {
+    &:has([data-mt-visible]) {
+      width: 25rem;
+
+      > [data-mt-name="nameAndActive"] {
+
+        > .name-wrapper {
+          width: 63%;
+        }
+
+        > .active-wrapper {
+          width: 35%;
+        }
+      }
+
+      > [data-mt-name="address"] {
+        > [data-mt-component="label.row"] {
+          > [name="addressPostal"] {
+            flex-grow: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 40rem) {
+  #main > #myPageForm > .container > .content-container > [data-mt-name="gymInfo"] {
+      width: 21rem;
+
+    > [data-mt-name="nameAndActive"] {
+
+      > .name-wrapper {
+        width: 57%;
+      }
+
+      > .active-wrapper {
+        width: 35%;
+      }
+    }
+  }
+}

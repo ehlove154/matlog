@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div data-mt-visible th:fragment="userSearch" data-mt-name="userSearch" data-mt-component="column">
+    <h2 class="title">회원 조회</h2>
+    <label data-mt-object="label" data-mt-name="search-container" data-mt-component="row">
+        <input required autocomplete="off" maxlength="5" minlength="1" name="name" placeholder="회원 이름으로 검색해 주세요."
+               type="text" data-mt-object="field" data-mt-component="label.field" data-mt-stretch>
+        <button type="submit">
+            <img src="/assets/images/myPage/search.png" alt="" class="icon">
+        </button>
+    </label>
+    <div class="userList">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">이름</th>
+                <th scope="col">연락처</th>
+                <th scope="col">회원권 만료일</th>
+                <th scope="col">회원 상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="user, iterStat : ${userList}">
+            <tr th:attr="data-index=${iterStat.index},
+            data-email=${user.email},
+            data-name=${user.name},
+            data-contact=${user.formattedContact},
+            data-promotion=${#temporals.format(user.promotionDate, 'yyyy-MM-dd')},
+            data-address=${user.address},
+            data-belt=${user.belt != null ? user.belt.toUpperCase() : '-1'},
+            data-stripe=${user.stripe != null ? user.stripe : '-1'},
+            data-expire=${#temporals.format(user.expireDate, 'yyyy-MM-dd')},
+            data-membershipName=${user.membershipName},
+            data-membership=${user.membership},
+            data-createdAt=${#temporals.format(user.createdAt, 'yyyy-MM-dd')},
+            data-attend-month=${user.monthlyAttendance},
+            data-attend-total=${user.totalAttendance},
+            data-attend-recent=${#temporals.format(user.recentAttendance, 'yyyy-MM-dd')},
+            data-status=${user.status}">
+                <td hidden="hidden" th:value="${user.email}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.getFormattedContact}">010-2918-0807</td>
+                <td th:text="${#temporals.format(user.expireDate, 'yyyy-MM-dd')}">2025-09-09</td>
+                <td>
+                    <span th:attr="data-mt-color=${user.status == '회원권 만료' ? 'gray' : (user.status == '만료임박' ? 'red' : 'green')}"
+                          th:text="${user.status}"
+                          data-mt-object="button">수강 중</span>
+                </td>
+            </tr>
+            <tr class="info" th:attr="data-index=${iterStat.index}, data-email=${user.email}">
+                <td colspan="4">
+                    <ul class="list">
+                        <input type="hidden" data-mt-name="email" th:value="${user.email}"/>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">회원 이름</span>
+                            <span class="description" data-mt-name="name"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">가입일</span>
+                            <span class="description" data-mt-name="createdAt"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">회원권 종류</span>
+                            <span class="description" data-mt-name="membershipName"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">회원권 만료일</span>
+                            <span class="description" data-mt-name="expire"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">연락처</span>
+                            <span class="description" data-mt-name="contact"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">주소</span>
+                            <span class="description" data-mt-name="address"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">벨트</span>
+                            <select required data-mt-object="field" data-mt-component="label.field" data-mt-name="belt">
+                                <option disabled hidden value="-1">벨트색</option>
+                                <option value="WHITE">화이트</option>
+                                <option value="GRAY">그레이</option>
+                                <option value="YELLOW">옐로우</option>
+                                <option value="ORANGE">오렌지</option>
+                                <option value="GREEN">그린</option>
+                                <option value="BLUE">블루</option>
+                                <option value="PURPLE">퍼플</option>
+                                <option value="BROWN">브라운</option>
+                                <option value="BLACK">블랙</option>
+                            </select>
+                            <select required data-mt-object="field" data-mt-component="label.field" data-mt-name="stripe">
+                                <option disabled hidden value="-1">그랄</option>
+                                <option value="0">무그랄</option>
+                                <option value="1">1그랄</option>
+                                <option value="2">2그랄</option>
+                                <option value="3">3그랄</option>
+                                <option value="4">4그랄</option>
+                            </select>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">승급일</span>
+                            <span class="description">
+                                <input required autocomplete="off" name="promotion" type="date" data-mt-object="field"
+                                       data-mt-component="label.field" data-mt-name="promotion">
+                            </span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">당월 출석 횟수</span>
+                            <span class="description" data-mt-name="attend-month"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">총 출석 횟수</span>
+                            <span class="description" data-mt-name="attend-total"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">최근 출석일</span>
+                            <span class="description" data-mt-name="attend-recent"></span>
+                        </li>
+                        <li class="item" data-mt-component="row">
+                            <span class="caption">회원 상태</span>
+                            <span class="description">
+                                <span data-mt-object="button" data-mt-color="green" data-mt-name="status"></span>
+                            </span>
+                        </li>
+                    </ul>
+                    <span class="button-container" data-mt-component="row">
+                        <button type="button" data-mt-object="button" data-mt-color="gray" data-mt-name="userInfoDelete">회원 정보 삭제하기</button>
+                        <button type="button" data-mt-object="button" data-mt-color="navy" data-mt-name="userInfoModify">회원 정보 수정하기</button>
+                    </span>
+                </td>
+            </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <ul class="list">
+        <li class="message empty" data-mt-reference="message" data-mt-name="empty">검색 결과가 없습니다.</li>
+    </ul>
+    <div class="page-container">
+        <a href="#" class="previous">
+            <img src="/assets/images/previous.png" alt="" class="icon">
+        </a>
+        <a href="#" class="page">1</a>
+        <a href="#" class="page -selected">2</a>
+        <a href="#" class="page">3</a>
+        <a href="#" class="page">4</a>
+        <a href="#" class="page">5</a>
+        <a href="#" class="next">
+            <img src="/assets/images/next.png" alt="" class="icon">
+        </a>
+    </div>
+</div>
+</html>

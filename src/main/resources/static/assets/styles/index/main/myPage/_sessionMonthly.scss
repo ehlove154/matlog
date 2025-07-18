@@ -1,0 +1,104 @@
+@use "sass:color";
+
+@import "../../../_def";
+@import "./monthlyGraph";
+
+#main > #myPageForm > .container > .content-container > [data-mt-name="sessionMonthly"] {
+  gap: 1rem;
+  display: none;
+
+  &[data-mt-visible] {
+    display: flex;
+  }
+
+  > .title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  > .card {
+    gap: 1rem;
+    justify-content: space-between;
+
+    > div {
+      border-radius: 0.5rem;
+      box-shadow: 0 0.125rem 0.5rem #eeecee;
+      border: 0.0625rem solid $global-color-border-lighten-70;
+      width: 10rem;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      text-align: center;
+
+      > .caption {
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
+
+      .description {
+        font-size: 0.8rem;
+      }
+
+      > [data-mt-component="row"] {
+        align-items: center;
+
+        > .icon {
+          scale: 80%;
+          margin-left: -0.5rem;
+        }
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 80rem) {
+  #main > #myPageForm > .container > .content-container {
+    width: 34rem;
+  }
+}
+
+@media screen and (max-width: 60rem) {
+  #main > #myPageForm > .container > .content-container {
+    width: 25rem;
+
+    [data-mt-name="sessionMonthly"] {
+      > .card {
+        > div {
+          width: 6rem;
+
+          > [data-mt-component="row"] {
+            flex-direction: column;
+            gap: 0;
+
+            > .icon {
+              margin-right: 0;
+              margin-left: 0.1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 40rem) {
+  #main > #myPageForm > .container > .content-container > [data-mt-name="sessionMonthly"] {
+    > .card {
+      > div {
+        width: 6rem;
+
+        > [data-mt-component="row"] {
+          flex-direction: column;
+          gap: 0;
+
+          > .icon {
+            margin-right: 0;
+            margin-left: 0.1rem;
+          }
+        }
+      }
+    }
+  }
+}

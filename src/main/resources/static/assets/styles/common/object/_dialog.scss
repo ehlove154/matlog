@@ -62,7 +62,8 @@
     > [data-mt-component~="dialog.modal.content"] {
       flex-grow: 1;
       flex-shrink: 1;
-      line-height: 1.375;
+      line-height: 1.7;
+      white-space: break-spaces;
       overflow: hidden auto;
     }
 
@@ -71,72 +72,3 @@
     }
   }
 }
-
-//[data-mt-object="dialog"] {
-//  @include flex(column, center, center);
-//  top: 0;
-//  left: 0;
-//  width: 100%;
-//  height: 100%;
-//  backdrop-filter: blur(0.5rem);
-//  background-color: #00000010;
-//  opacity: 0;
-//  pointer-events: none;
-//  position: fixed;
-//  z-index: 9;
-//
-//  &[data-mt-visible] {
-//    opacity: 1;
-//    pointer-events: auto;
-//
-//    > [data-mt-component~="dialog.modal"] {
-//      opacity: 1;
-//      transform: scale(100%) translate(-50%, -50%);
-//    }
-//  }
-//
-//
-//
-//  > [data-mt-component~="dialog.modal"] {
-//    @include flex(column, stretch, flex-start, 1rem);
-//    top: 50%;
-//    left: 40%;
-//    position: absolute;
-//    opacity: 0;
-//    background-color: $global-color-text;
-//    color: $global-color-background;
-//    max-width: min(30rem, calc(100% - 2rem));
-//    max-height: calc(100% - 2rem);
-//    min-width: 20rem;
-//    border-radius: 0.25rem;
-//    overflow: hidden;
-//    margin: auto 4rem;
-//    padding: 1.25rem 2.5rem;
-//    transform: scale(97.5%) translate(-50%, -50%);
-//    transition-duration: 175ms;
-//    transition-property: opacity, transform;
-//    transition-timing-function: ease;
-//
-//    > [data-mt-component~="dialog.modal.title"] {
-//      font-size: 1rem;
-//      font-weight: 500;
-//    }
-//
-//    > [data-mt-component~="dialog.modal.content"] {
-//      flex-grow: 1;
-//      flex-shrink: 1;
-//      line-height: 1.375rem;
-//      //white-space: pre-line;
-//      overflow: hidden auto;
-//      text-align: center;
-//    }
-//
-//    > [data-mt-component~="dialog.modal.buttonContainer"] {
-//      @include flex(row, stretch, flex-end, 0.5rem);
-//
-//      > [data-mt-component~="dialog.modal.buttonContainer.button"] {
-//        border-radius: 0.25rem;
-//      }
-//    }
-//  }
-//}

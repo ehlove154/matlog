@@ -1,0 +1,36 @@
+<!doctype html> <!--http://localhost:8080/user/myPage-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MatLog | 마이 페이지</title>
+    <link rel="shortcut icon" href="/assets/images/shortcut_icon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/styles/common.min.css">
+    <link rel="stylesheet" href="/assets/styles/index.min.css">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/assets/scripts/common.js" type="module"></script>
+    <script defer src="/assets/scripts/user/myPage.js" type="module"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/loading :: loading}"></th:block>
+<th:block th:replace="~{/fragments/loading :: dialog}"></th:block>
+<th:block th:replace="~{/fragments/loading :: addressFindDialog}"></th:block>
+<main id="main">
+    <th:block th:replace="~{/fragments/header :: header}"></th:block>
+    <form novalidate id="myPageForm">
+        <div class="container">
+            <th:block th:replace="~{/fragments/myPage/menu :: myPageMenu}"></th:block>
+            <div class="content-container">
+                <h2 class="title">마이 페이지</h2>
+                <th:block th:replace="~{/fragments/myPage/userModify :: userModify}"></th:block>
+                <th:block th:replace="~{/fragments/myPage/sessionReservation :: sessionReservation}"></th:block>
+                <th:block th:replace="~{/fragments/myPage/sessionMonthly :: sessionMonthly}"></th:block>
+                <th:block th:replace="~{/fragments/myPage/gymInfo :: gymInfo}"></th:block>
+                <th:block th:replace="~{/fragments/myPage/userSearch :: userSearch}"></th:block>
+                <th:block th:replace="~{/fragments/myPage/sessionRegistration :: sessionRegistration}"></th:block>
+            </div>
+        </div>
+    </form>
+</main>
+</body>
+</html>

@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class JiuJitsuMembershipApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JiuJitsuMembershipApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(JiuJitsuMembershipApplication.class, args);
+    }
 
 }

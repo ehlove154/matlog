@@ -37,7 +37,25 @@
 }
 
 
-$global-color-background: #111111;
+$global_color-primary : #1E2A38;
+$global_color-primary-lighten-5: color.adjust($global_color-primary, $lightness: 5%);
+$global_color-primary-lighten-10: color.adjust($global_color-primary, $lightness: 10%);
+$global_color-primary-lighten-20: color.adjust($global_color-primary, $lightness: 20%);
+$global_color-primary-lighten-30: color.adjust($global_color-primary, $lightness: 30%);
+$global_color-primary-lighten-40: color.adjust($global_color-primary, $lightness: 40%);
+$global_color-primary-lighten-50: color.adjust($global_color-primary, $lightness: 50%);
+$global_color-primary-lighten-60: color.adjust($global_color-primary, $lightness: 60%);
+$global_color-primary-lighten-70: color.adjust($global_color-primary, $lightness: 70%);
+
+$global_color-accent : #FFD369;
+$global_color-accent-lighten-5: color.adjust($global_color-accent, $lightness: 5%);
+$global_color-accent-lighten-10: color.adjust($global_color-accent, $lightness: 10%);
+$global_color-accent-lighten-20: color.adjust($global_color-accent, $lightness: 20%);
+$global_color-accent-lighten-30: color.adjust($global_color-accent, $lightness: 30%);
+$global_color-accent-lighten-40: color.adjust($global_color-accent, $lightness: 40%);
+$global_color-accent-lighten-50: color.adjust($global_color-accent, $lightness: 50%);
+
+$global-color-background: #f7f8fa;
 $global-color-background-lighten-5: color.adjust($global-color-background, $lightness: 5%);
 $global-color-background-lighten-10: color.adjust($global-color-background, $lightness: 10%);
 $global-color-background-lighten-20: color.adjust($global-color-background, $lightness: 20%);
@@ -52,13 +70,17 @@ $global-color-border-lighten-20: color.adjust($global-color-border, $lightness: 
 $global-color-border-lighten-30: color.adjust($global-color-border, $lightness: 30%);
 $global-color-border-lighten-40: color.adjust($global-color-border, $lightness: 40%);
 $global-color-border-lighten-50: color.adjust($global-color-border, $lightness: 50%);
+$global-color-border-lighten-60: color.adjust($global-color-border, $lightness: 60%);
+$global-color-border-lighten-70: color.adjust($global-color-border, $lightness: 70%);
+$global-color-border-lighten-80: color.adjust($global-color-border, $lightness: 80%);
+$global-color-border-lighten-90: color.adjust($global-color-border, $lightness: 90%);
 
 $global-color-border-hover: color.adjust($global-color-border, $lightness: 25%);
 $global-color-border-focus: color.adjust($global-color-border, $lightness: 50%);
 
-$global-color-concept: #ff0134;
+$global-color-concept: #ff4d4f;
 
-$global-color-text: #fafafa;
+$global-color-text: #212529;
 $global-color-text-darken-10: color.adjust($global-color-text, $lightness: -10%);
 $global-color-text-darken-20: color.adjust($global-color-text, $lightness: -20%);
 $global-color-text-darken-30: color.adjust($global-color-text, $lightness: -30%);

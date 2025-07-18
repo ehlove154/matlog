@@ -1,0 +1,218 @@
+<!doctype html> <!--http://localhost:8080/user/register-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MatLog | 회원가입</title>
+    <link rel="shortcut icon" href="/assets/images/shortcut_icon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/styles/common.min.css">
+    <link rel="stylesheet" href="/assets/styles/index.min.css">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/assets/scripts/common.js" type="module"></script>
+    <script defer src="/assets/scripts/user/register.js" type="module"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/loading :: loading}"></th:block>
+<th:block th:replace="~{/fragments/loading :: dialog}"></th:block>
+<th:block th:replace="~{/fragments/loading :: addressFindDialog}"></th:block>
+<main id="main">
+    <th:block th:replace="~{/fragments/header :: header}"></th:block>
+    <form novalidate id="registerForm">
+        <h2 class="title">회원가입</h2>
+        <label data-mt-object="label" data-mt-name="email">
+            <span data-mt-component="label.caption">이메일</span>
+            <span data-mt-component="label.row">
+                <input required autocomplete="email" maxlength="100" minlength="8" name="email"
+                       placeholder="matlog@sample.com" type="email" data-mt-object="field"
+                       data-mt-component="label.field">
+                <button data-mt-name="emailCheck" data-mt-object="button" type="button" data-mt-color="navy" name="emailCheck">중복확인</button>
+            </span>
+            <span data-mt-component="label.warning"><!--warning--></span>
+            <span data-mt-component="label.description">입력하신 이메일 주소는 로그인 및 계정 복구 등 다양한 상황에서 활용 됨으로 실제 이메일을 수신 할 수 있는 이메일 주소를 입력해 주세요.</span>
+        </label>
+        <label data-mt-object="label" data-mt-name="password">
+            <span data-mt-component="label.caption">비밀번호</span>
+            <input required autocomplete="off" maxlength="127" minlength="8" name="password"
+                   placeholder="비밀번호를 입력해 주세요." type="password" data-mt-object="field" data-mt-component="label.field">
+            <span data-mt-component="label.warning"><!--warning--></span>
+            <span data-mt-component="label.description">알파벳, 숫자, 공백을 제외한 특수기호를 이용하며 8자 이상을 입력해 주세요.</span>
+        </label>
+        <label data-mt-object="label" data-mt-name="passwordCheck">
+            <span data-mt-component="label.caption">비밀번호 확인</span>
+            <input required autocomplete="off" maxlength="127" minlength="8" name="passwordCheck"
+                   placeholder="비밀번호를 재입력해 주세요." type="password" data-mt-object="field" data-mt-component="label.field">
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <label data-mt-object="label" data-mt-name="name">
+            <span data-mt-component="label.caption">이름</span>
+            <input required autocomplete="off" maxlength="5" minlength="2" name="name" placeholder="이름을 입력해 주세요."
+                   type="text" data-mt-object="field" data-mt-component="label.field" >
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <label data-mt-object="label" data-mt-name="birth">
+            <span data-mt-component="label.caption">생년월일 / 성별</span>
+            <span data-mt-component="label.row">
+                <input required autocomplete="off" name="birth" type="date" data-mt-object="field"
+                       data-mt-component="label.field">
+                <span class="gender-wrapper">
+                    <label data-mt-object="label" data-mt-name="gender">
+                        <input name="gender" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="F">
+                        <span data-mt-component="label.caption">여</span>
+                    </label>
+                    <label data-mt-object="label" data-mt-name="gender">
+                        <input name="gender" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="M">
+                        <span data-mt-component="label.caption">남</span>
+                    </label>
+                </span>
+            </span>
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <label data-mt-object="label" data-mt-name="contact">
+            <span data-mt-component="label.caption">연락처</span>
+            <span data-mt-component="label.row">
+                <input required data-mt-object="field" data-mt-component="label.field" maxlength="11" minlength="10"
+                       name="contact" placeholder="'-'없이 숫자만 입력해 주세요." type="tel">
+                <button data-mt-object="button" type="button" data-mt-color="navy" data-mt-name="contactCheck">본인인증</button>
+            </span>
+            <label data-mt-component="label.row" data-mt-name="contactCode">
+                <input disabled required data-mt-object="field" data-mt-component="label.field" maxlength="6" minlength="6" name="contactCode" placeholder="000000" type="text">
+                <button disabled data-mt-object="button" type="button" data-mt-color="navy" data-mt-name="contactCodeCheck">인증번호 확인</button>
+            </label>
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <label data-mt-object="label" data-mt-name="address">
+            <span data-mt-component="label.caption">주소</span>
+            <span data-mt-component="label.row">
+                <input readonly required data-mt-object="field" data-mt-component="label.field" maxlength="5"
+                       minlength="5" name="addressPostal" placeholder="우편번호 (주소 찾기 버튼을 클릭해 주세요.)">
+                <button data-mt-object="button" data-mt-color="navy" name="addressFindButton"
+                        type="button">주소 찾기</button>
+            </span>
+            <input readonly required data-mt-object="field" data-mt-component="label.field" maxlength="100"
+                   minlength="10" name="addressPrimary" placeholder="기본 주소 (주소 찾기 버튼을 클릭해 주세요.)" type="text">
+            <input data-mt-object="field" data-mt-component="label.field" maxlength="100" minlength="0"
+                   name="addressSecondary" placeholder="상세 주소 (건물 이름, 동, 호)" type="text">
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <label data-mt-object="label" data-mt-name="user_role">
+            <span data-mt-component="label.caption">체육관</span>
+            <span class="role-container" data-mt-component="label.row">
+                <label data-mt-object="label" data-mt-name="role">
+                    <input name="role" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="master">
+                    <span data-mt-component="label.caption">체육관 대표</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="role">
+                    <input name="role" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="member">
+                    <span data-mt-component="label.caption">체육관 수강생</span>
+                </label>
+            </span>
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <label data-mt-object="label" data-mt-name="gymId" for="gymSelect">
+            <select required data-mt-object="field" data-mt-component="label.field" data-mt-name="gym" id="gymSelect" name="gymSelect">
+                <option disabled hidden selected value="-1">체육관을 선택해주세요. (체육관 수강생 전용)</option>
+                <th:block th:each="gym : ${gyms}">
+                    <option th:value="${gym.gymId}" th:text="${gym.gymName}"></option>
+                </th:block>
+            </select>
+            <input required data-mt-object="field" data-mt-component="label.field" maxlength="30" minlength="2" name="gymInput" placeholder="체육관 이름을 입력해 주세요. (체육관 대표 전용)" type="text" id="gymInput">
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <label data-mt-object="label" data-mt-name="belts">
+            <span data-mt-component="label.caption">벨트</span>
+            <span class="belt-container">
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field" value="WHITE">
+                    <span data-mt-component="label.caption">화이트</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="GRAY">
+                    <span data-mt-component="label.caption">그레이</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="YELLOW">
+                    <span data-mt-component="label.caption">옐로우</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="ORANGE">
+                    <span data-mt-component="label.caption">오렌지</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="GREEN">
+                    <span data-mt-component="label.caption">그린</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="BLUE">
+                    <span data-mt-component="label.caption">블루</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="PURPLE">
+                    <span data-mt-component="label.caption">퍼플</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field"
+                           value="BROWN">
+                    <span data-mt-component="label.caption">브라운</span>
+                </label>
+                <label data-mt-object="label" data-mt-name="belt">
+                    <input name="belt" type="radio" data-mt-object="field" data-mt-component="label.field" value="BLACK">
+                    <span data-mt-component="label.caption">블랙</span>
+                </label>
+            </span>
+            <span class="common-container">
+                <span class="stripe-wrapper">
+                    <label data-mt-object="label" data-mt-name="stripe">
+                        <input name="stripe" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="0">
+                        <span data-mt-component="label.caption">무그랄</span>
+                    </label>
+                    <label data-mt-object="label" data-mt-name="stripe">
+                        <input name="stripe" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="1">
+                        <span data-mt-component="label.caption">1그랄</span>
+                    </label>
+                    <label data-mt-object="label" data-mt-name="stripe">
+                        <input name="stripe" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="2">
+                        <span data-mt-component="label.caption">2그랄</span>
+                    </label>
+                    <label data-mt-object="label" data-mt-name="stripe">
+                        <input name="stripe" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="3">
+                        <span data-mt-component="label.caption">3그랄</span>
+                    </label>
+                    <label data-mt-object="label" data-mt-name="stripe">
+                        <input name="stripe" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="4">
+                        <span data-mt-component="label.caption">4그랄</span>
+                    </label>
+                </span>
+                <span class="promotion-wrapper">
+                    <label data-mt-object="label" data-mt-name="lastPromotionAt">
+                        <span data-mt-component="label.caption">승급일</span>
+                        <input required autocomplete="off" name="lastPromotionAt" type="date" data-mt-object="field"
+                               data-mt-component="label.field">
+                    </label>
+                    <span data-mt-component="label.description">마지막 승급일을 입력해 주세요. 승급 이력이 없다면 입력하지 않아도 됩니다.</span>
+                </span>
+            </span>
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </label>
+        <div class="button-container">
+            <button name="back" type="button" data-mt-object="button" data-mt-color="gray">돌아가기</button>
+            <button type="submit" data-mt-object="button" data-mt-color="navy">회원가입</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

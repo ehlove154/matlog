@@ -1,4 +1,4 @@
-package com.yjb.meltube.Results;
+package com.yjb.jiujitsumembership.results;
 
 public interface Result {
     String name();

@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<header id="header" th:fragment="header">
+<header id="header" class="header" th:fragment="header">
+    <input hidden class="toggle" id="menuToggle" type="checkbox">
     <img alt="" src="/assets/images/logo_concept.png" class="logo">
     <span data-mt-stretch role="none"></span>
-    <label class="menu">
+    <label class="menu" for="menuToggle">
         <img alt="menu" class="icon" draggable="false" src="/assets/images/index/header/menu.png">
     </label>
 </header>

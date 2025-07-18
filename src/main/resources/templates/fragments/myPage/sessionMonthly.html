@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sessionMonthly" data-mt-name="sessionMonthly" data-mt-component="column">
+    <h2 class="title">세션 참여 현황</h2>
+    <div class="vertical_chart_box">
+        <h2 class="title">월별 세션 참여 통계</h2>
+        <div class="chart_box">
+            <ul class="axis_y">
+                <li class="item">0
+                    <span class="blind">회</span>
+                </li>
+                <li class="item">10
+                    <span class="blind">회</span>
+                </li>
+                <li class="item">20
+                    <span class="blind">회</span>
+                </li>
+                <li class="item">30
+                    <span class="blind">회</span>
+                </li>
+                <li class="item">40
+                    <span class="blind">회</span>
+                </li>
+            </ul>
+            <ul class="axis_x">
+                <li class="item" data-count="32">
+                    <div class="text_box">1월</div>
+                    <div class="bar_wrapper" >
+                        <div class="bar" style="height:80%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="20">
+                    <div class="text_box">2월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:50%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="40">
+                    <div class="text_box">3월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:100%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="28">
+                    <div class="text_box">4월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:70%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="12">
+                    <div class="text_box">5월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:30%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="4">
+                    <div class="text_box">6월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:10%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="0">
+                    <div class="text_box">7월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:0;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="24">
+                    <div class="text_box">8월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:60%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="22">
+                    <div class="text_box">9월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:55%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="4">
+                    <div class="text_box">10월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:10%;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="0">
+                    <div class="text_box">11월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:0;"></div>
+                    </div>
+                </li>
+                <li class="item" data-count="28">
+                    <div class="text_box">12월</div>
+                    <div class="bar_wrapper">
+                        <div class="bar" style="height:70%;"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div data-mt-component="row" class="card">
+        <div class="total" data-mt-component="column">
+            <span class="caption">156</span>
+            <span class="description">총 세션 참여 횟수</span>
+        </div>
+        <div class="weekly" data-mt-component="column">
+            <span class="caption">8</span>
+            <span class="description">주간 평균 세션 참여 횟수</span>
+        </div>
+        <div class="variation" data-mt-component="column">
+            <span class="caption">8</span>
+            <span data-mt-component="row">
+                <span class="description">지난 달 대비 증감</span>
+                <img src="/assets/images/myPage/up.png" alt="" class="icon">
+            </span>
+        </div>
+    </div>
+</div>
+</html>

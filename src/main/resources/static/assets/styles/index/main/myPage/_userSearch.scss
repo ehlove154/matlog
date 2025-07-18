@@ -1,0 +1,272 @@
+@use "sass:color";
+
+@import "../../../_def";
+
+#main > #myPageForm > .container > .content-container > [data-mt-name="userSearch"] {
+  gap: 1rem;
+  display: none;
+
+  &[data-mt-visible] {
+    display: flex;
+  }
+
+  > .title {
+    font-size: 1.2rem;
+    font-weight: 400;
+  }
+
+  > [data-mt-name="search-container"] {
+    border-radius: 999rem;
+    box-shadow: 0 0.125rem 0.5rem #eeecee;
+    border: 0.0625rem solid $global-color-border-lighten-70;
+    background-color: color.adjust($global-color-background, $alpha: -0.25);
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+
+    > input {
+      border: none;
+      background-color: transparent;
+      padding-left: 1.5rem;
+    }
+
+    > button {
+      > .icon {
+        scale: 45%;
+        cursor: pointer;
+      }
+    }
+  }
+
+  > .userList {
+    display: inline-block;
+    border: 0.0625rem solid $global-color-border-lighten-70;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.125rem 0.5rem #eeecee;
+    width: 35rem;
+    margin: auto;
+
+    > .table {
+      border-collapse: collapse;
+      width: 100%;
+
+      > thead {
+        box-shadow: 0 0.125rem 0.5rem #eeecee;
+        margin-bottom: 0.5rem;
+
+        > tr {
+          border-bottom: 0.0625rem solid $global-color-border-lighten-70;
+
+          > th {
+            padding: 0.75rem;
+
+            &:not(:last-child) {
+              border-right: 0.0625rem solid $global-color-border-lighten-80;
+            }
+          }
+        }
+      }
+
+      > tbody {
+        > tr {
+          cursor: pointer;
+          border-bottom: 0.0625rem solid $global-color-border-lighten-80;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          > td {
+            padding: 0.2rem 0.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+
+
+            &:not(:last-child) {
+              border-right: 0.0625rem solid $global-color-border-lighten-80;
+            }
+
+            > [data-mt-object="button"] {
+              width: 4rem;
+              font-size: 0.6rem;
+              padding: 0.5rem;
+              margin: auto;
+            }
+          }
+
+          &.info {
+            display: none;
+
+            > td {
+              padding: 1rem 1rem 2rem 1rem;
+
+              > .list {
+                display: none;
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: 6fr;
+                align-items: center;
+                gap: 0.375rem;
+                padding: 0.5rem 1rem 1.5rem 1rem;
+                cursor: default;
+
+                > .item {
+                  align-items: center;
+
+                  &::before {
+                    content: "·";
+                  }
+
+                  > .caption {
+                    font-size: 0.7rem;
+                    color: $global-color-border-lighten-50;
+                  }
+
+                  > .description {
+                    font-size: 0.9rem;
+
+                    > input {
+                      border: none;
+                      cursor: pointer;
+                    }
+
+                    > [data-mt-object="button"] {
+                      width: 4rem;
+                      font-size: 0.6rem;
+                      padding: 0.3rem;
+                      cursor: default;
+                    }
+                  }
+
+                  > select {
+                    width: 39%;
+                  }
+                }
+              }
+
+              > .button-container {
+                cursor: default;
+                justify-content: center;
+
+                > button {
+                  width: auto;
+                  font-size: 0.8rem;
+                  padding: 0.5rem 1rem;
+                  cursor: pointer;
+                }
+              }
+            }
+
+            &[data-mt-visible] {
+              display: revert;
+
+              > td > .list {
+                display: grid;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  > .list {
+    text-align: center;
+    font-size: 1.2rem;
+    color: $global-color-border-lighten-40;
+    display: none;
+  }
+
+  > .page-container {
+    @include flex(row, center, center, 0.375rem);
+    margin-top: 1.5rem;
+
+    > .previous > .icon {
+      margin-right: 0.5rem;
+      width: 1rem;
+    }
+
+    > .next > .icon {
+      margin-left: 0.5rem;
+      width: 1rem;
+    }
+
+    > .page {
+      @include flex(row, center, center);
+      width: 2rem;
+      height: 2rem;
+      background-color: $global-color-background;
+      border: 0.0625rem solid #e0e0e0;
+      border-radius: 999rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $global_color-primary-lighten-20;
+        border-color: $global_color-primary-lighten-20;
+        color: $global_color-accent-lighten-20;
+      }
+
+      &:active {
+        background-color: $global_color-primary-lighten-30;
+        border-color: $global_color-primary-lighten-30;
+        color: $global_color-accent-lighten-30;
+      }
+
+      &.-selected {
+        background-color: $global_color-primary-lighten-10;
+        border-color: $global_color-primary-lighten-10;
+        color: $global_color-accent-lighten-5;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 50rem) {
+  #main > #myPageForm > .container > .content-container > [data-mt-name="userSearch"] {
+    width: auto;
+
+    > .userList {
+      width: 30rem;
+    }
+  }
+}
+
+@media screen and (max-width: 40rem) {
+  #main > #myPageForm > .container > .content-container > [data-mt-name="userSearch"] {
+    width: 25rem;
+
+    > [data-mt-name="search-container"] {
+      width: 85%;
+    }
+
+    > .userList {
+      width: 85%;
+      margin: 0;
+
+      > .table {
+        > thead > tr > th {
+          &:nth-child(3) {
+            display: none;
+          }
+        }
+
+        > tbody > tr {
+          > td {
+            &:nth-child(3) {
+              display: none;
+            }
+          }
+
+          &.info > td > .list {
+            grid-template-columns: repeat(1, 1fr);
+          }
+        }
+      }
+    }
+
+    .page-container {
+      width: 80%;
+    }
+  }
+}

@@ -52,3 +52,46 @@ ol, ul {
   margin-inline: 0;
   padding-inline: 0;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#addressFindDialog {
+  @include flex(column, center, center, 1.25rem);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(0.5rem);
+  background-color: #212325a0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transition-duration: 175ms;
+  transition-property: opacity;
+  transition-timing-function: ease;
+  z-index: 6;
+
+  &.-visible {
+    opacity: 1;
+    pointer-events: auto;
+
+    > .modal {
+      transform: scale(100%);
+    }
+  }
+
+  > .modal {
+    width: 22.5rem;
+    aspect-ratio: 3/4;
+    background-color: #ffffff;
+    border-radius: 0.25rem;
+    transform: scale(97.5%);
+    transition-duration: 175ms;
+    transition-property: transform;
+    transition-timing-function: ease;
+    overflow: hidden;
+  }
+}

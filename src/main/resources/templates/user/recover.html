@@ -1,0 +1,108 @@
+<!doctype html> <!--http://localhost:8080/user/recover-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MatLog | 계정 복구</title>
+    <link rel="shortcut icon" href="/assets/images/shortcut_icon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/styles/common.min.css">
+    <link rel="stylesheet" href="/assets/styles/index.min.css">
+    <script src="/assets/scripts/common.js" type="module"></script>
+    <script defer src="/assets/scripts/user/recover.js" type="module"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/loading :: loading}"></th:block>
+<th:block th:replace="~{/fragments/loading :: dialog}"></th:block>
+<main id="main">
+    <th:block th:replace="~{/fragments/header :: header}"></th:block>
+    <form novalidate id="recoverForm">
+        <h2 class="title">계정 복구</h2>
+        <div class="type">
+            <label data-mt-object="label">
+                <input hidden name="type" type="radio" class="input" value="email">
+                <span class="title">이메일 찾기</span>
+                <span class="message">회원가입시 입력하였던 이름, 생년월일, 연락처 정보로 이메일을 찾을 수 있습니다.</span>
+            </label>
+            <label data-mt-object="label">
+                <input hidden name="type" type="radio" class="input" value="password" checked>
+                <span class="title">비밀번호 재설정</span>
+                <span class="message">이메일 인증을 통해 비밀번호를 재설정할 수 있습니다.</span>
+            </label>
+        </div>
+        <div class="container empty">'이메일 찾기'와 '비밀번호 재설정' 중 하나를 선택해 주세요.
+        </div>
+        <div class="container email">
+            <label data-mt-object="label" data-mt-name="email">
+                <span data-mt-component="label.caption">이름 / 생년월일 / 성별</span>
+                <span data-mt-component="label.row">
+                    <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field" maxlength="5"
+                   minlength="1" name="eName" type="text" placeholder="성 + 이름 (공백 없음)">
+                    <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field" name="eBirth"
+                       type="date">
+                    <span class="gender-wrapper">
+                        <label data-mt-object="label" data-mt-name="gender">
+                            <input name="eGender" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="F">
+                            <span data-mt-component="label.caption">여</span>
+                        </label>
+                        <label data-mt-object="label" data-mt-name="gender">
+                            <input name="eGender" type="radio" data-mt-object="field" data-mt-component="label.field"
+                               value="M">
+                            <span data-mt-component="label.caption">남</span>
+                        </label>
+                    </span>
+                </span>
+                <span data-mt-component="label.warning"><!--warning--></span>
+            </label>
+            <label data-mt-object="label" data-mt-name="contact">
+                <span data-mt-component="label.caption">연락처</span>
+                <input required data-mt-object="field" data-mt-component="label.field" maxlength="11" minlength="10"
+                       name="eContact" placeholder="'-'없이 숫자만 입력해 주세요." type="tel">
+                <span data-mt-component="label.warning"><!--warning--></span>
+            </label>
+        </div>
+        <div class="container password">
+            <input hidden name="pEmailSalt" type="hidden">
+            <label data-mt-object="label" data-mt-name="password">
+                <span data-mt-component="label.caption">이메일</span>
+                <span data-mt-component="label.row">
+                    <input required autocomplete="email" maxlength="100" minlength="8" name="pEmail"
+                       placeholder="matlog@sample.com" type="email" data-mt-object="field"
+                       data-mt-component="label.field">
+                    <button data-mt-object="button" type="button" data-mt-color="navy"
+                            data-mt-name="pEmailCodeSendButton">인증번호 전송</button>
+                </span>
+                <span data-mt-component="label.row">
+                    <input disabled required data-mt-object="field" data-mt-component="label.field" maxlength="6"
+                       minlength="6"
+                       name="pEmailCode" placeholder="000000" autocomplete="off" type="text">
+                    <button disabled data-mt-object="button" type="button" data-mt-color="navy"
+                            data-mt-name="pEmailCodeVerifyButton">인증번호 확인</button>
+            </span>
+                <span data-mt-component="label.warning"><!--warning--></span>
+            </label>
+            <label data-mt-object="label">
+                <span data-mt-component="label.caption">신규 비밀번호</span>
+                <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field"
+                       maxlength="127" minlength="8"
+                       name="pPassword" placeholder="숫자, 알파벳, 특수기호 8자 이상" type="password">
+                <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field"
+                       maxlength="127" minlength="8"
+                       name="pPasswordCheck" placeholder="비밀번호 재입력" type="password">
+                <span data-mt-component="label.warning"><!--warning--></span>
+            </label>
+        </div>
+        <div class="button-container">
+            <a data-mt-object="button" data-mt-color="gray" href="/user/login">
+                <img class="icon cancel" src="/assets/images/register-form.cancel.png" alt="">
+                <span data-mt-component="button.caption"> 취소</span>
+            </a>
+            <button type="submit" data-mt-object="button" data-mt-color="navy">
+                <span data-mt-component="button.caption"> 계정 복구</span>
+                <img class="icon next" src="/assets/images/next.png" alt="">
+            </button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

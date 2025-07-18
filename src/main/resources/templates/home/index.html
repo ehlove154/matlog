@@ -1,0 +1,438 @@
+<!doctype html> <!--http://localhost:8080/-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MatLog | 주짓수 회원 관리 시스템</title>
+    <link rel="shortcut icon" href="/assets/images/shortcut_icon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/styles/common.min.css">
+    <link rel="stylesheet" href="/assets/styles/index.min.css">
+    <script src="/assets/scripts/common.js" type="module"></script>
+    <script defer src="/assets/scripts/index/main.js" type="module"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/loading :: loading}"></th:block>
+<th:block th:replace="~{/fragments/loading :: dialog}"></th:block>
+<main id="main">
+    <th:block th:replace="~{/fragments/header :: header}"></th:block>
+    <form novalidate id="timetableForm">
+        <div class="title-container">
+            <h2 class="title">2025 6월</h2>
+            <div class="day" id="sessionToggle">
+                <button data-mt-object="label" data-mt-name="mon" type="button" data-day="mon">
+                    <span class="week">월</span>
+                    <span class="day">23</span>
+                </button>
+                <button type="button" data-mt-object="label" data-mt-name="tue" data-day="tue">
+                    <span class="week">화</span>
+                    <span class="day">24</span>
+                </button>
+                <button type="button" data-mt-object="label" data-mt-name="wed" data-day="wed">
+                    <span class="week">수</span>
+                    <span class="day">25</span>
+                </button>
+                <button type="button" data-mt-object="label" data-mt-name="thu" data-day="thu">
+                    <span class="week">목</span>
+                    <span class="day">26</span>
+                </button>
+                <button type="button" data-mt-object="label" data-mt-name="fri" data-day="fri">
+                    <span class="week">금</span>
+                    <span class="day">27</span>
+                </button>
+            </div>
+        </div>
+        <label class="timetable" for="sessionToggle" data-mt-visible>
+            <div data-mt-name="weeklySession" data-mt-component="timetableLabel.div" data-mt-reference="timeTable" data-mt-day="mon" class="time-column">
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">10:30</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">10:30 - 11:30 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">13:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">13:00 - 14:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">18:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">18:00 - 19:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">19:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">19:00 - 20:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">20:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 (스파링) 4층</div>
+                        <div class="time">20:00 - 21:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">21:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">21:00 - 22:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">21:00 - 22:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">22:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 (스파링) 4층</div>
+                        <div class="time">22:00 - 22:40 (40min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+            </div>
+
+            <div data-mt-name="weeklySession" data-mt-component="timetableLabel.div" data-mt-reference="timeTable" data-mt-day="tue" class="time-column">
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">10:30</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">10:30 - 11:30 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">13:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">13:00 - 14:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">18:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">18:00 - 19:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">19:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">19:00 - 20:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">20:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 (스파링) 4층</div>
+                        <div class="time">20:00 - 21:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">21:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">21:00 - 22:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+            </div>
+
+            <div data-mt-name="weeklySession" data-mt-component="timetableLabel.div" data-mt-reference="timeTable" data-mt-day="wed" class="time-column">
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">10:30</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">10:30 - 11:30 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">13:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">13:00 - 14:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">18:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">18:00 - 19:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">19:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">19:00 - 20:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">20:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 (스파링) 4층</div>
+                        <div class="time">20:00 - 21:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">21:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">21:00 - 22:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">21:00 - 22:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">22:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 (스파링) 4층</div>
+                        <div class="time">22:00 - 22:40 (40min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+            </div>
+
+            <div data-mt-name="weeklySession" data-mt-component="timetableLabel.div" data-mt-reference="timeTable" data-mt-day="thu" class="time-column">
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">10:30</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">10:30 - 11:30 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">13:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">13:00 - 14:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">18:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">18:00 - 19:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">19:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">19:00 - 20:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">20:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 (스파링) 4층</div>
+                        <div class="time">20:00 - 21:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">21:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">21:00 - 22:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+            </div>
+
+            <div data-mt-name="weeklySession" data-mt-component="timetableLabel.div" data-mt-reference="timeTable" data-mt-day="fri" class="time-column">
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">10:30</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">10:30 - 11:30 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">13:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">13:00 - 14:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">18:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">18:00 - 19:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">19:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 4층</div>
+                        <div class="time">19:00 - 20:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">20:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 (스파링) 4층</div>
+                        <div class="time">20:00 - 21:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">21:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">킥복싱 3층</div>
+                        <div class="time">21:00 - 22:00 (60min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+                <div class="session-container">
+                    <div class="start-time">
+                        <span class="caption">22:00</span>
+                        <hr class="box" role="none">
+                    </div>
+                    <div class="content">
+                        <div class="class">주짓수 (스파링) 4층</div>
+                        <div class="time">22:00 - 22:40 (40min)</div>
+                        <div class="coach">코치 : 백유정</div>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+        <div class="message init" data-mt-reference="message" data-mt-name="init">등록된 세션이 없습니다.<br>체육관 운영자라면 마이페이지에서 세션을 추가해 주세요.</div>
+    </form>
+</main>
+</body>
+</html>

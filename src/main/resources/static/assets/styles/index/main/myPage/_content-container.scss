@@ -1,0 +1,16 @@
+@use "sass:color";
+
+@import "../../../_def";
+
+#main > #myPageForm {
+
+  > .container {
+    > .content-container {
+      background-color: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+      padding: 1rem 2rem;
+      width: auto;
+    }
+  }
+}

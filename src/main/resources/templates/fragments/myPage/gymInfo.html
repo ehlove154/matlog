@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="gymInfo" data-mt-name="gymInfo" data-mt-component="column">
+    <h2 class="title">체육관 정보</h2>
+    <label data-mt-object="label" data-mt-name="nameAndActive" data-mt-component="row">
+        <span class="name-wrapper" data-mt-component="column">
+            <span data-mt-component="label.caption">체육관 이름</span>
+            <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field" type="text" maxlength="30" minlength="2" name="gymName" placeholder="체육관 이름을 입력해 주세요." th:value="${gym.getGymName()}">
+            <span data-mt-component="label.warning"><!--warning--></span>
+        </span>
+        <span class="active-wrapper">
+            <label data-mt-object="label" data-mt-name="active">
+                <input name="active" type="radio" data-mt-object="field" data-mt-component="label.field" value="1" th:checked="${gym != null and gym.isActive == true}">
+                <span data-mt-component="label.caption">운영 중</span>
+            </label>
+            <label data-mt-object="label" data-mt-name="active">
+                <input name="active" type="radio" data-mt-object="field" data-mt-component="label.field" value="0" th:checked="${gym != null and gym.isActive == false}">
+                <span data-mt-component="label.caption">운영 중지</span>
+            </label>
+        </span>
+    </label>
+    <label data-mt-object="label" data-mt-name="gymAddress">
+        <span data-mt-component="label.caption">주소</span>
+        <span data-mt-component="label.row">
+                <input readonly required data-mt-object="field" data-mt-component="label.field" maxlength="5" minlength="5" name="gymAddressPostal" placeholder="우편번호 (주소 찾기 버튼을 클릭해 주세요.)" data-mt-name="gymAddressPostal" th:value="${gym.getAddressPostal()}">
+                <button data-mt-object="button" data-mt-color="navy" name="addressFindButton" type="button">주소 찾기</button>
+            </span>
+        <input readonly required data-mt-object="field" data-mt-component="label.field" maxlength="100" minlength="10" name="gymAddressPrimary" placeholder="기본 주소 (주소 찾기 버튼을 클릭해 주세요.)" type="text" data-mt-name="gymAddressPrimary" th:value="${gym.getAddressPrimary()}">
+        <input data-mt-object="field" data-mt-component="label.field" maxlength="100" minlength="0" data-mt-name="gymAddressSecondary" name="gymAddressSecondary" placeholder="상세 주소 (건물 이름, 동, 호)" type="text" th:value="${gym.getAddressSecondary()}">
+        <span data-mt-component="label.warning"><!--warning--></span>
+    </label>
+    <span class="button-container" data-mt-component="row">
+        <button type="submit" data-mt-name="name" data-mt-object="button" data-mt-color="green">저장</button>
+    </span>
+</div>
+</html>

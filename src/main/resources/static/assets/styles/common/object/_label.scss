@@ -12,8 +12,8 @@
 
   &[data-mt-invalid] {
     [data-mt-component~="label.field"] {
-      border-color: #e74c3c;
-      color: #e74c3c;
+      border-color: #ff4d4f;
+      color: #ff4d4f;
     }
 
     [data-mt-component~="label.warning"] {
@@ -24,19 +24,22 @@
 
   &[data-mt-valid] {
     [data-mt-component~="label.field"] {
-      border-color: #2ecc71;
-      color: #2ecc71;
+      border-color: #52c41a;
+      color: #52c41a;
     }
 
     [data-mt-component~="label.warning"] {
-      margin-left: 1rem;
-      color: #2ecc71;
+      color: #52c41a;
       display: block;
     }
   }
 
   [data-mt-component~="label.row"] {
     @include flex(row, stretch, flex-start, 0.5rem);
+  }
+
+  [data-mt-component~="label.column"] {
+    @include flex(column, stretch, flex-start, 0.5rem);
   }
 
     [data-mt-component~="label.caption"] {
@@ -52,15 +55,21 @@
       font-size: 0.75rem;
       line-height: 1.25;
       text-align: justify;
-      padding-inline: 1rem;
       margin-bottom: 0.5rem;
     }
 
     [data-mt-component~="label.warning"] {
-      color: #e74c3c;
+      color: #ff4d4f;
       font-size: 0.9rem;
       line-height: 1.25;
       display: none;
-      margin-left: 1rem;
     }
   }
+
+[data-mt-component~="row"] {
+  @include flex(row, stretch, flex-start, 0.5rem);
+}
+
+[data-mt-component~="column"] {
+  @include flex(column, stretch, flex-start, 0.5rem);
+}
