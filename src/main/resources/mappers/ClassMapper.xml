@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjb.jiujitsumembership.mappers.ClassMapper">
+    <insert id="insert" parameterType="com.yjb.jiujitsumembership.entities.ClassEntity" useGeneratedKeys="true" keyProperty="classId" keyColumn="class_id">
+        insert into `jiujitsu`.`classes` (`class_id`, `class_name`, `user_email`, `coach`, `start_time`, `end_time`, `day`, `gym_id`)
+        values (#{clazz.classId}, #{clazz.className}, #{clazz.userEmail}, #{clazz.coach}, #{clazz.startTime}, #{clazz.endTime}, #{clazz.day}, #{clazz.gymId})
+    </insert>
+
+    <update id="update" parameterType="com.yjb.jiujitsumembership.entities.ClassEntity">
+        update `jiujitsu`.`classes`
+        set `class_name` = #{clazz.className},
+            `coach`      = #{clazz.coach},
+            `start_time` = #{clazz.startTime},
+            `end_time`   = #{clazz.endTime},
+            `day`        = #{clazz.day},
+            `gym_id`     = #{clazz.gymId}
+        where `class_id` = #{clazz.classId}
+        limit 1
+    </update>
+</mapper>
