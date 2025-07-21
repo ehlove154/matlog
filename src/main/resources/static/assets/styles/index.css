@@ -255,6 +255,22 @@
   flex-grow: 1;
   flex-shrink: 1;
 }
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content[disabled] {
+  cursor: default;
+  border: 0.0625rem solid #ededed;
+  color: rgb(160.5, 160.5, 160.5);
+}
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content[disabled]:hover {
+  border: 0.0625rem solid #ededed;
+  background-color: inherit;
+}
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content[disabled]:hover > .class {
+  color: inherit;
+}
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content[disabled]:hover > .time,
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content[disabled]:hover > .coach {
+  color: inherit;
+}
 #main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content > .class {
   font-size: 1rem;
   margin-bottom: 0.3rem;

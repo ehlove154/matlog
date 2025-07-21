@@ -117,6 +117,26 @@
           margin: auto;
           cursor: pointer;
 
+          &[disabled] {
+            cursor: default;
+            border: 0.0625rem solid $global-color-border-lighten-80;
+            color: $global-color-border-lighten-50;
+
+            &:hover {
+              border: 0.0625rem solid $global-color-border-lighten-80;
+              background-color: inherit;
+
+              > .class {
+                color: inherit;
+              }
+
+              > .time,
+              > .coach {
+                color: inherit;
+              }
+            }
+          }
+
           > .class {
             font-size: 1rem;
             margin-bottom: 0.3rem;
