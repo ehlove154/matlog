@@ -16,44 +16,17 @@ import '../common.js';
         const daySessions = {};
         let currentDay = null;
 
-        const stored = localStorage.getItem('sessionRegistration');
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored);
-                Object.entries(parsed).forEach(([day, sessions]) => {
-                    daySessions[day] = sessions.map(data => {
-                        const $clone = $template.cloneNode(true);
-                        $clone.querySelectorAll('input').forEach($input => {
-                            if ($input.type === 'radio') {
-                                $input.checked = !!data[$input.name];
-                            } else {
-                                $input.value = data[$input.name] ?? '';
-                            }
-                        });
-                        return $clone;
-                    });
-                });
-            } catch (err) {
-                console.error('failed to restore sessions', err);
-            }
-        }
-
-        function persistSessions() {
-            const data = {};
-            Object.entries(daySessions).forEach(([day, nodes]) => {
-                data[day] = nodes.map($el => {
-                    const obj = {};
-                    $el.querySelectorAll('input').forEach($input => {
-                        if ($input.type === 'radio') {
-                            obj[$input.name] = $input.checked;
-                        } else {
-                            obj[$input.name] = $input.value;
-                        }
-                    });
-                    return obj;
+        if (window.sessionsByDay) {
+            Object.entries(window.sessionsByDay).forEach(([day, sessions]) => {
+                daySessions[day] = sessions.map(data => {
+                    const $clone = $template.cloneNode(true);
+                    $clone.querySelector('input[name="sessionName"]').value = data.className ?? '';
+                    $clone.querySelector('input[name="startTime"]').value = data.startTime ?? '';
+                    $clone.querySelector('input[name="endTime"]').value = data.endTime ?? '';
+                    $clone.querySelector('input[name="coach"]').value = data.coach ?? '';
+                    return $clone;
                 });
             });
-            localStorage.setItem('sessionRegistration', JSON.stringify(data));
         }
 
         const $dayRadios = $registration.querySelectorAll('.week-container input[name="week.day"]');
@@ -70,7 +43,6 @@ import '../common.js';
         function switchDay(day) {
             if (currentDay !== null) {
                 daySessions[currentDay] = Array.from($wrapper.children);
-                persistSessions();
             }
             currentDay = day;
             const saved = daySessions[day] ?? [];
@@ -116,7 +88,6 @@ import '../common.js';
                 $wrapper.appendChild($clone);
                 if (currentDay) {
                     daySessions[currentDay] = Array.from($wrapper.children);
-                    persistSessions();
                 }
             });
         }

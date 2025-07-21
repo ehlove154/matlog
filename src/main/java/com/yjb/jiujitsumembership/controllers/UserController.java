@@ -138,6 +138,7 @@ public class UserController {
                             @SessionAttribute(value = "userDto", required = false) UserDto userDto,
                             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                             @RequestParam(value = "name", required = false) String name,
+                            @RequestParam(value = "day", required = false, defaultValue = "MON") String day,
                             Model model) {
 
         if (signedUser == null) {
@@ -153,6 +154,7 @@ public class UserController {
             gym = this.gymMapper.selectByEmail(userDto.getEmail());
         }
         model.addAttribute("gym", gym);
+        model.addAttribute("day", day);
 
         List<ClassEntity> sessions = this.classService.getSessions(signedUser);
         Map<String, List<ClassEntity>> sessionsByDay = sessions.stream()

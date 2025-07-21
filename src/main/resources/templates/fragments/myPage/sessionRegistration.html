@@ -42,37 +42,33 @@
         </span>
         <span class="common-container" data-mt-component="column">
             <span class="common-wrapper">
-                <th:block th:each="session : ${sessionsByDay}">
-                    <span class="session-wrapper" data-mt-component="column">
-                        <label data-mt-object="label" data-mt-name="session">
-                            <span data-mt-component="label.caption">세션명</span>
-                            <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field"
-                                   type="text" maxlength="100" minlength="2" name="sessionName"
-                                   placeholder="세션명을 입력해 주세요." th:value="${session.className}">
-                            <span data-mt-component="label.warning"><!--warning--></span>
-                        </label>
-                        <label data-mt-object="label" data-mt-name="session">
-                            <span data-mt-component="label.caption">시작 시간</span>
-                            <input required data-mt-object="field" data-mt-component="label.field" type="time" name="startTime"
-                                   th:value="${session.startTime}">
-                            <span data-mt-component="label.warning"><!--warning--></span>
-                        </label>
-                        <label data-mt-object="label" data-mt-name="session">
-                            <span data-mt-component="label.caption">종료 시간</span>
-                            <input required data-mt-object="field" data-mt-component="label.field" type="time" name="endTime"
-                                   th:value="${session.endTime}">
-                            <span data-mt-component="label.warning"><!--warning--></span>
-                        </label>
-                        <label data-mt-object="label" data-mt-name="session">
-                            <span data-mt-component="label.caption">담당 코치</span>
-                            <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field"
-                                   type="text" maxlength="5" minlength="2" name="coach"
-                                   placeholder="코치 이름을 입력해 주세요." th:value="${session.coach}">
-                            <span data-mt-component="label.warning"><!--warning--></span>
-                        </label>
-                    </span>
+                <th:block th:each="entry : ${sessionsByDay}">
+                    <th:block th:each="classSession : ${entry.value}">
+                        <span class="session-wrapper" data-mt-component="column" th:attr="data-day=${entry.key}">
+                            <label data-mt-object="label" data-mt-name="session">
+                                <span data-mt-component="label.caption">세션명</span>
+                                <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field" type="text" maxlength="100" minlength="2" name="sessionName" placeholder="세션명을 입력해 주세요." th:value="${classSession.className}">
+                                <span data-mt-component="label.warning"><!--warning--></span>
+                            </label>
+                            <label data-mt-object="label" data-mt-name="session">
+                                <span data-mt-component="label.caption">시작 시간</span>
+                                <input required data-mt-object="field" data-mt-component="label.field" type="time" name="startTime" th:value="${classSession.startTime}">
+                                <span data-mt-component="label.warning"><!--warning--></span>
+                            </label>
+                            <label data-mt-object="label" data-mt-name="session">
+                                <span data-mt-component="label.caption">종료 시간</span>
+                                <input required data-mt-object="field" data-mt-component="label.field" type="time" name="endTime" th:value="${classSession.endTime}">
+                                <span data-mt-component="label.warning"><!--warning--></span>
+                            </label>
+                            <label data-mt-object="label" data-mt-name="session">
+                                <span data-mt-component="label.caption">담당 코치</span>
+                                <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field" type="text" maxlength="5" minlength="2" name="coach" placeholder="코치 이름을 입력해 주세요." th:value="${classSession.coach}">
+                                <span data-mt-component="label.warning"><!--warning--></span>
+                            </label>
+                        </span>
+                    </th:block>
                 </th:block>
-                <th:block th:if="${#lists.isEmpty(sessionsByDay)}">
+                <th:block th:if="${sessionsByDay.isEmpty()}">
                     <span class="session-wrapper" data-mt-component="column">
                         <label data-mt-object="label" data-mt-name="session">
                             <span data-mt-component="label.caption">세션명</span>
@@ -83,12 +79,14 @@
                         </label>
                         <label data-mt-object="label" data-mt-name="session">
                             <span data-mt-component="label.caption">시작 시간</span>
-                            <input required data-mt-object="field" data-mt-component="label.field" type="time" name="startTime">
+                            <input required data-mt-object="field" data-mt-component="label.field" type="time"
+                                   name="startTime">
                             <span data-mt-component="label.warning"><!--warning--></span>
                         </label>
                         <label data-mt-object="label" data-mt-name="session">
                             <span data-mt-component="label.caption">종료 시간</span>
-                            <input required data-mt-object="field" data-mt-component="label.field" type="time" name="endTime">
+                            <input required data-mt-object="field" data-mt-component="label.field" type="time"
+                                   name="endTime">
                             <span data-mt-component="label.warning"><!--warning--></span>
                         </label>
                         <label data-mt-object="label" data-mt-name="session">
@@ -102,7 +100,8 @@
                 </th:block>
             </span>
             <span class="button-container" data-mt-component="row">
-                <button type="button" data-mt-name="name" data-mt-object="button" data-mt-color="simple">+ 클래스 추가</button>
+                <button type="button" data-mt-name="name" data-mt-object="button"
+                        data-mt-color="simple">+ 클래스 추가</button>
                 <button type="submit" data-mt-name="name" data-mt-object="button" data-mt-color="navy">저장</button>
             </span>
         </span>
