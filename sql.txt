@@ -7,22 +7,12 @@ create table `jiujitsu`.`belts`
     constraint primary key (`belt_code`)
 );
 
-create table `jiujitsu`.`stripes`
-(
-    `stripe_id`    int         not null auto_increment,
-    `belt_code`    varchar(20) not null,
-    `stripe_count` tinyint     not null,
-    `display_text` varchar(10) not null,
-    constraint primary key (`stripe_id`),
-    constraint foreign key (`belt_code`) references `jiujitsu`.`belts` (`belt_code`) on update cascade on delete cascade
-);
-
 create table `jiujitsu`.`memberships`
 (
     `membership_code` varchar(5) not null,
     `display_text`    varchar(5) not null,
-    `join_date`       date       not null default now(),
-    `expire_date`     date       not null default now(),
+    `duration_month`       int,
+    `price`     int       not null,
     constraint primary key (`membership_code`)
 );
 
@@ -64,6 +54,8 @@ create table `jiujitsu`.`users`
     `last_signed_at`          datetime                           null     default null comment '마지막 로그인 일시',
     `last_signed_ua`          varchar(512)                       null     default null comment '마지막 로그인 유저 에이전트',
     `membership`              varchar(5)                         not null,
+    `membership_joined_date` date default now,
+    `membership_expire_date` date default now,
     `user_role`               enum ('ADMIN', 'MASTER', 'MEMBER') not null,
     `is_delete`               boolean                            not null default false,
     `is_suspended`            boolean                            not null default false,
