@@ -65,6 +65,8 @@
                                 <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field" type="text" maxlength="5" minlength="2" name="coach" placeholder="코치 이름을 입력해 주세요." th:value="${classSession.coach}">
                                 <span data-mt-component="label.warning"><!--warning--></span>
                             </label>
+                            <input type="hidden" name="classId" th:value="${classSession.classId}">
+                            <button type="button" class="delete-session">삭제</button>
                         </span>
                     </th:block>
                 </th:block>
@@ -96,6 +98,8 @@
                                    placeholder="코치 이름을 입력해 주세요.">
                             <span data-mt-component="label.warning"><!--warning--></span>
                         </label>
+                        <input type="hidden" name="classId" value="0">
+                        <button type="button" class="delete-session">삭제</button>
                     </span>
                 </th:block>
             </span>

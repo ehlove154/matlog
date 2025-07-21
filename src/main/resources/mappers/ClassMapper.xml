@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yjb.jiujitsumembership.mappers.ClassMapper">
     <insert id="insert" parameterType="com.yjb.jiujitsumembership.entities.ClassEntity" useGeneratedKeys="true" keyProperty="classId" keyColumn="class_id">
-        insert into `jiujitsu`.`classes` (`class_id`, `class_name`, `user_email`, `coach`, `start_time`, `end_time`, `day`, `gym_id`)
-        values (#{clazz.classId}, #{clazz.className}, #{clazz.userEmail}, #{clazz.coach}, #{clazz.startTime}, #{clazz.endTime}, #{clazz.day}, #{clazz.gymId})
+        insert into `jiujitsu`.`classes` (`class_id`, `class_name`, `user_email`, `coach`, `start_time`, `end_time`, `day`, `gym_id`, `is_deleted`)
+        values (#{clazz.classId}, #{clazz.className}, #{clazz.userEmail}, #{clazz.coach}, #{clazz.startTime}, #{clazz.endTime}, #{clazz.day}, #{clazz.gymId}, false)
     </insert>
 
     <update id="update" parameterType="com.yjb.jiujitsumembership.entities.ClassEntity">
@@ -13,8 +13,16 @@
             `start_time` = #{clazz.startTime},
             `end_time`   = #{clazz.endTime},
             `day`        = #{clazz.day},
-            `gym_id`     = #{clazz.gymId}
+            `gym_id`     = #{clazz.gymId},
+            `is_deleted` = #{clazz.isDeleted}
         where `class_id` = #{clazz.classId}
+        limit 1
+    </update>
+
+    <update id="updateDeleted" parameterType="int">
+        update `jiujitsu`.`classes`
+        set `is_deleted` = true
+        where `class_id` = #{classId}
         limit 1
     </update>
 
@@ -29,6 +37,7 @@
                `gym_id`     as `gymId`
         from `jiujitsu`.`classes`
         where `user_email` = #{email}
+          and `is_deleted` = false
         order by `day`, `start_time`
     </select>
 
@@ -42,6 +51,7 @@
                `day`        as `day`,
                `gym_id`     as `gymId`
         from `jiujitsu`.`classes`
+        where `is_deleted` = false
         order by `day`, `start_time`
     </select>
 </mapper>

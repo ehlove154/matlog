@@ -14,7 +14,23 @@ import '../common.js';
         let $template = $wrapper.querySelector('.session-wrapper');
 
         const daySessions = {};
+        const deletedIds = new Set();
         let currentDay = null;
+
+        function attachDelete($el) {
+            const btn = $el.querySelector('.delete-session');
+            if (!btn) return;
+            btn.addEventListener('click', () => {
+                const idInput = $el.querySelector('input[name="classId"]');
+                if (idInput && idInput.value && Number(idInput.value) > 0) {
+                    deletedIds.add(Number(idInput.value));
+                }
+                $el.remove();
+                if (currentDay) {
+                    daySessions[currentDay] = Array.from($wrapper.children);
+                }
+            });
+        }
 
         function dedupeDaySessions() {
             Object.entries(daySessions).forEach(([day, elements]) => {
@@ -40,6 +56,10 @@ import '../common.js';
                     $clone.querySelector('input[name="startTime"]').value = data.startTime ?? '';
                     $clone.querySelector('input[name="endTime"]').value = data.endTime ?? '';
                     $clone.querySelector('input[name="coach"]').value = data.coach ?? '';
+                    const idInput = $clone.querySelector('input[name="classId"]');
+                    if (idInput) idInput.value = data.classId ?? 0;
+                    attachDelete($clone);
+
                     return $clone;
                 });
             });
@@ -51,6 +71,7 @@ import '../common.js';
                 if (!daySessions[day]) {
                     daySessions[day] = [];
                 }
+                attachDelete($el);
                 daySessions[day].push($el.cloneNode(true));
             });
             if ($template) {
@@ -89,11 +110,13 @@ import '../common.js';
                         $input.value = '';
                     }
                 });
+                attachDelete($clone);
                 $wrapper.appendChild($clone);
                 daySessions[day] = Array.from($wrapper.children);
             } else {
                 saved.forEach($el => {
                     const $cloned = $el.cloneNode(true);
+                    attachDelete($cloned);
                     $wrapper.appendChild($cloned);
                 });
                 daySessions[day] = Array.from($wrapper.children);
@@ -118,6 +141,9 @@ import '../common.js';
                         $input.value = '';
                     }
                 });
+                const idInput = $clone.querySelector('input[name="classId"]');
+                if (idInput) idInput.value = 0;
+                attachDelete($clone);
                 $wrapper.appendChild($clone);
                 if (currentDay) {
                     daySessions[currentDay] = Array.from($wrapper.children);
@@ -140,10 +166,17 @@ import '../common.js';
                         const startTime = $el.querySelector('input[name="startTime"]').value;
                         const endTime = $el.querySelector('input[name="endTime"]').value;
                         const coach = $el.querySelector('input[name="coach"]').value.trim();
+                        const idInput = $el.querySelector('input[name="classId"]');
+                        const classId = idInput ? Number(idInput.value) : 0;
+
                         if (sessionName && startTime && endTime && coach) {
-                            payload.push({className: sessionName, startTime, endTime, coach, day});
+                            payload.push({classId, className: sessionName, startTime, endTime, coach, day});
                         }
                     });
+                });
+
+                deletedIds.forEach(id => {
+                    payload.push({classId: id, isDeleted: true});
                 });
 
                 const xhr = new XMLHttpRequest();
@@ -158,6 +191,7 @@ import '../common.js';
                     const response = JSON.parse(xhr.responseText);
                     switch (response.result) {
                         case 'success':
+                            deletedIds.clear();
                             dialog.showSimpleOk('세션 등록', '세션 등록이 완료되었습니다.');
                             break;
                         case 'failure_session_expired':

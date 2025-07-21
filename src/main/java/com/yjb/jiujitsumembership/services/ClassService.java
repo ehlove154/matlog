@@ -30,10 +30,20 @@ public class ClassService {
             return CommonResult.SUCCESS;
         }
         for (ClassEntity session : sessions) {
+            if (session.getClassId() > 0 && Boolean.TRUE.equals(session.getIsDeleted())) {
+                classMapper.updateDeleted(session.getClassId());
+                continue;
+            }
+
             session.setUserEmail(signedUser.getEmail());
             if (signedUser.getGymId() != null) {
                 session.setGymId(signedUser.getGymId());
             }
+
+            if (session.getIsDeleted() == null) {
+                session.setIsDeleted(false);
+            }
+
             if (session.getClassId() > 0) {
                 classMapper.update(session);
             } else {

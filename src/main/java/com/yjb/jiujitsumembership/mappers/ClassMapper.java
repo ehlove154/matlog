@@ -12,7 +12,9 @@ public interface ClassMapper {
 
     int update(@Param(value = "clazz") ClassEntity clazz);
 
-    List<ClassEntity> selectByUserEmail(@Param("email") String email);
+    List<ClassEntity> selectByUserEmail(@Param(value = "email") String email);
 
     List<ClassEntity> selectAll();
+
+    int updateDeleted(@Param(value = "classId") int classId);
 }
