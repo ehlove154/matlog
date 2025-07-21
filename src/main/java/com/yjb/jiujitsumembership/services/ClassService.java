@@ -42,4 +42,11 @@ public class ClassService {
         }
         return CommonResult.SUCCESS;
     }
+
+    public List<ClassEntity> getSessions(UserEntity signedUser) {
+        if (signedUser == null) {
+            return List.of();
+        }
+        return this.classMapper.selectByUserEmail(signedUser.getEmail());
+    }
 }

@@ -17,4 +17,18 @@
         where `class_id` = #{clazz.classId}
         limit 1
     </update>
+
+    <select id="selectByUserEmail" resultType="com.yjb.jiujitsumembership.entities.ClassEntity">
+        select `class_id`   as `classId`,
+               `class_name` as `className`,
+               `user_email` as `userEmail`,
+               `coach`      as `coach`,
+               `start_time` as `startTime`,
+               `end_time`   as `endTime`,
+               `day`        as `day`,
+               `gym_id`     as `gymId`
+        from `jiujitsu`.`classes`
+        where `user_email` = #{email}
+        order by `day`, `start_time`
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.yjb.jiujitsumembership.controllers;
 
 import com.yjb.jiujitsumembership.dtoes.UserDto;
+import com.yjb.jiujitsumembership.entities.ClassEntity;
 import com.yjb.jiujitsumembership.entities.GymEntity;
 import com.yjb.jiujitsumembership.entities.UserEntity;
 import com.yjb.jiujitsumembership.mappers.GymMapper;
@@ -8,6 +9,7 @@ import com.yjb.jiujitsumembership.mappers.UserMapper;
 import com.yjb.jiujitsumembership.results.CommonResult;
 import com.yjb.jiujitsumembership.results.Result;
 import com.yjb.jiujitsumembership.results.ResultTuple;
+import com.yjb.jiujitsumembership.services.ClassService;
 import com.yjb.jiujitsumembership.services.UserService;
 import com.yjb.jiujitsumembership.vos.PageVo;
 import com.yjb.jiujitsumembership.vos.UserListVo;
@@ -21,6 +23,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -29,12 +33,14 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final GymMapper gymMapper;
+    private final ClassService classService;
 
     @Autowired
-    public UserController(UserService userService, UserMapper userMapper, GymMapper gymMapper) {
+    public UserController(UserService userService, UserMapper userMapper, GymMapper gymMapper, ClassService classService) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.gymMapper = gymMapper;
+        this.classService = classService;
     }
 
     @RequestMapping(value = "/check-email", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -127,35 +133,6 @@ public class UserController {
         return "user/recover";
     }
 
-    //    @RequestMapping(value = "/myPage", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-//    public String getMyPage(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
-//                            @SessionAttribute(value = "userDto", required = false) UserDto userDto,
-//                            @RequestParam(value = "userList", required = false) UserListVo userListVo,
-//                            Model model) {
-//
-//        if (signedUser == null) {
-//            return "redirect:/user/login";
-//        }
-//
-//        model.addAttribute("signedUser", signedUser);
-//        model.addAttribute("userDto", userDto);
-//
-//        GymEntity gym = null;
-//        if (userDto != null && userDto.getEmail() != null) {
-//            gym = this.gymMapper.selectByEmail(userDto.getEmail());
-//        }
-//        model.addAttribute("gym", gym);
-//
-//        List<UserListVo> userListVo = this.userMapper.selectForUser(user.getEmail());
-//        if (userListVo == null || userListVo.isEmpty()) {
-//            // Null 또는 빈 리스트일 경우 처리
-//            model.addAttribute("userList", List.of()); // 빈 리스트라도 보내야 thymeleaf에서 오류 안남
-//        } else {
-//            model.addAttribute("userList", userListVo); // 리스트를 전달
-//        }
-//
-//        return "user/myPage";
-//    }
     @RequestMapping(value = "/myPage", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String getMyPage(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
                             @SessionAttribute(value = "userDto", required = false) UserDto userDto,
@@ -176,6 +153,11 @@ public class UserController {
             gym = this.gymMapper.selectByEmail(userDto.getEmail());
         }
         model.addAttribute("gym", gym);
+
+        List<ClassEntity> sessions = this.classService.getSessions(signedUser);
+        Map<String, List<ClassEntity>> sessionsByDay = sessions.stream()
+                .collect(Collectors.groupingBy(ClassEntity::getDay));
+        model.addAttribute("sessionsByDay", sessionsByDay);
 
         PageVo pageVo;
         List<UserListVo> userList;
