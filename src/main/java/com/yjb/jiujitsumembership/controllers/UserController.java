@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -158,7 +159,7 @@ public class UserController {
 
         List<ClassEntity> sessions = this.classService.getSessions(signedUser);
         Map<String, List<ClassEntity>> sessionsByDay = sessions.stream()
-                .collect(Collectors.groupingBy(ClassEntity::getDay));
+                .collect(Collectors.groupingBy(ClassEntity::getDay, LinkedHashMap::new, Collectors.toList()));
         model.addAttribute("sessionsByDay", sessionsByDay);
 
         PageVo pageVo;

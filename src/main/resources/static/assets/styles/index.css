@@ -2644,9 +2644,7 @@
 #main > #myPageForm > .container > .content-container > [data-mt-name=registration] > [data-mt-name=week] > .common-container > .common-wrapper > .session-wrapper > .delete-session {
   margin-top: 0.5rem;
   width: 4rem;
-  padding: 0.3rem;
-  border: 0.0625rem solid rgb(109.5, 109.5, 109.5);
-  background-color: rgb(211.5, 211.5, 211.5);
+  padding: 0.5rem;
   cursor: pointer;
 }
 #main > #myPageForm > .container > .content-container > [data-mt-name=registration] > [data-mt-name=week] > .common-container > .common-wrapper > .session-wrapper > label {

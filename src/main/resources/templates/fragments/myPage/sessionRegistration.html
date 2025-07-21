@@ -66,7 +66,7 @@
                                 <span data-mt-component="label.warning"><!--warning--></span>
                             </label>
                             <input type="hidden" name="classId" th:value="${classSession.classId}">
-                            <button type="button" class="delete-session">삭제</button>
+                            <button type="button" class="delete-session" data-mt-color="red" data-mt-object="button">삭제</button>
                         </span>
                     </th:block>
                 </th:block>
@@ -99,7 +99,7 @@
                             <span data-mt-component="label.warning"><!--warning--></span>
                         </label>
                         <input type="hidden" name="classId" value="0">
-                        <button type="button" class="delete-session">삭제</button>
+                        <button type="button" data-mt-object="button" class="delete-session" data-mt-color="red">삭제</button>
                     </span>
                 </th:block>
             </span>

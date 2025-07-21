@@ -8,203 +8,215 @@ import '../common.js';
         });
         window.$loading = document.getElementById('loading');
 
-        const $wrapper = $registration.querySelector('.common-wrapper');
-        const $addButton = $registration.querySelector('.button-container button[data-mt-color="simple"]');
-
-        let $template = $wrapper.querySelector('.session-wrapper');
-
-        const daySessions = {};
-        const deletedIds = new Set();
-        let currentDay = null;
-
-        function attachDelete($el) {
-            const btn = $el.querySelector('.delete-session');
-            if (!btn) return;
-            btn.addEventListener('click', () => {
-                const idInput = $el.querySelector('input[name="classId"]');
-                if (idInput && idInput.value && Number(idInput.value) > 0) {
-                    deletedIds.add(Number(idInput.value));
+        fetch('/user/myPage/classes')
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (data) {
+                    window.sessionsByDay = data;
                 }
-                $el.remove();
-                if (currentDay) {
-                    daySessions[currentDay] = Array.from($wrapper.children);
-                }
-            });
-        }
+                init();
+            })
+            .catch(() => init());
 
-        function dedupeDaySessions() {
-            Object.entries(daySessions).forEach(([day, elements]) => {
-                const map = new Map();
-                elements.forEach($el => {
-                    const start = $el.querySelector('input[name="startTime"]').value;
-                    const end = $el.querySelector('input[name="endTime"]').value;
-                    const key = `${start}-${end}`;
-                    if (map.has(key)) {
-                        map.delete(key);
+        function init() {
+            const $wrapper = $registration.querySelector('.common-wrapper');
+            const $addButton = $registration.querySelector('.button-container button[data-mt-color="simple"]');
+
+            let $template = $wrapper.querySelector('.session-wrapper');
+
+            const daySessions = {};
+            const deletedIds = new Set();
+            let currentDay = null;
+
+            function attachDelete($el) {
+                const btn = $el.querySelector('.delete-session');
+                if (!btn) return;
+                btn.addEventListener('click', () => {
+                    const idInput = $el.querySelector('input[name="classId"]');
+                    if (idInput && idInput.value && Number(idInput.value) > 0) {
+                        deletedIds.add(Number(idInput.value));
                     }
-                    map.set(key, $el);
-                });
-                daySessions[day] = Array.from(map.values());
-            });
-        }
-
-        if (window.sessionsByDay) {
-            Object.entries(window.sessionsByDay).forEach(([day, sessions]) => {
-                daySessions[day] = sessions.map(data => {
-                    const $clone = $template.cloneNode(true);
-                    $clone.querySelector('input[name="sessionName"]').value = data.className ?? '';
-                    $clone.querySelector('input[name="startTime"]').value = data.startTime ?? '';
-                    $clone.querySelector('input[name="endTime"]').value = data.endTime ?? '';
-                    $clone.querySelector('input[name="coach"]').value = data.coach ?? '';
-                    const idInput = $clone.querySelector('input[name="classId"]');
-                    if (idInput) idInput.value = data.classId ?? 0;
-                    attachDelete($clone);
-
-                    return $clone;
-                });
-            });
-            $wrapper.innerHTML = '';
-        } else {
-            const $sessions = $wrapper.querySelectorAll('.session-wrapper');
-            $sessions.forEach($el => {
-                const day = $el.getAttribute('data-day');
-                if (!daySessions[day]) {
-                    daySessions[day] = [];
-                }
-                attachDelete($el);
-                daySessions[day].push($el.cloneNode(true));
-            });
-            if ($template) {
-                $template = $template.cloneNode(true);
-            }
-            $wrapper.innerHTML = '';
-        }
-
-        const $dayRadios = $registration.querySelectorAll('.week-container input[name="week.day"]');
-        const $initial = Array.from($dayRadios).find(r => r.checked);
-
-        if ($initial) {
-            if (!daySessions[$initial.value]) {
-                daySessions[$initial.value] = [];
-            }
-        }
-        dedupeDaySessions();
-        if ($initial) {
-            currentDay = null;
-            switchDay($initial.value);
-        }
-
-        function switchDay(day) {
-            if (currentDay !== null) {
-                daySessions[currentDay] = Array.from($wrapper.children);
-            }
-            currentDay = day;
-            const saved = daySessions[day] ?? [];
-            $wrapper.innerHTML = '';
-            if (saved.length === 0 && $template) {
-                const $clone = $template.cloneNode(true);
-                $clone.querySelectorAll('input').forEach($input => {
-                    if ($input.type === 'radio') {
-                        $input.checked = false;
-                    } else {
-                        $input.value = '';
+                    $el.remove();
+                    if (currentDay) {
+                        daySessions[currentDay] = Array.from($wrapper.children);
                     }
                 });
-                attachDelete($clone);
-                $wrapper.appendChild($clone);
-                daySessions[day] = Array.from($wrapper.children);
+            }
+
+            function dedupeDaySessions() {
+                Object.entries(daySessions).forEach(([day, elements]) => {
+                    const map = new Map();
+                    elements.forEach($el => {
+                        const start = $el.querySelector('input[name="startTime"]').value;
+                        const end = $el.querySelector('input[name="endTime"]').value;
+                        const key = `${start}-${end}`;
+                        if (map.has(key)) {
+                            map.delete(key);
+                        }
+                        map.set(key, $el);
+                    });
+                    daySessions[day] = Array.from(map.values());
+                });
+            }
+
+            if (window.sessionsByDay) {
+                Object.entries(window.sessionsByDay).forEach(([day, sessions]) => {
+                    daySessions[day] = sessions.map(data => {
+                        const $clone = $template.cloneNode(true);
+                        $clone.querySelector('input[name="sessionName"]').value = data.className ?? '';
+                        $clone.querySelector('input[name="startTime"]').value = data.startTime ?? '';
+                        $clone.querySelector('input[name="endTime"]').value = data.endTime ?? '';
+                        $clone.querySelector('input[name="coach"]').value = data.coach ?? '';
+                        const idInput = $clone.querySelector('input[name="classId"]');
+                        if (idInput) idInput.value = data.classId ?? 0;
+                        attachDelete($clone);
+
+                        return $clone;
+                    });
+                });
+                $wrapper.innerHTML = '';
             } else {
-                saved.forEach($el => {
-                    const $cloned = $el.cloneNode(true);
-                    attachDelete($cloned);
-                    $wrapper.appendChild($cloned);
-                });
-                daySessions[day] = Array.from($wrapper.children);
-            }
-        }
-
-        $dayRadios.forEach($input => {
-            $input.addEventListener('change', () => {
-                if ($input.checked) {
-                    switchDay($input.value);
-                }
-            });
-        });
-
-        if ($addButton && $template) {
-            $addButton.addEventListener('click', () => {
-                const $clone = $template.cloneNode(true);
-                $clone.querySelectorAll('input').forEach($input => {
-                    if ($input.type === 'radio') {
-                        $input.checked = false;
-                    } else {
-                        $input.value = '';
+                const $sessions = $wrapper.querySelectorAll('.session-wrapper');
+                $sessions.forEach($el => {
+                    const day = $el.getAttribute('data-day');
+                    if (!daySessions[day]) {
+                        daySessions[day] = [];
                     }
+                    attachDelete($el);
+                    daySessions[day].push($el.cloneNode(true));
                 });
-                const idInput = $clone.querySelector('input[name="classId"]');
-                if (idInput) idInput.value = 0;
-                attachDelete($clone);
-                $wrapper.appendChild($clone);
-                if (currentDay) {
-                    daySessions[currentDay] = Array.from($wrapper.children);
+                if ($template) {
+                    $template = $template.cloneNode(true);
                 }
-            });
-        }
-        const $form = document.getElementById('myPageForm');
-        if ($form) {
-            $form.addEventListener('submit', (e) => {
-                e.preventDefault();
+                $wrapper.innerHTML = '';
+            }
 
+            const $dayRadios = $registration.querySelectorAll('.week-container input[name="week.day"]');
+            const $initial = Array.from($dayRadios).find(r => r.checked);
+
+            if ($initial) {
+                if (!daySessions[$initial.value]) {
+                    daySessions[$initial.value] = [];
+                }
+            }
+            dedupeDaySessions();
+            if ($initial) {
+                currentDay = null;
+                switchDay($initial.value);
+            }
+
+            function switchDay(day) {
                 if (currentDay !== null) {
                     daySessions[currentDay] = Array.from($wrapper.children);
                 }
-
-                const payload = [];
-                Object.entries(daySessions).forEach(([day, elements]) => {
-                    elements.forEach($el => {
-                        const sessionName = $el.querySelector('input[name="sessionName"]').value.trim();
-                        const startTime = $el.querySelector('input[name="startTime"]').value;
-                        const endTime = $el.querySelector('input[name="endTime"]').value;
-                        const coach = $el.querySelector('input[name="coach"]').value.trim();
-                        const idInput = $el.querySelector('input[name="classId"]');
-                        const classId = idInput ? Number(idInput.value) : 0;
-
-                        if (sessionName && startTime && endTime && coach) {
-                            payload.push({classId, className: sessionName, startTime, endTime, coach, day});
+                currentDay = day;
+                const saved = daySessions[day] ?? [];
+                $wrapper.innerHTML = '';
+                if (saved.length === 0 && $template) {
+                    const $clone = $template.cloneNode(true);
+                    $clone.querySelectorAll('input').forEach($input => {
+                        if ($input.type === 'radio') {
+                            $input.checked = false;
+                        } else {
+                            $input.value = '';
                         }
                     });
-                });
+                    attachDelete($clone);
+                    $wrapper.appendChild($clone);
+                    daySessions[day] = Array.from($wrapper.children);
+                } else {
+                    saved.forEach($el => {
+                        const $cloned = $el.cloneNode(true);
+                        attachDelete($cloned);
+                        $wrapper.appendChild($cloned);
+                    });
+                    daySessions[day] = Array.from($wrapper.children);
+                }
+            }
 
-                deletedIds.forEach(id => {
-                    payload.push({classId: id, isDeleted: true});
-                });
-
-                const xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = () => {
-                    if (xhr.readyState !== XMLHttpRequest.DONE) return;
-
-                    if (xhr.status < 200 || xhr.status >= 300) {
-                        dialog.showSimpleOk('세션 등록', '요청을 처리하는 도중 오류가 발생하였습니다.');
-                        return;
+            $dayRadios.forEach($input => {
+                $input.addEventListener('change', () => {
+                    if ($input.checked) {
+                        switchDay($input.value);
                     }
-
-                    const response = JSON.parse(xhr.responseText);
-                    switch (response.result) {
-                        case 'success':
-                            deletedIds.clear();
-                            dialog.showSimpleOk('세션 등록', '세션 등록이 완료되었습니다.');
-                            break;
-                        case 'failure_session_expired':
-                            dialog.showSimpleOk('세션 등록', '세션이 만료되었습니다. 다시 로그인해 주세요.', () => location.href = '/user/login');
-                            break;
-                        default:
-                            dialog.showSimpleOk('세션 등록', '세션 등록에 실패하였습니다.');
-                    }
-                };
-                xhr.open('PATCH', '/user/myPage/sessionRegistration');
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.send(JSON.stringify(payload));
+                });
             });
+
+            if ($addButton && $template) {
+                $addButton.addEventListener('click', () => {
+                    const $clone = $template.cloneNode(true);
+                    $clone.querySelectorAll('input').forEach($input => {
+                        if ($input.type === 'radio') {
+                            $input.checked = false;
+                        } else {
+                            $input.value = '';
+                        }
+                    });
+                    const idInput = $clone.querySelector('input[name="classId"]');
+                    if (idInput) idInput.value = 0;
+                    attachDelete($clone);
+                    $wrapper.appendChild($clone);
+                    if (currentDay) {
+                        daySessions[currentDay] = Array.from($wrapper.children);
+                    }
+                });
+            }
+            const $form = document.getElementById('myPageForm');
+            if ($form) {
+                $form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+
+                    if (currentDay !== null) {
+                        daySessions[currentDay] = Array.from($wrapper.children);
+                    }
+
+                    const payload = [];
+                    Object.entries(daySessions).forEach(([day, elements]) => {
+                        elements.forEach($el => {
+                            const sessionName = $el.querySelector('input[name="sessionName"]').value.trim();
+                            const startTime = $el.querySelector('input[name="startTime"]').value;
+                            const endTime = $el.querySelector('input[name="endTime"]').value;
+                            const coach = $el.querySelector('input[name="coach"]').value.trim();
+                            const idInput = $el.querySelector('input[name="classId"]');
+                            const classId = idInput ? Number(idInput.value) : 0;
+
+                            if (sessionName && startTime && endTime && coach) {
+                                payload.push({classId, className: sessionName, startTime, endTime, coach, day});
+                            }
+                        });
+                    });
+
+                    deletedIds.forEach(id => {
+                        payload.push({classId: id, isDeleted: true});
+                    });
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = () => {
+                        if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+                        if (xhr.status < 200 || xhr.status >= 300) {
+                            dialog.showSimpleOk('세션 등록', '요청을 처리하는 도중 오류가 발생하였습니다.');
+                            return;
+                        }
+
+                        const response = JSON.parse(xhr.responseText);
+                        switch (response.result) {
+                            case 'success':
+                                deletedIds.clear();
+                                dialog.showSimpleOk('세션 등록', '세션 등록이 완료되었습니다.');
+                                break;
+                            case 'failure_session_expired':
+                                dialog.showSimpleOk('세션 등록', '세션이 만료되었습니다. 다시 로그인해 주세요.', () => location.href = '/user/login');
+                                break;
+                            default:
+                                dialog.showSimpleOk('세션 등록', '세션 등록에 실패하였습니다.');
+                        }
+                    };
+                    xhr.open('PATCH', '/user/myPage/sessionRegistration');
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify(payload));
+                });
+            }
         }
     }
 }
