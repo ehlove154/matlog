@@ -8,10 +8,10 @@ import '../common.js';
         });
         window.$loading = document.getElementById('loading');
 
-        fetch('/user/myPage/classes')
+        fetch('/user/myPage/classes/all')
             .then(res => res.ok ? res.json() : null)
             .then(data => {
-                if (data) {
+                if (data && !data.result) {
                     window.sessionsByDay = data;
                 }
                 init();
@@ -40,22 +40,6 @@ import '../common.js';
                     if (currentDay) {
                         daySessions[currentDay] = Array.from($wrapper.children);
                     }
-                });
-            }
-
-            function dedupeDaySessions() {
-                Object.entries(daySessions).forEach(([day, elements]) => {
-                    const map = new Map();
-                    elements.forEach($el => {
-                        const start = $el.querySelector('input[name="startTime"]').value;
-                        const end = $el.querySelector('input[name="endTime"]').value;
-                        const key = `${start}-${end}`;
-                        if (map.has(key)) {
-                            map.delete(key);
-                        }
-                        map.set(key, $el);
-                    });
-                    daySessions[day] = Array.from(map.values());
                 });
             }
 
@@ -99,7 +83,7 @@ import '../common.js';
                     daySessions[$initial.value] = [];
                 }
             }
-            dedupeDaySessions();
+
             if ($initial) {
                 currentDay = null;
                 switchDay($initial.value);

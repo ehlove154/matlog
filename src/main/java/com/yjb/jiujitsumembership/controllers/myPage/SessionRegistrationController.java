@@ -59,4 +59,40 @@ public class SessionRegistrationController {
         });
         return response.toString();
     }
+
+    @GetMapping(value = "/classes/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getAllClasses(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser) {
+        JSONObject response = new JSONObject();
+
+        if (signedUser == null) {
+            response.put("result", "failure_session_expired");
+            return response.toString();
+        }
+        if (!"MASTER".equalsIgnoreCase(signedUser.getUserRole())) {
+            response.put("result", "unauthorized");
+            return response.toString();
+        }
+
+        List<ClassEntity> sessions = this.classService.getAllSessions();
+        Map<String, List<ClassEntity>> byDay = sessions.stream()
+                .collect(Collectors.groupingBy(ClassEntity::getDay, LinkedHashMap::new, Collectors.toList()));
+
+        byDay.forEach((day, list) -> {
+            JSONArray arr = new JSONArray();
+            list.forEach(session -> {
+                JSONObject obj = new JSONObject();
+                obj.put("classId", session.getClassId());
+                obj.put("className", session.getClassName());
+                obj.put("coach", session.getCoach());
+                obj.put("startTime", session.getStartTime());
+                obj.put("endTime", session.getEndTime());
+                obj.put("day", session.getDay());
+                arr.put(obj);
+            });
+            response.put(day, arr);
+        });
+
+        return response.toString();
+    }
 }
