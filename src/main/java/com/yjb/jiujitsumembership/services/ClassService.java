@@ -34,7 +34,7 @@ public class ClassService {
                 return CommonResult.FAILURE;
             }
 
-            if (session.getClassId() > 0 && Boolean.TRUE.equals(session.isDelete())) {
+            if (session.getClassId() > 0 && Boolean.TRUE.equals(session.isDeleted())) {
                 classMapper.updateDeleted(session.getClassId());
                 continue;
             }
@@ -44,7 +44,7 @@ public class ClassService {
                 session.setGymId(signedUser.getGymId());
             }
 
-                session.setDelete(false);
+                session.setDeleted(false);
 
             if (session.getClassId() > 0) {
                 classMapper.update(session);
