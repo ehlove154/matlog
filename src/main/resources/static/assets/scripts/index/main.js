@@ -7,6 +7,11 @@ import '../common.js';
             return;
         }
 
+        window.dialog = new Dialog({
+            $element: document.body.querySelector(':scope > [data-mt-object="dialog"]')
+        });
+        window.$loading = document.getElementById('loading');
+
         const $title = $timetableForm.querySelector('.title-container > .title');
         const $dayButtons = $timetableForm.querySelectorAll('.title-container .day > button');
         const $timeColumns = $timetableForm.querySelectorAll('.timetable [data-mt-day]');
@@ -48,7 +53,9 @@ import '../common.js';
                     });
                 });
                 updateDisabled();
-            }).catch(() => {});
+            }).catch(() => {
+                dialog.showSimpleOk('시간표 불러오기 실패', '네트워크 오류가 발생했습니다.');
+            });
         }
 
         const updateDisabled = () => {

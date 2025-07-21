@@ -30,6 +30,10 @@ public class ClassService {
             return CommonResult.SUCCESS;
         }
         for (ClassEntity session : sessions) {
+            if (session.getStartTime() != null && session.getEndTime() != null && session.getStartTime().isAfter(session.getEndTime())) {
+                return CommonResult.FAILURE;
+            }
+
             if (session.getClassId() > 0 && Boolean.TRUE.equals(session.isDelete())) {
                 classMapper.updateDeleted(session.getClassId());
                 continue;

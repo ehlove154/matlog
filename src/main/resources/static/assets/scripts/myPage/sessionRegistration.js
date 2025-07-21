@@ -32,14 +32,28 @@ import '../common.js';
                 const btn = $el.querySelector('.delete-session');
                 if (!btn) return;
                 btn.addEventListener('click', () => {
-                    const idInput = $el.querySelector('input[name="classId"]');
-                    if (idInput && idInput.value && Number(idInput.value) > 0) {
-                        deletedIds.add(Number(idInput.value));
-                    }
-                    $el.remove();
-                    if (currentDay) {
-                        daySessions[currentDay] = Array.from($wrapper.children);
-                    }
+                    dialog.show({
+                        title: '세션 삭제',
+                        content: '정말로 세션을 삭제하시겠습니까?',
+                        buttons: [
+                            {caption: '아니요', onClickCallback: ($modal) => dialog.hide($modal)},
+                            {
+                                caption: '네',
+                                color: 'green',
+                                onClickCallback: ($modal) => {
+                                    dialog.hide($modal);
+                                    const idInput = $el.querySelector('input[name="classId"]');
+                                    if (idInput && idInput.value && Number(idInput.value) > 0) {
+                                        deletedIds.add(Number(idInput.value));
+                                    }
+                                    $el.remove();
+                                    if (currentDay) {
+                                        daySessions[currentDay] = Array.from($wrapper.children);
+                                    }
+                                }
+                            }
+                        ]
+                    });
                 });
             }
 
