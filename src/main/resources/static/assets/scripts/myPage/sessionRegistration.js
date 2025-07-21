@@ -11,10 +11,26 @@ import '../common.js';
         const $wrapper = $registration.querySelector('.common-wrapper');
         const $addButton = $registration.querySelector('.button-container button[data-mt-color="simple"]');
 
-        const $template = $wrapper.querySelector('.session-wrapper');
+        let $template = $wrapper.querySelector('.session-wrapper');
 
         const daySessions = {};
         let currentDay = null;
+
+        function dedupeDaySessions() {
+            Object.entries(daySessions).forEach(([day, elements]) => {
+                const map = new Map();
+                elements.forEach($el => {
+                    const start = $el.querySelector('input[name="startTime"]').value;
+                    const end = $el.querySelector('input[name="endTime"]').value;
+                    const key = `${start}-${end}`;
+                    if (map.has(key)) {
+                        map.delete(key);
+                    }
+                    map.set(key, $el);
+                });
+                daySessions[day] = Array.from(map.values());
+            });
+        }
 
         if (window.sessionsByDay) {
             Object.entries(window.sessionsByDay).forEach(([day, sessions]) => {
@@ -27,17 +43,34 @@ import '../common.js';
                     return $clone;
                 });
             });
+            $wrapper.innerHTML = '';
+        } else {
+            const $sessions = $wrapper.querySelectorAll('.session-wrapper');
+            $sessions.forEach($el => {
+                const day = $el.getAttribute('data-day');
+                if (!daySessions[day]) {
+                    daySessions[day] = [];
+                }
+                daySessions[day].push($el.cloneNode(true));
+            });
+            if ($template) {
+                $template = $template.cloneNode(true);
+            }
+            $wrapper.innerHTML = '';
         }
 
         const $dayRadios = $registration.querySelectorAll('.week-container input[name="week.day"]');
         const $initial = Array.from($dayRadios).find(r => r.checked);
 
         if ($initial) {
-            currentDay = $initial.value;
-            if (!daySessions[currentDay]) {
-                daySessions[currentDay] = Array.from($wrapper.children);
+            if (!daySessions[$initial.value]) {
+                daySessions[$initial.value] = [];
             }
-            switchDay(currentDay);
+        }
+        dedupeDaySessions();
+        if ($initial) {
+            currentDay = null;
+            switchDay($initial.value);
         }
 
         function switchDay(day) {
