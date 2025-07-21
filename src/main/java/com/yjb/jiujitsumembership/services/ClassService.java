@@ -49,4 +49,8 @@ public class ClassService {
         }
         return this.classMapper.selectByUserEmail(signedUser.getEmail());
     }
+
+    public List<ClassEntity> getAllSessions() {
+        return this.classMapper.selectAll();
+    }
 }

@@ -79,6 +79,7 @@ create table `jiujitsu`.`classes`
     `end_time`   time         not null default current_time,
     `day`        varchar(5)   not null,
     `gym_id`     int unsigned not null,
+    `is_deleted` boolean not null default false,
     constraint primary key (`class_id`),
     constraint foreign key (`user_email`) references `jiujitsu`.`users` (`email`) on update cascade on update cascade,
     constraint foreign key (`day`) references `jiujitsu`.`days` (`days_code`) on delete cascade on update cascade,

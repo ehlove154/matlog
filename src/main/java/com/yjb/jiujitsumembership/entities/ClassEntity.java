@@ -19,4 +19,5 @@ public class ClassEntity {
     private LocalTime endTime;
     private String day;
     private int gymId;
+    private boolean isDeleted;
 }
