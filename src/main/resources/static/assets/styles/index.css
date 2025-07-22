@@ -616,6 +616,9 @@
     flex-grow: 1;
     flex-shrink: 1;
   }
+  #main > #bookForm > .container > .info > .coach {
+    margin-bottom: 5rem;
+  }
   #main > #bookForm > .container > .list-container {
     width: 90%;
   }

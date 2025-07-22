@@ -17,4 +17,7 @@ public interface ClassReservationMapper {
     int deleteById(@Param(value = "reservationId") int reservationId);
 
     List<ClassReservationEntity> selectByClassId(@Param(value = "classId") int classId);
+
+    int selectCountByUserAndClassId(@Param(value = "userEmail") String userEmail,
+                                    @Param(value = "classId") int classId);
 }

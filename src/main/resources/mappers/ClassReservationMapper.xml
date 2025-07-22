@@ -41,4 +41,11 @@
         from `jiujitsu`.`class_reservations`
         where `class_id` = #{classId}
     </select>
+
+    <select id="selectCountByUserAndClassId" resultType="java.lang.Integer">
+        select count(0)
+        from `jiujitsu`.`class_reservations`
+        where `user_email` = #{userEmail}
+          and `class_id` = #{classId}
+    </select>
 </mapper>

@@ -41,6 +41,12 @@ public class ReservationService {
             return ResultTuple.<ReservationDto>builder().result(CommonResult.FAILURE).build();
         }
 
+        if (this.reservationMapper.selectCountByUserAndClassId(signedUser.getEmail(), classId) > 0) {
+            return ResultTuple.<ReservationDto>builder()
+                    .result(CommonResult.FAILURE_DUPLICATE_RESERVATION)
+                    .build();
+        }
+
         ClassReservationEntity entity = ClassReservationEntity.builder()
                 .userEmail(signedUser.getEmail())
                 .classId(classId)
@@ -59,7 +65,6 @@ public class ReservationService {
         }
 
         ReservationDto dto = ReservationDto.builder()
-                .reservationId(entity.getReservationId())
                 .reservationId(entity.getReservationId())
                 .email(userDto.getEmail())
                 .name(userDto.getName())

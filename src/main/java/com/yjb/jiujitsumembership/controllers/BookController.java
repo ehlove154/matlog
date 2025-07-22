@@ -45,7 +45,6 @@ public class BookController {
             attendee.put("stripeCount", dto.getStripeCount());
             attendee.put("beltWithStripe", dto.getBeltWithStripe());
             attendee.put("isAttended", dto.isAttended());
-            attendee.put("isAttended", dto.isAttended());
             reservations.put(attendee);
         }
         response.put("result", "success");
