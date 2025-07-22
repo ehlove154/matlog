@@ -21,21 +21,16 @@ import '../common.js';
 
         const updateReservationStatus = () => {
             signedEmail = document.body.dataset.email?.toLowerCase();
-            if (!classId) return;
-            fetch(`/book/reservations?classId=${classId}`)
+            if (!classId || !signedEmail) return;
+            fetch(`/book/reservation?classId=${classId}`)
                 .then(res => res.ok ? res.json() : {})
                 .then(data => {
-                    if (data.result !== 'success' || !Array.isArray(data.reservations)) return;
-                    reservationId = null;
-                    data.reservations.forEach(r => {
-                        if (signedEmail && r.email && r.email.toLowerCase() === signedEmail) {
-                            reservationId = r.reservationId;
-                        }
-                    });
-                    if (reservationId) {
+                    if (data.result === 'success') {
+                        reservationId = data.reservationId;
                         $submitButton.setAttribute('data-mt-color', 'red');
                         $submitButton.textContent = '예약 취소 하기';
                     } else {
+                        reservationId = null;
                         $submitButton.setAttribute('data-mt-color', 'green');
                         $submitButton.textContent = '예약하기';
                     }

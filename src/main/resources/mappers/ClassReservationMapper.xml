@@ -79,4 +79,19 @@
           and `class_id` = #{classId}
           and `is_deleted` = false
     </select>
+
+    <select id="selectOneByClassIdAndEmail" resultType="com.yjb.jiujitsumembership.entities.ClassReservationEntity">
+        select `reservation_id` as `reservationId`,
+               `user_email`     as `userEmail`,
+               `class_id`       as `classId`,
+               `reserved_at`    as `reservedAt`,
+               `is_attended`    as `isAttended`,
+               `attended_at`    as `attendedAt`
+        from `jiujitsu`.`class_reservations`
+        where `class_id` = #{classId}
+          and `user_email` = #{email}
+          and `is_deleted` = false
+        limit 1
+    </select>
+
 </mapper>

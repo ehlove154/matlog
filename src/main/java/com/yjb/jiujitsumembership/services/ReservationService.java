@@ -137,4 +137,34 @@ public class ReservationService {
         int affected = this.reservationMapper.updateDeletedReservation(reservationId, email);
         return affected > 0 ? CommonResult.SUCCESS : CommonResult.FAILURE;
     }
+
+    public ReservationDto getReservationByUser(int classId, String email) {
+        if (classId <= 0 || email == null) {
+            return null;
+        }
+        ClassReservationEntity entity = this.reservationMapper.selectOneByClassIdAndEmail(classId, email);
+        if (entity == null) {
+            return null;
+        }
+        UserDto userDto = this.userMapper.selectUserDtoByEmail(entity.getUserEmail());
+        if (userDto == null) {
+            return null;
+        }
+        int stripe = userDto.getStripeCount() != null ? userDto.getStripeCount() : 0;
+        String beltWithStripe = userDto.getDisplayText();
+        if (beltWithStripe == null) beltWithStripe = "";
+        beltWithStripe += stripe > 0 ? " " + stripe + "그랄" : " 무그랄";
+
+        return ReservationDto.builder()
+                .reservationId(entity.getReservationId())
+                .email(userDto.getEmail())
+                .name(userDto.getName())
+                .belt(userDto.getBelt())
+                .displayText(userDto.getDisplayText())
+                .stripeCount(userDto.getStripeCount())
+                .beltWithStripe(beltWithStripe)
+                .isAttended(entity.isAttended())
+                .build();
+    }
+
 }

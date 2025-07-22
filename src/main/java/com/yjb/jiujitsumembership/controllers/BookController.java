@@ -121,4 +121,24 @@ public class BookController {
         response.put("result", result.name().toLowerCase());
         return response.toString();
     }
+
+    @GetMapping(value = "/book/reservation", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getReservation(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
+                                 @RequestParam(value = "classId", required = false) Integer classId) {
+        JSONObject response = new JSONObject();
+        if (signedUser == null || classId == null) {
+            response.put("result", "failure");
+            return response.toString();
+        }
+        ReservationDto dto = this.reservationService.getReservationByUser(classId, signedUser.getEmail());
+        if (dto != null) {
+            response.put("result", "success");
+            response.put("reservationId", dto.getReservationId());
+        } else {
+            response.put("result", "none");
+        }
+        return response.toString();
+    }
+
 }

@@ -28,4 +28,7 @@ public interface ClassReservationMapper {
 
     int updateDeletedReservation(@Param(value = "reservationId") int reservationId,
                       @Param(value = "email") String email);
+
+    ClassReservationEntity selectOneByClassIdAndEmail(@Param(value = "classId") int classId,
+                                                      @Param(value = "email") String email);
 }
