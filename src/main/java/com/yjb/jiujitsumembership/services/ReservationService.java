@@ -107,6 +107,7 @@ public class ReservationService {
             beltWithStripe += stripe > 0 ? " " + stripe + "그랄" : " 무그랄";
 
             ReservationDto dto = ReservationDto.builder()
+                    .reservationId(entity.getReservationId())
                     .email(userDto.getEmail())
                     .name(userDto.getName())
                     .belt(userDto.getBelt())
