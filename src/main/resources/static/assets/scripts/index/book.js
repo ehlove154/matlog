@@ -16,8 +16,44 @@ import '../common.js';
         }
 
         const $submitButton = $bookForm.querySelector('button[type="submit"]');
-        const signedEmail = document.body.dataset.email?.toLowerCase();
+        let signedEmail = document.body.dataset.email?.toLowerCase();
         let reservationId = null;
+
+        const updateReservationStatus = () => {
+            signedEmail = document.body.dataset.email?.toLowerCase();
+            if (!classId) return;
+            fetch(`/book/reservations?classId=${classId}`)
+                .then(res => res.ok ? res.json() : {})
+                .then(data => {
+                    if (data.result !== 'success' || !Array.isArray(data.reservations)) return;
+                    reservationId = null;
+                    data.reservations.forEach(r => {
+                        if (signedEmail && r.email && r.email.toLowerCase() === signedEmail) {
+                            reservationId = r.reservationId;
+                        }
+                    });
+                    if (reservationId) {
+                        $submitButton.setAttribute('data-mt-color', 'red');
+                        $submitButton.textContent = '예약 취소 하기';
+                    } else {
+                        $submitButton.setAttribute('data-mt-color', 'green');
+                        $submitButton.textContent = '예약하기';
+                    }
+                });
+        };
+
+        updateReservationStatus();
+
+        window.addEventListener('message', (e) => {
+            const data = e.data;
+            if (!data) return;
+            if (data === 'loginComplete' || data.type === 'loginComplete' || data.type === 'loginSuccess') {
+                if (data.email) {
+                    document.body.dataset.email = data.email;
+                }
+                updateReservationStatus();
+            }
+        });
 
         window.dialog = new Dialog({
             $element: document.body.querySelector(':scope > [data-mt-object="dialog"]')
@@ -80,10 +116,6 @@ import '../common.js';
                             reservationId = r.reservationId;
                         }
                     });
-                    if (reservationId) {
-                        $submitButton.setAttribute('data-mt-color', 'red');
-                        $submitButton.textContent = '예약 취소 하기';
-                    }
                 });
         }
         $bookForm.addEventListener('submit', (e) => {
