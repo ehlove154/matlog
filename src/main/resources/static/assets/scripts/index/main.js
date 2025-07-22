@@ -15,7 +15,6 @@ import '../common.js';
         const $title = $timetableForm.querySelector('.title-container > .title');
         const $dayButtons = Array.from($timetableForm.querySelectorAll('.title-container .day > button'));
         const $timeColumns = Array.from($timetableForm.querySelectorAll('.timetable [data-mt-day]'));
-        // let activeDay = 0;
 
         const today = new Date();
         let activeDay = (today.getDay() + 6) % 7;
@@ -68,19 +67,18 @@ import '../common.js';
             else if (window.matchMedia('(max-width: 80rem)').matches) count = 3;
             else if (window.matchMedia('(max-width: 100rem)').matches) count = 4;
 
-            const today = new Date();
-            let start = (today.getDay() + 6) % 7;
-            if (start >= $timeColumns.length) start = 0;
-            const container = $timeColumns[0].parentElement;
             const visible = [];
             if (count === 1) {
                 visible.push(activeDay);
             } else {
-                for (let i = start; visible.length < count; i = (i + 1) % $timeColumns.length) {
-                    visible.push(i);
+                const today = new Date();
+                let start = (today.getDay() + 6) % 7;
+                if (start >= $timeColumns.length) start = 0;
+
+                for (let offset = 0; offset < $timeColumns.length && visible.length < count; offset++) {
+                    visible.push((start + offset) % $timeColumns.length);
                 }
             }
-            visible.forEach(i => container.appendChild($timeColumns[i]));
             $timeColumns.forEach((col, i) => {
                 col.style.display = visible.includes(i) ? 'flex' : 'none';
                 col.classList.toggle('active', i === activeDay);
@@ -88,7 +86,6 @@ import '../common.js';
             $dayButtons.forEach((btn, i) => {
                 btn.classList.toggle('active', i === activeDay);
             });
-            // $dayButtons.forEach(btn => btn.classList.remove('active'));
         };
 
         const updateDisabled = () => {
