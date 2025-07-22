@@ -8,11 +8,11 @@ import java.util.List;
 
 @Mapper
 public interface ClassReservationMapper {
-    int insert(@Param("reservation") ClassReservationEntity reservation);
+    int insert(@Param(value = "reservation") ClassReservationEntity reservation);
 
-    int update(@Param("reservation") ClassReservationEntity reservation);
+    int update(@Param(value = "reservation") ClassReservationEntity reservation);
 
-    int deleteById(@Param("reservationId") int reservationId);
+    int deleteById(@Param(value = "reservationId") int reservationId);
 
-    List<ClassReservationEntity> selectByClassId(@Param("classId") int classId);
+    List<ClassReservationEntity> selectByClassId(@Param(value = "classId") int classId);
 }

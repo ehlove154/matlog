@@ -25,58 +25,7 @@
                 <div class="coach" th:text="'코치 : ' + ${coach}">코치 : 백유정</div>
             </div>
             <div class="list-container">
-                <ul class="bookList">
-                    <li class="item">
-                        <img src="/assets/images/user/belt/white4.png" alt="" class="icon">
-                        <span class="caption">백유정</span>
-                        <button type="button" data-mt-color="gray" data-mt-object="button" data-mt-visible th:if="${session.signedUser != null and session.signedUser.userRole == 'MASTER'}">미출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/white2.png" alt="" class="icon">
-                        <span class="caption">이정형</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/white.png" alt="" class="icon">
-                        <span class="caption">김종현</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/blue3.png" alt="" class="icon">
-                        <span class="caption">최민호</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/yellow4.png" alt="" class="icon">
-                        <span class="caption">이태민</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/white.png" alt="" class="icon">
-                        <span class="caption">김기범</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/purple3.png" alt="" class="icon">
-                        <span class="caption">이수혁</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/white.png" alt="" class="icon">
-                        <span class="caption">망곰이</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/orange2.png" alt="" class="icon">
-                        <span class="caption">호랭이</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                    <li class="item">
-                        <img src="/assets/images/user/belt/orange4.png" alt="" class="icon">
-                        <span class="caption">코코</span>
-                        <button type="button" data-mt-color="green" data-mt-object="button">출석</button>
-                    </li>
-                </ul>
+                <ul class="bookList"></ul>
                 <ul class="list">
                     <li class="message empty" data-mt-reference="message" data-mt-name="empty">예약자가 없습니다.</li>
                 </ul>

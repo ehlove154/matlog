@@ -21,19 +21,29 @@ import '../common.js';
         window.$loading = document.getElementById('loading');
 
         const $buttons = $bookList.querySelectorAll('button[data-mt-visible]');
+        const isMaster = $buttons.length > 0;
 
-        $buttons.forEach(($btn) => {
-            $btn.addEventListener('click', () => {
-                const color = $btn.getAttribute('data-mt-color');
-                if (color === 'gray') {
-                    $btn.setAttribute('data-mt-color', 'green');
-                    $btn.textContent = '출석';
-                } else {
-                    $btn.setAttribute('data-mt-color', 'gray');
-                    $btn.textContent = '미출석';
-                }
-            });
-        });
+        if (classId) {
+            fetch(`/book/reservations?classId=${classId}`)
+                .then(res => res.ok ? res.json() : [])
+                .then(data => {
+                    if (!Array.isArray(data)) return;
+                    data.forEach(r => {
+                        const li = document.createElement('li');
+                        li.classList.add('item');
+                        li.textContent = r.userEmail;
+                        $list.appendChild(li);
+
+                        const bookLi = document.createElement('li');
+                        bookLi.classList.add('item');
+                        const span = document.createElement('span');
+                        span.classList.add('caption');
+                        span.textContent = r.userEmail;
+                        bookLi.appendChild(span);
+                        $bookList.appendChild(bookLi);
+                    });
+                });
+        }
         $bookForm.addEventListener('submit', (e) => {
             e.preventDefault();
             if (!classId) {
@@ -68,8 +78,30 @@ import '../common.js';
                     const span = document.createElement('span');
                     span.classList.add('caption');
                     span.textContent = attendee.name;
+
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.setAttribute('data-mt-object', 'button');
+                    const attended = false;
+                    button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
+                    button.textContent = attended ? '출석' : '미출석';
+                    if (isMaster) {
+                        button.setAttribute('data-mt-visible', '');
+                        button.addEventListener('click', () => {
+                            const color = button.getAttribute('data-mt-color');
+                            if (color === 'gray') {
+                                button.setAttribute('data-mt-color', 'green');
+                                button.textContent = '출석';
+                            } else {
+                                button.setAttribute('data-mt-color', 'gray');
+                                button.textContent = '미출석';
+                            }
+                        });
+                    }
+
                     bookLi.appendChild(img);
                     bookLi.appendChild(span);
+                    bookLi.appendChild(button);
                     $bookList.appendChild(bookLi);
                 })
                 .catch(() => {

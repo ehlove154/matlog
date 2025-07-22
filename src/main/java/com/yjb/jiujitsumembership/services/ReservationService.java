@@ -1,5 +1,6 @@
 package com.yjb.jiujitsumembership.services;
 
+import com.yjb.jiujitsumembership.dtoes.ReservationDto;
 import com.yjb.jiujitsumembership.dtoes.UserDto;
 import com.yjb.jiujitsumembership.entities.ClassReservationEntity;
 import com.yjb.jiujitsumembership.entities.UserEntity;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ReservationService {
@@ -21,6 +24,13 @@ public class ReservationService {
     public ReservationService(ClassReservationMapper reservationMapper, UserMapper userMapper) {
         this.reservationMapper = reservationMapper;
         this.userMapper = userMapper;
+    }
+
+    public List<ClassReservationEntity> getReservations(int classId) {
+        if (classId <= 0) {
+            return List.of();
+        }
+        return this.reservationMapper.selectByClassId(classId);
     }
 
     public ResultTuple<UserDto> reserve(int classId, UserEntity signedUser) {
@@ -36,7 +46,6 @@ public class ReservationService {
                 .classId(classId)
                 .reservedAt(LocalDateTime.now())
                 .isAttended(false)
-                .attendedAt(null)
                 .build();
 
         int affected = reservationMapper.insert(entity);
@@ -46,5 +55,47 @@ public class ReservationService {
 
         UserDto dto = userMapper.selectUserDtoByEmail(signedUser.getEmail());
         return ResultTuple.<UserDto>builder().payload(dto).result(CommonResult.SUCCESS).build();
+    }
+
+    public CommonResult updateAttendance(int reservationId, boolean attended) {
+        ClassReservationEntity entity = ClassReservationEntity.builder()
+                .reservationId(reservationId)
+                .isAttended(attended)
+                .attendedAt(attended ? LocalDateTime.now() : null)
+                .build();
+
+        int affected = this.reservationMapper.update(entity);
+        return affected > 0 ? CommonResult.SUCCESS : CommonResult.FAILURE;
+    }
+
+    public List<ReservationDto> getReservations(int classId) {
+        if (classId <= 0) {
+            return List.of();
+        }
+        List<ClassReservationEntity> entities = this.reservationMapper.selectByClassId(classId);
+        if (entities == null || entities.isEmpty()) {
+            return List.of();
+        }
+        List<ReservationDto> reservations = new ArrayList<>();
+        for (ClassReservationEntity entity : entities) {
+            UserDto userDto = this.userMapper.selectUserDtoByEmail(entity.getUserEmail());
+            if (userDto == null) continue;
+            int stripe = userDto.getStripeCount() != null ? userDto.getStripeCount() : 0;
+            String beltWithStripe = userDto.getDisplayText();
+            if (beltWithStripe == null) beltWithStripe = "";
+            beltWithStripe += stripe > 0 ? " " + stripe + "그랄" : " 무그랄";
+
+            ReservationDto dto = ReservationDto.builder()
+                    .email(userDto.getEmail())
+                    .name(userDto.getName())
+                    .belt(userDto.getBelt())
+                    .displayText(userDto.getDisplayText())
+                    .stripeCount(userDto.getStripeCount())
+                    .beltWithStripe(beltWithStripe)
+                    .isAttended(entity.isAttended())
+                    .build();
+            reservations.add(dto);
+        }
+        return reservations;
     }
 }

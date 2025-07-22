@@ -50,6 +50,7 @@ public class HomeController {
             JSONArray arr = new JSONArray();
             list.forEach(session -> {
                 JSONObject obj = new JSONObject();
+                obj.put("classId", session.getClassId());
                 obj.put("className", session.getClassName());
                 obj.put("coach", session.getCoach());
                 obj.put("startTime", session.getStartTime());

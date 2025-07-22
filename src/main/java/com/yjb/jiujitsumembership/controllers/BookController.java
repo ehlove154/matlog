@@ -1,10 +1,13 @@
 package com.yjb.jiujitsumembership.controllers;
 
+import com.yjb.jiujitsumembership.dtoes.ReservationDto;
 import com.yjb.jiujitsumembership.dtoes.UserDto;
+import com.yjb.jiujitsumembership.entities.ClassReservationEntity;
 import com.yjb.jiujitsumembership.entities.UserEntity;
 import com.yjb.jiujitsumembership.results.CommonResult;
 import com.yjb.jiujitsumembership.results.ResultTuple;
 import com.yjb.jiujitsumembership.services.ReservationService;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,6 +24,31 @@ public class BookController {
     @Autowired
     public BookController(ReservationService reservationService) {
         this.reservationService = reservationService;
+    }
+
+    @RequestMapping(value = "/book/reservations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getReservations(@RequestParam(value = "classId", required = false) Integer classId) {
+        JSONObject response = new JSONObject();
+        if (classId == null) {
+            response.put("result", "failure");
+            return response.toString();
+        }
+        JSONArray reservations = new JSONArray();
+        for (ReservationDto dto : this.reservationService.getReservations(classId)) {
+            JSONObject attendee = new JSONObject();
+            attendee.put("email", dto.getEmail());
+            attendee.put("name", dto.getName());
+            attendee.put("belt", dto.getBelt());
+            attendee.put("displayText", dto.getDisplayText());
+            attendee.put("stripeCount", dto.getStripeCount());
+            attendee.put("beltWithStripe", dto.getBeltWithStripe());
+            attendee.put("isAttended", dto.isAttended());
+            reservations.put(attendee);
+        }
+        response.put("result", "success");
+        response.put("reservations", reservations);
+        return response.toString();
     }
 
     @RequestMapping(value = "/book", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
@@ -60,6 +88,24 @@ public class BookController {
             attendee.put("beltWithStripe", dto.getBeltWithStripe());
             response.put("attendee", attendee);
         }
+        return response.toString();
+    }
+
+    @PostMapping(value = "/book/attendance", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String postAttendance(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
+                                 @RequestParam(value = "reservationId", required = false) Integer reservationId,
+                                 @RequestParam(value = "attended", required = false) Boolean attended) {
+        JSONObject response = new JSONObject();
+
+        if (signedUser == null || !"MASTER".equalsIgnoreCase(signedUser.getUserRole())) {
+            response.put("result", "unauthorized");
+            return response.toString();
+        }
+
+        CommonResult result = this.reservationService.updateAttendance(reservationId == null ? 0 : reservationId,
+                attended != null && attended);
+        response.put("result", result.name().toLowerCase());
         return response.toString();
     }
 }

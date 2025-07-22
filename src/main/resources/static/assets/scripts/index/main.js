@@ -56,6 +56,7 @@ import '../common.js';
                         const start = (session.startTime || '').substring(0,5);
                         $clone.dataset.start = start;
                         $clone.dataset.end = (session.endTime || '').substring(0,5);
+                        $clone.dataset.classId = session.classId || '';
                         $clone.dataset.className = session.className || '';
                         $clone.dataset.coach = session.coach || '';
                         $clone.dataset.date = date.toISOString().split('T')[0];
@@ -74,6 +75,7 @@ import '../common.js';
                         $clone.addEventListener('click', () => {
                             if ($content.hasAttribute('disabled')) return;
                             const params = new URLSearchParams({
+                                classId: $clone.dataset.classId,
                                 className: $clone.dataset.className,
                                 date: $clone.dataset.date,
                                 day: $clone.dataset.dayName,

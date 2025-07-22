@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yjb.jiujitsumembership.mappers.ClassReservationMapper">
     <insert id="insert" parameterType="com.yjb.jiujitsumembership.entities.ClassReservationEntity" useGeneratedKeys="true" keyProperty="reservationId" keyColumn="reservation_id">
-        insert into `jiujitsu`.`class_reservations` (`reservation_id`, `user_email`, `class_id`, `reserved_at`, `is_attended`, `attended_at`)
-        values (#{reservation.reservationId}, #{reservation.userEmail}, #{reservation.classId}, #{reservation.reservedAt}, #{reservation.isAttended}, #{reservation.attendedAt})
+        insert into `jiujitsu`.`class_reservations` (`reservation_id`, `user_email`, `class_id`, `reserved_at`, `is_attended`)
+        values (#{reservation.reservationId}, #{reservation.userEmail}, #{reservation.classId}, #{reservation.reservedAt}, #{reservation.isAttended})
     </insert>
 
     <update id="update" parameterType="com.yjb.jiujitsumembership.entities.ClassReservationEntity">
