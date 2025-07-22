@@ -29,7 +29,7 @@
                     <li class="item">
                         <img src="/assets/images/user/belt/white4.png" alt="" class="icon">
                         <span class="caption">백유정</span>
-                        <button type="button" data-mt-color="gray" data-mt-object="button" data-mt-visible>미출석</button>
+                        <button type="button" data-mt-color="gray" data-mt-object="button" data-mt-visible th:if="${session.signedUser != null and session.signedUser.userRole == 'MASTER'}">미출석</button>
                     </li>
                     <li class="item">
                         <img src="/assets/images/user/belt/white2.png" alt="" class="icon">
