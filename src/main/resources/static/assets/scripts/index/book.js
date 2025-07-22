@@ -16,7 +16,7 @@ import '../common.js';
         }
 
         const $submitButton = $bookForm.querySelector('button[type="submit"]');
-        const signedEmail = document.body.dataset.email;
+        const signedEmail = document.body.dataset.email?.toLowerCase();
         let reservationId = null;
 
         window.dialog = new Dialog({
@@ -76,7 +76,7 @@ import '../common.js';
                         bookLi.appendChild(button);
                         $bookList.appendChild(bookLi);
 
-                        if (signedEmail && r.email === signedEmail) {
+                        if (signedEmail && r.email && r.email.toLowerCase() === signedEmail) {
                             reservationId = r.reservationId;
                         }
                     });
