@@ -15,7 +15,10 @@ import '../common.js';
         const $title = $timetableForm.querySelector('.title-container > .title');
         const $dayButtons = Array.from($timetableForm.querySelectorAll('.title-container .day > button'));
         const $timeColumns = Array.from($timetableForm.querySelectorAll('.timetable [data-mt-day]'));
-        let activeDay = 0;
+        // let activeDay = 0;
+
+        const today = new Date();
+        let activeDay = (today.getDay() + 6) % 7;
         const $sessionTemplate = document.getElementById('sessionTemplate');
 
         const now = new Date();
@@ -65,16 +68,6 @@ import '../common.js';
             else if (window.matchMedia('(max-width: 80rem)').matches) count = 3;
             else if (window.matchMedia('(max-width: 100rem)').matches) count = 4;
 
-            // if (count === 1) {
-            //     $timeColumns.forEach((col, i) => {
-            //         col.style.display = i === activeDay ? 'flex' : 'none';
-            //     });
-            //     $dayButtons.forEach((btn, i) => {
-            //         btn.classList.toggle('active', i === activeDay);
-            //     });
-            //     return;
-            // }
-
             const today = new Date();
             let start = (today.getDay() + 6) % 7;
             if (start >= $timeColumns.length) start = 0;
@@ -83,7 +76,7 @@ import '../common.js';
             if (count === 1) {
                 visible.push(activeDay);
             } else {
-                for (let i = start; i < $timeColumns.length && visible.length < count; i++) {
+                for (let i = start; visible.length < count; i = (i + 1) % $timeColumns.length) {
                     visible.push(i);
                 }
             }
