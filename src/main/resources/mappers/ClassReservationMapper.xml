@@ -17,6 +17,14 @@
         limit 1
     </update>
 
+    <update id="updateAttendance" parameterType="com.yjb.jiujitsumembership.entities.ClassReservationEntity">
+        update `jiujitsu`.`class_reservations`
+        set `is_attended` = #{reservation.isAttended},
+            `attended_at` = #{reservation.attendedAt}
+        where `reservation_id` = #{reservation.reservationId}
+        limit 1
+    </update>
+
     <delete id="deleteById" parameterType="int">
         delete from `jiujitsu`.`class_reservations`
         where `reservation_id` = #{reservationId}

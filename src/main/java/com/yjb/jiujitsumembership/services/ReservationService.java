@@ -26,19 +26,19 @@ public class ReservationService {
         this.userMapper = userMapper;
     }
 
-    public List<ClassReservationEntity> getReservations(int classId) {
+    public List<ClassReservationEntity> getReservationEntities(int classId) {
         if (classId <= 0) {
             return List.of();
         }
         return this.reservationMapper.selectByClassId(classId);
     }
 
-    public ResultTuple<UserDto> reserve(int classId, UserEntity signedUser) {
+    public ResultTuple<ReservationDto> reserve(int classId, UserEntity signedUser) {
         if (signedUser == null) {
-            return ResultTuple.<UserDto>builder().result(CommonResult.FAILURE_SESSION_EXPIRED).build();
+            return ResultTuple.<ReservationDto>builder().result(CommonResult.FAILURE_SESSION_EXPIRED).build();
         }
         if (classId <= 0) {
-            return ResultTuple.<UserDto>builder().result(CommonResult.FAILURE).build();
+            return ResultTuple.<ReservationDto>builder().result(CommonResult.FAILURE).build();
         }
 
         ClassReservationEntity entity = ClassReservationEntity.builder()
@@ -50,11 +50,27 @@ public class ReservationService {
 
         int affected = reservationMapper.insert(entity);
         if (affected == 0) {
-            return ResultTuple.<UserDto>builder().result(CommonResult.FAILURE).build();
+            return ResultTuple.<ReservationDto>builder().result(CommonResult.FAILURE).build();
         }
 
-        UserDto dto = userMapper.selectUserDtoByEmail(signedUser.getEmail());
-        return ResultTuple.<UserDto>builder().payload(dto).result(CommonResult.SUCCESS).build();
+        UserDto userDto = userMapper.selectUserDtoByEmail(signedUser.getEmail());
+        if (userDto == null) {
+            return ResultTuple.<ReservationDto>builder().result(CommonResult.FAILURE).build();
+        }
+
+        ReservationDto dto = ReservationDto.builder()
+                .reservationId(entity.getReservationId())
+                .reservationId(entity.getReservationId())
+                .email(userDto.getEmail())
+                .name(userDto.getName())
+                .belt(userDto.getBelt())
+                .displayText(userDto.getDisplayText())
+                .stripeCount(userDto.getStripeCount())
+                .beltWithStripe(userDto.getBeltWithStripe())
+                .isAttended(false)
+                .build();
+
+        return ResultTuple.<ReservationDto>builder().payload(dto).result(CommonResult.SUCCESS).build();
     }
 
     public CommonResult updateAttendance(int reservationId, boolean attended) {
@@ -64,7 +80,7 @@ public class ReservationService {
                 .attendedAt(attended ? LocalDateTime.now() : null)
                 .build();
 
-        int affected = this.reservationMapper.update(entity);
+        int affected = this.reservationMapper.updateAttendance(entity);
         return affected > 0 ? CommonResult.SUCCESS : CommonResult.FAILURE;
     }
 

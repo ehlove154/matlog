@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 public class ReservationDto {
+    private Integer reservationId;
     private String email;
     private String name;
     private String belt;

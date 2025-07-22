@@ -21,25 +21,110 @@ import '../common.js';
         window.$loading = document.getElementById('loading');
 
         const $buttons = $bookList.querySelectorAll('button[data-mt-visible]');
-        const isMaster = $buttons.length > 0;
+        const isMaster = document.body.dataset.master === 'true';
+
+        const appendAttendee = (att) => {
+            const li = document.createElement('li');
+            li.classList.add('item');
+            li.textContent = att.name ?? att.email;
+            $list.appendChild(li);
+
+            const bookLi = document.createElement('li');
+            bookLi.classList.add('item');
+
+            if (att.belt) {
+                const img = document.createElement('img');
+                const stripe = att.stripeCount ? att.stripeCount : '';
+                img.src = `/assets/images/user/belt/${att.belt.toLowerCase()}${stripe}.png`;
+                img.alt = '';
+                img.classList.add('icon');
+                bookLi.appendChild(img);
+            }
+
+            const span = document.createElement('span');
+            span.classList.add('caption');
+            span.textContent = att.name ?? att.email;
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.setAttribute('data-mt-object', 'button');
+
+            const attended = att.isAttended === true;
+            button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
+            button.textContent = attended ? '출석' : '미출석';
+            if (isMaster) {
+                button.setAttribute('data-mt-visible', '');
+                button.addEventListener('click', () => {
+                    const newState = button.getAttribute('data-mt-color') !== 'green';
+                    fetch('/book/attendance', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        body: new URLSearchParams({
+                            reservationId: att.reservationId,
+                            attended: newState
+                        }).toString()
+                    }).then(res => res.ok ? res.json() : Promise.reject())
+                        .then(result => {
+                            if (result && result.result === 'success') {
+                                button.setAttribute('data-mt-color', newState ? 'green' : 'gray');
+                                button.textContent = newState ? '출석' : '미출석';
+                                att.isAttended = newState;
+                            }
+                        });
+                });
+            }
+
+            bookLi.appendChild(span);
+            bookLi.appendChild(button);
+            $bookList.appendChild(bookLi);
+        };
 
         if (classId) {
             fetch(`/book/reservations?classId=${classId}`)
-                .then(res => res.ok ? res.json() : [])
+                .then(res => res.ok ? res.json() : {})
                 .then(data => {
-                    if (!Array.isArray(data)) return;
-                    data.forEach(r => {
+                    if (data.result !== 'success' || !Array.isArray(data.reservations)) return;
+                    data.reservations.forEach(r => {
                         const li = document.createElement('li');
                         li.classList.add('item');
-                        li.textContent = r.userEmail;
+                        li.textContent = r.name;
                         $list.appendChild(li);
 
                         const bookLi = document.createElement('li');
                         bookLi.classList.add('item');
+                        const img = document.createElement('img');
+                        const stripe = r.stripeCount ? r.stripeCount : '';
+                        img.src = `/assets/images/user/belt/${r.belt.toLowerCase()}${stripe}.png`;
+                        img.alt = '';
+                        img.classList.add('icon');
+
                         const span = document.createElement('span');
                         span.classList.add('caption');
-                        span.textContent = r.userEmail;
+                        span.textContent = r.name;
+
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.setAttribute('data-mt-object', 'button');
+                        const attended = r.isAttended;
+                        button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
+                        button.textContent = attended ? '출석' : '미출석';
+                        if (isMaster) {
+                            button.setAttribute('data-mt-visible', '');
+                            button.addEventListener('click', () => {
+                                const color = button.getAttribute('data-mt-color');
+                                if (color === 'gray') {
+                                    button.setAttribute('data-mt-color', 'green');
+                                    button.textContent = '출석';
+                                } else {
+                                    button.setAttribute('data-mt-color', 'gray');
+                                    button.textContent = '미출석';
+                                }
+                            });
+                        }
+
+                        bookLi.appendChild(img);
                         bookLi.appendChild(span);
+                        bookLi.appendChild(button);
                         $bookList.appendChild(bookLi);
                     });
                 });

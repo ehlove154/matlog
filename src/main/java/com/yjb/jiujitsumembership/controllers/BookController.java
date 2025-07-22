@@ -37,12 +37,14 @@ public class BookController {
         JSONArray reservations = new JSONArray();
         for (ReservationDto dto : this.reservationService.getReservations(classId)) {
             JSONObject attendee = new JSONObject();
+            attendee.put("reservationId", dto.getReservationId());
             attendee.put("email", dto.getEmail());
             attendee.put("name", dto.getName());
             attendee.put("belt", dto.getBelt());
             attendee.put("displayText", dto.getDisplayText());
             attendee.put("stripeCount", dto.getStripeCount());
             attendee.put("beltWithStripe", dto.getBeltWithStripe());
+            attendee.put("isAttended", dto.isAttended());
             attendee.put("isAttended", dto.isAttended());
             reservations.put(attendee);
         }
@@ -74,12 +76,13 @@ public class BookController {
     public String postReserve(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
                               @RequestParam(value = "classId", required = false) Integer classId) {
         JSONObject response = new JSONObject();
-        ResultTuple<UserDto> result = this.reservationService.reserve(classId == null ? 0 : classId, signedUser);
+        ResultTuple<ReservationDto> result = this.reservationService.reserve(classId == null ? 0 : classId, signedUser);
         response.put("result", result.getResult().nameToLower());
 
         if (result.getResult() == CommonResult.SUCCESS && result.getPayload() != null) {
-            UserDto dto = result.getPayload();
+            ReservationDto dto = result.getPayload();
             JSONObject attendee = new JSONObject();
+            attendee.put("reservationId", dto.getReservationId());
             attendee.put("email", dto.getEmail());
             attendee.put("name", dto.getName());
             attendee.put("belt", dto.getBelt());

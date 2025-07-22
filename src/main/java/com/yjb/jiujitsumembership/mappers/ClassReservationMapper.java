@@ -12,6 +12,8 @@ public interface ClassReservationMapper {
 
     int update(@Param(value = "reservation") ClassReservationEntity reservation);
 
+    int updateAttendance(@Param(value = "reservation") ClassReservationEntity reservation);
+
     int deleteById(@Param(value = "reservationId") int reservationId);
 
     List<ClassReservationEntity> selectByClassId(@Param(value = "classId") int classId);
