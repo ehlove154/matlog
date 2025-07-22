@@ -94,6 +94,7 @@ create table `jiujitsu`.`class_reservations`
     `reserved_at`    datetime     not null default now(),
     `is_attended`    boolean      not null default false,
     `attended_at`    datetime     not null default now(),
+    `is_deleted` boolean not null default false,
     constraint primary key (`reservation_id`),
     constraint foreign key (`user_email`) references `jiujitsu`.`users` (`email`) on update cascade on delete cascade,
     constraint foreign key (`class_id`) references `jiujitsu`.`classes` (`class_id`) on update cascade on delete cascade

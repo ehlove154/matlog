@@ -17,4 +17,5 @@ public class ClassReservationEntity {
     private LocalDateTime reservedAt;
     private boolean isAttended;
     private LocalDateTime attendedAt;
+    private boolean isDeleted;
 }
