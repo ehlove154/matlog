@@ -26,11 +26,11 @@ public class ReservationService {
         this.userMapper = userMapper;
     }
 
-    public List<ClassReservationEntity> getReservationEntities(int classId) {
+    public List<ClassReservationEntity> getReservationEntities(int classId, String email) {
         if (classId <= 0) {
             return List.of();
         }
-        return this.reservationMapper.selectByClassId(classId);
+        return this.reservationMapper.selectByClassId(classId, email);
     }
 
     public ResultTuple<ReservationDto> reserve(int classId, UserEntity signedUser) {
@@ -89,11 +89,11 @@ public class ReservationService {
         return affected > 0 ? CommonResult.SUCCESS : CommonResult.FAILURE;
     }
 
-    public List<ReservationDto> getReservations(int classId) {
+    public List<ReservationDto> getReservations(int classId, String email) {
         if (classId <= 0) {
             return List.of();
         }
-        List<ClassReservationEntity> entities = this.reservationMapper.selectByClassId(classId);
+        List<ClassReservationEntity> entities = this.reservationMapper.selectByClassId(classId, email);
         if (entities == null || entities.isEmpty()) {
             return List.of();
         }
@@ -133,7 +133,7 @@ public class ReservationService {
             email = user.getEmail();
         }
 
-        int affected = this.reservationMapper.updateDeleted(reservationId, email);
+        int affected = this.reservationMapper.updateDeletedReservation(reservationId, email);
         return affected > 0 ? CommonResult.SUCCESS : CommonResult.FAILURE;
     }
 }

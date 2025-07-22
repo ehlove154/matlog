@@ -28,14 +28,14 @@ public class BookController {
 
     @RequestMapping(value = "/book/reservations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getReservations(@RequestParam(value = "classId", required = false) Integer classId) {
+    public String getReservations(@RequestParam(value = "classId", required = false) Integer classId,  @RequestParam(value = "email", required = false) String email) {
         JSONObject response = new JSONObject();
         if (classId == null) {
             response.put("result", "failure");
             return response.toString();
         }
         JSONArray reservations = new JSONArray();
-        for (ReservationDto dto : this.reservationService.getReservations(classId)) {
+        for (ReservationDto dto : this.reservationService.getReservations(classId, email)) {
             JSONObject attendee = new JSONObject();
             attendee.put("reservationId", dto.getReservationId());
             attendee.put("email", dto.getEmail());
