@@ -110,4 +110,15 @@ public class BookController {
         response.put("result", result.name().toLowerCase());
         return response.toString();
     }
+
+    @PostMapping(value = "/book/cancel", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String postCancel(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
+                             @RequestParam(value = "reservationId", required = false) Integer reservationId) {
+        JSONObject response = new JSONObject();
+        CommonResult result = this.reservationService.cancelReservation(reservationId == null ? 0 : reservationId,
+                signedUser);
+        response.put("result", result.name().toLowerCase());
+        return response.toString();
+    }
 }

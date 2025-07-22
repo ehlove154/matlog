@@ -14,10 +14,18 @@ public interface ClassReservationMapper {
 
     int updateAttendance(@Param(value = "reservation") ClassReservationEntity reservation);
 
+    int updateDeleted(@Param(value = "reservationId") int reservationId);
+
     int deleteById(@Param(value = "reservationId") int reservationId);
 
-    List<ClassReservationEntity> selectByClassId(@Param(value = "classId") int classId);
+    List<ClassReservationEntity> selectByClassId(@Param(value = "classId") int classId,
+                                                 @Param(value = "email") String email);
 
     int selectCountByUserAndClassId(@Param(value = "userEmail") String userEmail,
                                     @Param(value = "classId") int classId);
+
+    ClassReservationEntity selectById(@Param(value = "reservationId") int reservationId);
+
+    int updateDeletedReservation(@Param(value = "reservationId") int reservationId,
+                      @Param(value = "email") String email);
 }

@@ -25,11 +25,40 @@
         limit 1
     </update>
 
+    <update id="updateDeleted" parameterType="int">
+        update `jiujitsu`.`class_reservations`
+        set `is_deleted` = true
+        where `reservation_id` = #{reservationId}
+        limit 1
+    </update>
+
+    <update id="updateDeletedReservation" parameterType="map">
+        update `jiujitsu`.`class_reservations`
+        set `is_deleted` = true
+        where `reservation_id` = #{reservationId}
+        <if test="email != null">
+            and `user_email` = #{email}
+        </if>
+        limit 1
+    </update>
+
     <delete id="deleteById" parameterType="int">
         delete from `jiujitsu`.`class_reservations`
         where `reservation_id` = #{reservationId}
         limit 1
     </delete>
+
+    <select id="selectById" resultType="com.yjb.jiujitsumembership.entities.ClassReservationEntity">
+        select `reservation_id` as `reservationId`,
+               `user_email`     as `userEmail`,
+               `class_id`       as `classId`,
+               `reserved_at`    as `reservedAt`,
+               `is_attended`    as `isAttended`,
+               `attended_at`    as `attendedAt`
+        from `jiujitsu`.`class_reservations`
+        where `reservation_id` = #{reservationId}
+          and `is_deleted` = false
+    </select>
 
     <select id="selectByClassId" resultType="com.yjb.jiujitsumembership.entities.ClassReservationEntity">
         select `reservation_id` as `reservationId`,
@@ -40,6 +69,7 @@
                `attended_at`    as `attendedAt`
         from `jiujitsu`.`class_reservations`
         where `class_id` = #{classId}
+          and `is_deleted` = false
     </select>
 
     <select id="selectCountByUserAndClassId" resultType="java.lang.Integer">
@@ -47,5 +77,6 @@
         from `jiujitsu`.`class_reservations`
         where `user_email` = #{userEmail}
           and `class_id` = #{classId}
+          and `is_deleted` = false
     </select>
 </mapper>

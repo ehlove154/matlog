@@ -119,4 +119,21 @@ public class ReservationService {
         }
         return reservations;
     }
+
+    public CommonResult cancelReservation(int reservationId, UserEntity user) {
+        if (user == null) {
+            return CommonResult.FAILURE_SESSION_EXPIRED;
+        }
+        if (reservationId <= 0) {
+            return CommonResult.FAILURE;
+        }
+
+        String email = null;
+        if (!"MASTER".equalsIgnoreCase(user.getUserRole())) {
+            email = user.getEmail();
+        }
+
+        int affected = this.reservationMapper.updateDeleted(reservationId, email);
+        return affected > 0 ? CommonResult.SUCCESS : CommonResult.FAILURE;
+    }
 }

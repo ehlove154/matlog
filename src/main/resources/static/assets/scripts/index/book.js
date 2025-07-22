@@ -15,68 +15,16 @@ import '../common.js';
             return;
         }
 
+        const $submitButton = $bookForm.querySelector('button[type="submit"]');
+        const signedEmail = document.body.dataset.email;
+        let reservationId = null;
+
         window.dialog = new Dialog({
             $element: document.body.querySelector(':scope > [data-mt-object="dialog"]')
         });
         window.$loading = document.getElementById('loading');
 
         const isMaster = document.body.dataset.master === 'true';
-
-        // const appendAttendee = (att) => {
-        //     const li = document.createElement('li');
-        //     li.classList.add('item');
-        //     li.textContent = att.name ?? att.email;
-        //     $list.appendChild(li);
-        //
-        //     const bookLi = document.createElement('li');
-        //     bookLi.classList.add('item');
-        //
-        //     if (att.belt) {
-        //         const img = document.createElement('img');
-        //         const stripe = att.stripeCount ? att.stripeCount : '';
-        //         img.src = `/assets/images/user/belt/${att.belt.toLowerCase()}${stripe}.png`;
-        //         img.alt = '';
-        //         img.classList.add('icon');
-        //         bookLi.appendChild(img);
-        //     }
-        //
-        //     const span = document.createElement('span');
-        //     span.classList.add('caption');
-        //     span.textContent = att.name ?? att.email;
-        //
-        //     const button = document.createElement('button');
-        //     button.type = 'button';
-        //     button.setAttribute('data-mt-object', 'button');
-        //
-        //     const attended = att.isAttended === true;
-        //     button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
-        //     button.textContent = attended ? '출석' : '미출석';
-        //     if (isMaster) {
-        //         button.setAttribute('data-mt-visible', '');
-        //         button.addEventListener('click', () => {
-        //             const newState = button.getAttribute('data-mt-color') !== 'green';
-        //             fetch('/book/attendance', {
-        //                 method: 'POST',
-        //                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        //                 body: new URLSearchParams({
-        //                     reservationId: att.reservationId,
-        //                     attended: newState
-        //                 }).toString()
-        //             }).then(res => res.ok ? res.json() : Promise.reject())
-        //                 .then(result => {
-        //                     if (result && result.result === 'success') {
-        //                         button.setAttribute('data-mt-color', newState ? 'green' : 'gray');
-        //                         button.textContent = newState ? '출석' : '미출석';
-        //                         att.isAttended = newState;
-        //                     }
-        //                 });
-        //         });
-        //     }
-        //
-        //     bookLi.appendChild(span);
-        //     bookLi.appendChild(button);
-        //     $bookList.appendChild(bookLi);
-        // };
 
         if (classId) {
             fetch(`/book/reservations?classId=${classId}`)
@@ -87,10 +35,12 @@ import '../common.js';
                         const li = document.createElement('li');
                         li.classList.add('item');
                         li.textContent = r.name;
+                        li.dataset.reservationId = r.reservationId;
                         $list.appendChild(li);
 
                         const bookLi = document.createElement('li');
                         bookLi.classList.add('item');
+                        bookLi.dataset.reservationId = r.reservationId;
                         const img = document.createElement('img');
                         const stripe = r.stripeCount ? r.stripeCount : '';
                         img.src = `/assets/images/user/belt/${r.belt.toLowerCase()}${stripe}.png`;
@@ -125,7 +75,15 @@ import '../common.js';
                         bookLi.appendChild(span);
                         bookLi.appendChild(button);
                         $bookList.appendChild(bookLi);
+
+                        if (signedEmail && r.email === signedEmail) {
+                            reservationId = r.reservationId;
+                        }
                     });
+                    if (reservationId) {
+                        $submitButton.setAttribute('data-mt-color', 'red');
+                        $submitButton.textContent = '예약 취소 하기';
+                    }
                 });
         }
         $bookForm.addEventListener('submit', (e) => {
@@ -134,63 +92,91 @@ import '../common.js';
                 dialog.showSimpleOk('예약', '세션 정보가 올바르지 않습니다.');
                 return;
             }
-            fetch('/book/reserve', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: new URLSearchParams({classId}).toString()
-            }).then(res => res.ok ? res.json() : Promise.reject())
-                .then(data => {
-                    if (!data || data.result !== 'success') {
-                        dialog.showSimpleOk('예약', '예약에 실패하였습니다.');
-                        return;
-                    }
-                    const attendee = data.attendee;
-                    if (!attendee) return;
+            if (!reservationId) {
+                fetch('/book/reserve', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: new URLSearchParams({classId}).toString()
+                }).then(res => res.ok ? res.json() : Promise.reject())
+                    .then(data => {
+                        if (!data || data.result !== 'success') {
+                            dialog.showSimpleOk('예약', '예약에 실패하였습니다.');
+                            return;
+                        }
+                        const attendee = data.attendee;
+                        if (!attendee) return;
 
-                    const li = document.createElement('li');
-                    li.classList.add('item');
-                    li.textContent = attendee.name;
-                    $list.appendChild(li);
+                        const li = document.createElement('li');
+                        li.classList.add('item');
+                        li.textContent = attendee.name;
+                        li.dataset.reservationId = attendee.reservationId;
+                        $list.appendChild(li);
 
-                    const bookLi = document.createElement('li');
-                    bookLi.classList.add('item');
-                    const img = document.createElement('img');
-                    const stripe = attendee.stripeCount ? attendee.stripeCount : '';
-                    img.src = `/assets/images/user/belt/${attendee.belt.toLowerCase()}${stripe}.png`;
-                    img.alt = '';
-                    img.classList.add('icon');
-                    const span = document.createElement('span');
-                    span.classList.add('caption');
-                    span.textContent = attendee.name;
+                        const bookLi = document.createElement('li');
+                        bookLi.classList.add('item');
+                        bookLi.dataset.reservationId = attendee.reservationId;
+                        const img = document.createElement('img');
+                        const stripe = attendee.stripeCount ? attendee.stripeCount : '';
+                        img.src = `/assets/images/user/belt/${attendee.belt.toLowerCase()}${stripe}.png`;
+                        img.alt = '';
+                        img.classList.add('icon');
+                        const span = document.createElement('span');
+                        span.classList.add('caption');
+                        span.textContent = attendee.name;
 
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.setAttribute('data-mt-object', 'button');
-                    const attended = false;
-                    button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
-                    button.textContent = attended ? '출석' : '미출석';
-                    if (isMaster) {
-                        button.setAttribute('data-mt-visible', '');
-                        button.addEventListener('click', () => {
-                            const color = button.getAttribute('data-mt-color');
-                            if (color === 'gray') {
-                                button.setAttribute('data-mt-color', 'green');
-                                button.textContent = '출석';
-                            } else {
-                                button.setAttribute('data-mt-color', 'gray');
-                                button.textContent = '미출석';
-                            }
-                        });
-                    }
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.setAttribute('data-mt-object', 'button');
+                        const attended = false;
+                        button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
+                        button.textContent = attended ? '출석' : '미출석';
+                        if (isMaster) {
+                            button.setAttribute('data-mt-visible', '');
+                            button.addEventListener('click', () => {
+                                const color = button.getAttribute('data-mt-color');
+                                if (color === 'gray') {
+                                    button.setAttribute('data-mt-color', 'green');
+                                    button.textContent = '출석';
+                                } else {
+                                    button.setAttribute('data-mt-color', 'gray');
+                                    button.textContent = '미출석';
+                                }
+                            });
+                        }
 
-                    bookLi.appendChild(img);
-                    bookLi.appendChild(span);
-                    bookLi.appendChild(button);
-                    $bookList.appendChild(bookLi);
-                })
-                .catch(() => {
-                    dialog.showSimpleOk('예약', '요청을 처리하는 도중 오류가 발생하였습니다.');
-                });
+                        bookLi.appendChild(img);
+                        bookLi.appendChild(span);
+                        bookLi.appendChild(button);
+                        $bookList.appendChild(bookLi);
+
+                        reservationId = attendee.reservationId;
+                        $submitButton.setAttribute('data-mt-color', 'red');
+                        $submitButton.textContent = '예약 취소 하기';
+                    })
+                    .catch(() => {
+                        dialog.showSimpleOk('예약', '요청을 처리하는 도중 오류가 발생하였습니다.');
+                    });
+            } else {
+                fetch('/book/cancel', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: new URLSearchParams({reservationId}).toString()
+                }).then(res => res.ok ? res.json() : Promise.reject())
+                    .then(data => {
+                        if (!data || data.result !== 'success') {
+                            dialog.showSimpleOk('예약 취소', '예약 취소에 실패하였습니다.');
+                            return;
+                        }
+                        $list.querySelector(`[data-reservation-id="${reservationId}"]`)?.remove();
+                        $bookList.querySelector(`[data-reservation-id="${reservationId}"]`)?.remove();
+                        reservationId = null;
+                        $submitButton.setAttribute('data-mt-color', 'green');
+                        $submitButton.textContent = '예약하기';
+                    })
+                    .catch(() => {
+                        dialog.showSimpleOk('예약 취소', '요청을 처리하는 도중 오류가 발생하였습니다.');
+                    });
+            }
         });
     });
 }
