@@ -17,4 +17,6 @@ public interface ClassMapper {
     List<ClassEntity> selectAll();
 
     int updateDeleted(@Param(value = "classId") int classId);
+
+    int deleteById(@Param(value = "classId") int classId);
 }

@@ -26,6 +26,13 @@
         limit 1
     </update>
 
+    <update id="deleteById" parameterType="int">
+        update `jiujitsu`.`classes`
+        set `is_deleted` = true
+        where `class_id` = #{classId}
+        limit 1
+    </update>
+
     <select id="selectByUserEmail" resultType="com.yjb.jiujitsumembership.entities.ClassEntity">
         select `class_id`   as `classId`,
                `class_name` as `className`,

@@ -95,4 +95,14 @@ public class SessionRegistrationController {
 
         return response.toString();
     }
+
+    @DeleteMapping(value = "/sessionRegistration/{classId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String deleteSessionRegistration(@PathVariable("classId") int classId,
+                                            @SessionAttribute(value = "signedUser", required = false) UserEntity signedUser) {
+        Result result = classService.deleteSession(classId, signedUser);
+        JSONObject response = new JSONObject();
+        response.put("result", result.name().toLowerCase());
+        return response.toString();
+    }
 }

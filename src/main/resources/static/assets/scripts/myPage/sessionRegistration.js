@@ -25,7 +25,7 @@ import '../common.js';
             let $template = $wrapper.querySelector('.session-wrapper');
 
             const daySessions = {};
-            const deletedIds = new Set();
+            // const deletedIds = new Set();
             let currentDay = null;
 
             function attachDelete($el) {
@@ -43,12 +43,41 @@ import '../common.js';
                                 onClickCallback: ($modal) => {
                                     dialog.hide($modal);
                                     const idInput = $el.querySelector('input[name="classId"]');
-                                    if (idInput && idInput.value && Number(idInput.value) > 0) {
-                                        deletedIds.add(Number(idInput.value));
-                                    }
-                                    $el.remove();
-                                    if (currentDay) {
-                                        daySessions[currentDay] = Array.from($wrapper.children);
+                                    // if (idInput && idInput.value && Number(idInput.value) > 0) {
+                                    //     deletedIds.add(Number(idInput.value));
+                                    // }
+                                    // $el.remove();
+                                    // if (currentDay) {
+                                    //     daySessions[currentDay] = Array.from($wrapper.children);
+                                    const classId = idInput ? Number(idInput.value) : 0;
+                                    if (classId > 0) {
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.onreadystatechange = () => {
+                                            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+                                            if (xhr.status >= 200 && xhr.status < 300) {
+                                                const response = JSON.parse(xhr.responseText);
+                                                if (response.result === 'success') {
+                                                    $el.remove();
+                                                    if (currentDay) {
+                                                        daySessions[currentDay] = Array.from($wrapper.children);
+                                                    }
+                                                } else if (response.result === 'failure_session_expired') {
+                                                    dialog.showSimpleOk('세션 삭제', '세션이 만료되었습니다. 다시 로그인해 주세요.', () => location.href = '/user/login');
+                                                } else {
+                                                    dialog.showSimpleOk('세션 삭제', '세션 삭제에 실패하였습니다.');
+                                                }
+                                            } else {
+                                                dialog.showSimpleOk('세션 삭제', '요청을 처리하는 도중 오류가 발생하였습니다.');
+                                            }
+                                        };
+                                        xhr.open('DELETE', `/user/myPage/sessionRegistration/${classId}`);
+                                        xhr.send();
+                                    } else {
+                                        $el.remove();
+                                        if (currentDay) {
+                                            daySessions[currentDay] = Array.from($wrapper.children);
+                                        }
                                     }
                                 }
                             }
@@ -184,9 +213,9 @@ import '../common.js';
                         });
                     });
 
-                    deletedIds.forEach(id => {
-                        payload.push({classId: id, isDeleted: true});
-                    });
+                    // deletedIds.forEach(id => {
+                    //     payload.push({classId: id, isDeleted: true});
+                    // });
 
                     const xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = () => {
@@ -200,7 +229,7 @@ import '../common.js';
                         const response = JSON.parse(xhr.responseText);
                         switch (response.result) {
                             case 'success':
-                                deletedIds.clear();
+                                // deletedIds.clear();
                                 dialog.showSimpleOk('세션 등록', '세션 등록이 완료되었습니다.');
                                 break;
                             case 'failure_session_expired':

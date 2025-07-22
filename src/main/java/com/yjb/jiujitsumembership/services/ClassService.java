@@ -62,6 +62,17 @@ public class ClassService {
         return this.classMapper.selectByUserEmail(signedUser.getEmail());
     }
 
+    public Result deleteSession(int classId, UserEntity signedUser) {
+        if (signedUser == null) {
+            return CommonResult.FAILURE_SESSION_EXPIRED;
+        }
+        if (!"MASTER".equalsIgnoreCase(signedUser.getUserRole())) {
+            return CommonResult.FAILURE;
+        }
+        int affected = this.classMapper.deleteById(classId);
+        return affected > 0 ? CommonResult.SUCCESS : CommonResult.FAILURE;
+    }
+
     public List<ClassEntity> getAllSessions() {
         return this.classMapper.selectAll();
     }
