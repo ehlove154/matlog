@@ -13,14 +13,14 @@ import '../common.js';
         window.$loading = document.getElementById('loading');
 
         const $title = $timetableForm.querySelector('.title-container > .title');
-        const $dayButtons = $timetableForm.querySelectorAll('.title-container .day > button');
-        const $timeColumns = $timetableForm.querySelectorAll('.timetable [data-mt-day]');
+        const $dayButtons = Array.from($timetableForm.querySelectorAll('.title-container .day > button'));
+        const $timeColumns = Array.from($timetableForm.querySelectorAll('.timetable [data-mt-day]'));
+        let activeDay = 0;
         const $sessionTemplate = document.getElementById('sessionTemplate');
 
         const now = new Date();
         $title.textContent = `${now.getFullYear()} ${now.getMonth() + 1}월`;
 
-        // Calculate Monday of the current week (Monday = first day)
         const monday = new Date(now);
         monday.setHours(0, 0, 0, 0);
         monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
@@ -58,6 +58,46 @@ import '../common.js';
             });
         }
 
+        const updateLayout = () => {
+            let count = 5;
+            if (window.matchMedia('(max-width: 40rem)').matches) count = 1;
+            else if (window.matchMedia('(max-width: 60rem)').matches) count = 2;
+            else if (window.matchMedia('(max-width: 80rem)').matches) count = 3;
+            else if (window.matchMedia('(max-width: 100rem)').matches) count = 4;
+
+            // if (count === 1) {
+            //     $timeColumns.forEach((col, i) => {
+            //         col.style.display = i === activeDay ? 'flex' : 'none';
+            //     });
+            //     $dayButtons.forEach((btn, i) => {
+            //         btn.classList.toggle('active', i === activeDay);
+            //     });
+            //     return;
+            // }
+
+            const today = new Date();
+            let start = (today.getDay() + 6) % 7;
+            if (start >= $timeColumns.length) start = 0;
+            const container = $timeColumns[0].parentElement;
+            const visible = [];
+            if (count === 1) {
+                visible.push(activeDay);
+            } else {
+                for (let i = start; i < $timeColumns.length && visible.length < count; i++) {
+                    visible.push(i);
+                }
+            }
+            visible.forEach(i => container.appendChild($timeColumns[i]));
+            $timeColumns.forEach((col, i) => {
+                col.style.display = visible.includes(i) ? 'flex' : 'none';
+                col.classList.toggle('active', i === activeDay);
+            });
+            $dayButtons.forEach((btn, i) => {
+                btn.classList.toggle('active', i === activeDay);
+            });
+            // $dayButtons.forEach(btn => btn.classList.remove('active'));
+        };
+
         const updateDisabled = () => {
             const now = new Date();
             $timeColumns.forEach((column, idx) => {
@@ -76,8 +116,15 @@ import '../common.js';
                 });
             });
         };
-
+        updateLayout();
         updateDisabled();
         setInterval(updateDisabled, 60000);
+        window.addEventListener('resize', updateLayout);
+        $dayButtons.forEach((btn, idx) => {
+            btn.addEventListener('click', () => {
+                activeDay = idx;
+                updateLayout();
+            });
+        });
     });
 }

@@ -129,14 +129,14 @@
   background-color: rgb(111.7441860465, 142.4418604651, 178.2558139535);
   color: rgb(255, 240.92, 207);
 }
-#main > #timetableForm > .title-container > .day > button:active {
+#main > #timetableForm > .title-container > .day > button:active, #main > #timetableForm > .title-container > .day > button.active {
   background-color: rgb(65.5813953488, 91.8139534884, 122.4186046512);
   color: #FFD369;
 }
-#main > #timetableForm > .title-container > .day > button:active + .week {
+#main > #timetableForm > .title-container > .day > button:active + .week, #main > #timetableForm > .title-container > .day > button.active + .week {
   margin-bottom: 0;
 }
-#main > #timetableForm > .title-container > .day > button:active ~ .day {
+#main > #timetableForm > .title-container > .day > button:active ~ .day, #main > #timetableForm > .title-container > .day > button.active ~ .day {
   width: 1.55rem;
   height: 1.55rem;
   text-align: center;
@@ -303,6 +303,17 @@
 #main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content:active > .coach {
   color: rgb(255, 225.96, 156);
 }
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content.active {
+  border: 0.0625rem solid #545454;
+  background-color: rgb(144.9534883721, 168.5348837209, 196.0465116279);
+}
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content.active > .class {
+  color: rgb(255, 218.48, 130.5);
+}
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content.active > .time,
+#main > #timetableForm > .timetable > [data-mt-name=weeklySession] > .session-container > .content.active > .coach {
+  color: rgb(255, 225.96, 156);
+}
 #main > #timetableForm > .message.init {
   margin: 5rem auto;
   font-size: 1.5rem;
@@ -320,31 +331,15 @@
   #main > #timetableForm > .timetable {
     width: 83rem;
   }
-  #main > #timetableForm > .timetable > [data-mt-name=weeklySession]:nth-child(n+5) {
-    display: none;
-  }
 }
 @media screen and (max-width: 80rem) {
   #main > #timetableForm > .timetable {
     width: 62rem;
   }
-  #main > #timetableForm > .timetable > [data-mt-name=weeklySession] {
-    display: none;
-  }
-  #main > #timetableForm > .timetable > [data-mt-name=weeklySession]:nth-child(-n+3) {
-    display: flex;
-  }
 }
 @media screen and (max-width: 60rem) {
   #main > #timetableForm > .timetable {
     width: 41rem;
-  }
-  #main > #timetableForm > .timetable > [data-mt-name=weeklySession] {
-    display: none;
-  }
-  #main > #timetableForm > .timetable > [data-mt-name=weeklySession]:nth-child(-n+2) {
-    display: flex;
-    flex-direction: column;
   }
   #main > #timetableForm > .message.init {
     font-size: 1rem;
@@ -357,13 +352,6 @@
   #main > #timetableForm > .timetable {
     justify-content: center;
     width: 20rem;
-  }
-  #main > #timetableForm > .timetable > [data-mt-name=weeklySession] {
-    display: none;
-  }
-  #main > #timetableForm > .timetable > [data-mt-name=weeklySession]:nth-child(1) {
-    display: flex;
-    flex-direction: column;
   }
 }
 #main > #bookForm {

@@ -43,16 +43,19 @@
           color: $global_color-accent-lighten-20;
         }
 
-        &:active {
+        &:active,
+        &.active {
           background-color: $global_color-primary-lighten-20;
           color: $global_color-accent;
         }
 
-        &:active + .week {
+        &:active + .week,
+        &.active + .week {
           margin-bottom: 0;
         }
 
-        &:active ~ .day {
+        &:active ~ .day,
+        &.active ~ .day {
           width: 1.55rem;
           height: 1.55rem;
           text-align: center;
@@ -176,6 +179,19 @@
               color: $global_color-accent-lighten-10;
             }
           }
+          &.active {
+            border: 0.0625rem solid $global-color-border-lighten-20;
+            background-color: $global_color-primary-lighten-50;
+
+            > .class {
+              color: $global_color-accent-lighten-5;
+            }
+
+            > .time,
+            > .coach {
+              color: $global_color-accent-lighten-10;
+            }
+          }
         }
       }
     }
@@ -199,24 +215,12 @@
 @media screen and (max-width: 100rem) {
   #main > #timetableForm > .timetable {
     width: calc(4 * 20rem + 3 * 1rem);
-
-    > [data-mt-name="weeklySession"]:nth-child(n+5) {
-      display: none;
-    }
   }
 }
 
 @media screen and (max-width: 80rem) {
   #main > #timetableForm > .timetable {
     width: calc(3 * 20rem + 2 * 1rem);
-
-    > [data-mt-name="weeklySession"] {
-      display: none;
-
-      &:nth-child(-n+3) {
-        display: flex;
-      }
-    }
   }
 }
 
@@ -224,15 +228,6 @@
   #main > #timetableForm {
     > .timetable {
       width: calc(2 * 20rem + 1 * 1rem);
-
-      > [data-mt-name="weeklySession"] {
-        display: none;
-
-        &:nth-child(-n+2) {
-          display: flex;
-          flex-direction: column;
-        }
-      }
     }
 
     > .message.init {
@@ -251,15 +246,6 @@
     > .timetable {
       justify-content: center;
       width: 20rem;
-
-      > [data-mt-name="weeklySession"] {
-        display: none;
-
-        &:nth-child(1) {
-          display: flex;
-          flex-direction: column;
-        }
-      }
     }
   }
 }
