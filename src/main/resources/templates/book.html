@@ -18,11 +18,11 @@
     <form novalidate id="bookForm">
         <div class="container">
             <div class="info">
-                <h2 class="title">주짓수 4층</h2>
-                <div class="date">2025-06-25</div>
-                <div class="day">수요일</div>
-                <div class="time">10:30 - 11:30 (60min)</div>
-                <div class="coach">코치 : 백유정</div>
+                <h2 class="title" th:text="${className}">주짓수 4층</h2>
+                <div class="date" th:text="${date}">2025-06-25</div>
+                <div class="day" th:text="${day}">수요일</div>
+                <div class="time" th:text="${time}">10:30 - 11:30 (60min)</div>
+                <div class="coach" th:text="'코치 : ' + ${coach}">코치 : 백유정</div>
             </div>
             <div class="list-container">
                 <ul class="bookList">

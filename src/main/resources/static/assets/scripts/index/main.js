@@ -38,19 +38,51 @@ import '../common.js';
         });
 
         const dayCodeMap = {MON: 'mon', TUE: 'tue', WED: 'wed', THU: 'thu', FRI: 'fri'};
+        const dayNames = ['월요일', '화요일', '수요일', '목요일', '금요일'];
         if ($sessionTemplate) {
             fetch('/classes').then(r => r.json()).then(data => {
                 Object.entries(data).forEach(([day, sessions]) => {
                     const column = $timetableForm.querySelector(`[data-mt-day="${dayCodeMap[day] || day.toLowerCase()}"]`);
                     if (!column) return;
                     column.innerHTML = '';
+                    let prevStart = null;
+                    const dayIndex = Object.keys(dayCodeMap).indexOf(day);
+                    const date = new Date(monday);
+                    if (dayIndex >= 0) {
+                        date.setDate(monday.getDate() + dayIndex);
+                    }
                     sessions.forEach(session => {
                         const $clone = $sessionTemplate.content.firstElementChild.cloneNode(true);
-                        $clone.querySelector('.start-time .caption').textContent = (session.startTime || '').substring(0,5);
+                        const start = (session.startTime || '').substring(0,5);
+                        $clone.dataset.start = start;
+                        $clone.dataset.end = (session.endTime || '').substring(0,5);
+                        $clone.dataset.className = session.className || '';
+                        $clone.dataset.coach = session.coach || '';
+                        $clone.dataset.date = date.toISOString().split('T')[0];
+                        $clone.dataset.dayName = dayNames[dayIndex] || day;
+                        if (start === prevStart) {
+                            const startTimeEl = $clone.querySelector('.start-time');
+                            startTimeEl?.remove();
+                        } else {
+                            $clone.querySelector('.start-time .caption').textContent = start;
+                            prevStart = start;
+                        }
                         const $content = $clone.querySelector('.content');
                         $content.querySelector('.class').textContent = session.className || '';
                         $content.querySelector('.time').textContent = `${session.startTime} - ${session.endTime}`;
                         $content.querySelector('.coach').textContent = `코치 : ${session.coach}`;
+                        $clone.addEventListener('click', () => {
+                            if ($content.hasAttribute('disabled')) return;
+                            const params = new URLSearchParams({
+                                className: $clone.dataset.className,
+                                date: $clone.dataset.date,
+                                day: $clone.dataset.dayName,
+                                start: $clone.dataset.start,
+                                end: $clone.dataset.end,
+                                coach: $clone.dataset.coach
+                            });
+                            location.href = `/book?${params.toString()}`;
+                        });
                         column.appendChild($clone);
                     });
                 });
@@ -95,9 +127,9 @@ import '../common.js';
                 date.setDate(monday.getDate() + idx);
 
                 column.querySelectorAll('.session-container').forEach(container => {
-                    const caption = container.querySelector('.start-time .caption');
-                    if (!caption) return;
-                    const [h, m] = caption.textContent.split(':').map(Number);
+                    const start = container.dataset.start;
+                    if (!start) return;
+                    const [h, m] = start.split(':').map(Number);
                     const sessionTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m);
                     const past = sessionTime <= now;
                     container.querySelectorAll('.content').forEach(content => {
