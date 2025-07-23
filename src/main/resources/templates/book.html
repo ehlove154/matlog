@@ -12,7 +12,8 @@
     <script defer src="/assets/scripts/index/book.js" type="module"></script>
 </head>
 <body th:attr="data-master=${#strings.equalsIgnoreCase(session.signedUser?.userRole, 'MASTER') ? 'true' : 'false'},
-             data-email=${session.signedUser?.email}">
+             data-email=${session.signedUser?.email},
+             data-membership=${session.signedUser?.membership}">>
 
 <th:block th:replace="~{/fragments/loading :: loading}"></th:block>
 <th:block th:replace="~{/fragments/loading :: dialog}"></th:block>

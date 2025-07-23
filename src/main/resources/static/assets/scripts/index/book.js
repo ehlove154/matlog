@@ -17,10 +17,12 @@ import '../common.js';
 
         const $submitButton = $bookForm.querySelector('button[type="submit"]');
         let signedEmail = document.body.dataset.email?.toLowerCase();
+        let membership = document.body.dataset.membership?.toUpperCase();
         let reservationId = null;
 
         const updateReservationStatus = () => {
             signedEmail = document.body.dataset.email?.toLowerCase();
+            membership = document.body.dataset.membership?.toUpperCase();
             if (!classId || !signedEmail) return;
             fetch(`/book/reservation?classId=${classId}`)
                 .then(res => res.ok ? res.json() : {})
@@ -45,6 +47,10 @@ import '../common.js';
             if (data === 'loginComplete' || data.type === 'loginComplete' || data.type === 'loginSuccess') {
                 if (data.email) {
                     document.body.dataset.email = data.email;
+                }
+                if (data.membership) {
+                    document.body.dataset.membership = data.membership;
+                    membership = data.membership.toUpperCase();
                 }
 
                 if (data.role) {
@@ -91,6 +97,9 @@ import '../common.js';
                     .then(list => {
                         if (!Array.isArray(list)) return;
                         list.forEach(m => {
+                            if (m.membershipCode && m.membershipCode.toUpperCase() === 'NONE') {
+                                return;
+                            }
                             const opt = document.createElement('option');
                             opt.value = m.membershipCode;
                             const text = m.displayText ? `${m.displayText} | ${Number(m.price).toLocaleString()}원` : `${m.durationMonth}개월 | ${Number(m.price).toLocaleString()}원`;
@@ -167,6 +176,11 @@ import '../common.js';
                 return;
             }
             if (!reservationId) {
+                membership = document.body.dataset.membership?.toUpperCase();
+                if (membership === 'NONE') {
+                    $membershipDialog?.show();
+                    return;
+                }
                 fetch('/book/reserve', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
