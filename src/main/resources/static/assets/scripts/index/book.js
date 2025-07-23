@@ -78,18 +78,26 @@ import '../common.js';
         window.$loading = document.getElementById('loading');
 
         const $membershipDialog = document.getElementById('membershipPaymentDialog');
+        const $modal = $membershipDialog.querySelector('[data-mt-component="dialog.modal"]');
         if ($membershipDialog) {
             const $closeBtn = $membershipDialog.querySelector('button[name="close"]');
             const $payBtn = $membershipDialog.querySelector('button[name="pay"]');
             const $select = $membershipDialog.querySelector('#membership');
 
+
             $membershipDialog.onclick = (e) => {
                 if (e.target === $membershipDialog) {
-                    $membershipDialog.hide();
+                    $membershipDialog.setVisible(false);
+                    $modal.setVisible(false);
                 }
             };
-            $closeBtn?.addEventListener('click', () => $membershipDialog.hide());
-            $payBtn?.addEventListener('click', () => { location.href = '/user/myPage'; });
+            $closeBtn?.addEventListener('click', () => {
+                $membershipDialog.setVisible(false);
+                $modal.setVisible(false);
+            });
+            $payBtn?.addEventListener('click', () => {
+                location.href = '/user/myPage';
+            });
 
             if ($select) {
                 fetch('/memberships')
@@ -178,7 +186,8 @@ import '../common.js';
             if (!reservationId) {
                 membership = document.body.dataset.membership?.toUpperCase();
                 if (membership === 'NONE') {
-                    $membershipDialog?.show();
+                    $membershipDialog?.setVisible(true);
+                    $modal?.setVisible(true);
                     return;
                 }
                 fetch('/book/reserve', {
@@ -192,7 +201,8 @@ import '../common.js';
                             return;
                         }
                         if (data.result === 'membership_required') {
-                            $membershipDialog?.show();
+                            $membershipDialog?.setVisible(true);
+                            $modal?.setVisible(true);
                             return;
                         }
                         if (data.result !== 'success') {
