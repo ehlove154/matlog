@@ -76,6 +76,14 @@ import '../common.js';
                         $content.querySelector('.coach').textContent = `코치 : ${session.coach}`;
                         $clone.addEventListener('click', () => {
                             if ($content.hasAttribute('disabled')) return;
+                            if (!document.body.dataset.email) {
+                                dialog.showSimpleOk(
+                                    '경고',
+                                    '로그인 후 사용할 수 있습니다. 확인을 누르시면 로그인 창으로 이동합니다.',
+                                    { onClickCallback: () => location.href = '/user/login' }
+                                );
+                                return;
+                            }
                             const params = new URLSearchParams({
                                 classId: $clone.dataset.classId,
                                 className: $clone.dataset.className,
