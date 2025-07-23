@@ -73,6 +73,7 @@ import '../common.js';
 
         let isMaster = (document.body.dataset.master || '').toLowerCase() === 'true';
 
+        console.log('isMaster =', document.body.dataset.master);
         if (classId) {
             fetch(`/book/reservations?classId=${classId}`)
                 .then(res => res.ok ? res.json() : {})

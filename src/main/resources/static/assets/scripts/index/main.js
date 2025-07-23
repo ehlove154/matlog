@@ -16,6 +16,8 @@ import '../common.js';
         const $dayButtons = Array.from($timetableForm.querySelectorAll('.title-container .day > button'));
         const $timeColumns = Array.from($timetableForm.querySelectorAll('.timetable [data-mt-day]'));
 
+        let isMaster = (document.body.dataset.master || '').toLowerCase() === 'true';
+
         const today = new Date();
         let activeDay = (today.getDay() + 6) % 7;
         const $sessionTemplate = document.getElementById('sessionTemplate');
@@ -135,7 +137,7 @@ import '../common.js';
                     const sessionTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m);
                     const past = sessionTime <= now;
                     container.querySelectorAll('.content').forEach(content => {
-                        content.setDisabled?.(past);
+                        content.setDisabled?.(past && !isMaster);
                     });
                 });
             });

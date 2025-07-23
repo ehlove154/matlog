@@ -10,8 +10,9 @@
     <script src="/assets/scripts/common.js" type="module"></script>
     <script defer src="/assets/scripts/index/book.js" type="module"></script>
 </head>
-<body data-master="${#strings.equalsIgnoreCase(session.signedUser?.userRole, 'MASTER')}"
-      data-email="${session.signedUser?.email}">
+<body th:attr="data-master=${#strings.equalsIgnoreCase(session.signedUser?.userRole, 'MASTER') ? 'true' : 'false'},
+             data-email=${session.signedUser?.email}">
+
 <th:block th:replace="~{/fragments/loading :: loading}"></th:block>
 <th:block th:replace="~{/fragments/loading :: dialog}"></th:block>
 <main id="main">
