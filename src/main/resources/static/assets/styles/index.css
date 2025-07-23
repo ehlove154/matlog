@@ -1453,6 +1453,97 @@
     width: 20rem;
   }
 }
+#membershipPaymentDialog {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(0.5rem);
+  background-color: rgba(0, 0, 0, 0.1254901961);
+  opacity: 0;
+  perspective: 50rem;
+  pointer-events: none;
+  position: fixed;
+  transition-duration: 175ms;
+  transition-property: opacity;
+  transition-timing-function: ease;
+  z-index: 9;
+}
+#membershipPaymentDialog[data-mt-visible] {
+  opacity: 1;
+  pointer-events: auto;
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"] {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  justify-content: flex-start;
+  top: 50%;
+  left: 50%;
+  background-color: #212529;
+  color: #f7f8fa;
+  max-width: min(30rem, 100% - 2rem);
+  max-height: calc(100% - 2rem);
+  min-width: 15rem;
+  border-radius: 0.25rem;
+  opacity: 0;
+  overflow: hidden;
+  padding: 1.25rem 1.5rem;
+  position: absolute;
+  transform: scale(97.5%) translate(-50%, -50%);
+  transform-origin: top left;
+  transition-duration: 175ms;
+  transition-property: filter, opacity, transform;
+  transition-timing-function: ease;
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"] > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"] > [data-mt-stretch] {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"][data-mt-visible] {
+  opacity: 1;
+  transform: scale(100%) translate(-50%, -50%);
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"].-collapsed {
+  filter: brightness(75%);
+  pointer-events: none;
+  transform: rotateY(-10deg) scale(97.5%) translate(-50%, -50%);
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"] > [data-mt-component~="dialog.modal.title"] {
+  font-size: 1rem;
+  font-weight: 500;
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"] > [data-mt-component~="dialog.modal.content"] {
+  flex-grow: 1;
+  flex-shrink: 1;
+  line-height: 1.7;
+  white-space: break-spaces;
+  overflow: hidden auto;
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"] > [data-mt-component~="dialog.modal.buttonContainer"] {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"] > [data-mt-component~="dialog.modal.buttonContainer"] > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#membershipPaymentDialog > [data-mt-component~="dialog.modal"] > [data-mt-component~="dialog.modal.buttonContainer"] > [data-mt-stretch] {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
 #main > #myPageForm > .container > .content-container {
   background-color: #fff;
   border-radius: 0.5rem;

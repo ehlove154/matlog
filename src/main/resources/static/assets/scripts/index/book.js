@@ -71,6 +71,19 @@ import '../common.js';
         });
         window.$loading = document.getElementById('loading');
 
+        const $membershipDialog = document.getElementById('membershipPaymentDialog');
+        if ($membershipDialog) {
+            const $closeBtn = $membershipDialog.querySelector('button[name="close"]');
+            const $payBtn = $membershipDialog.querySelector('button[name="pay"]');
+            $membershipDialog.onclick = (e) => {
+                if (e.target === $membershipDialog) {
+                    $membershipDialog.hide();
+                }
+            };
+            $closeBtn?.addEventListener('click', () => $membershipDialog.hide());
+            $payBtn?.addEventListener('click', () => { location.href = '/user/myPage'; });
+        }
+
         let isMaster = (document.body.dataset.master || '').toLowerCase() === 'true';
 
         console.log('isMaster =', document.body.dataset.master);
@@ -143,7 +156,15 @@ import '../common.js';
                     body: new URLSearchParams({classId}).toString()
                 }).then(res => res.ok ? res.json() : Promise.reject())
                     .then(data => {
-                        if (!data || data.result !== 'success') {
+                        if (!data) {
+                            dialog.showSimpleOk('예약', '예약에 실패하였습니다.');
+                            return;
+                        }
+                        if (data.result === 'membership_required') {
+                            $membershipDialog?.show();
+                            return;
+                        }
+                        if (data.result !== 'success') {
                             dialog.showSimpleOk('예약', '예약에 실패하였습니다.');
                             return;
                         }

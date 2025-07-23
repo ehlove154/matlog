@@ -76,6 +76,10 @@ public class BookController {
                               @RequestParam(value = "classId", required = false) Integer classId) {
         JSONObject response = new JSONObject();
         ResultTuple<ReservationDto> result = this.reservationService.reserve(classId == null ? 0 : classId, signedUser);
+        if (result.getResult() == CommonResult.FAILURE_MEMBERSHIP_REQUIRED) {
+            response.put("result", "membership_required");
+            return response.toString();
+        }
         response.put("result", result.getResult().nameToLower());
 
         if (result.getResult() == CommonResult.SUCCESS && result.getPayload() != null) {

@@ -4,5 +4,6 @@ public enum CommonResult implements Result {
     FAILURE,
     FAILURE_SESSION_EXPIRED,
     FAILURE_DUPLICATE_RESERVATION,
+    FAILURE_MEMBERSHIP_REQUIRED,
     SUCCESS
 }

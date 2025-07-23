@@ -1,0 +1,76 @@
+@use "sass:color";
+
+@import "../../../_def";
+
+
+#membershipPaymentDialog {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(0.5rem);
+  background-color: #00000020;
+  opacity: 0;
+  perspective: 50rem;
+  pointer-events: none;
+  position: fixed;
+  transition-duration: 175ms;
+  transition-property: opacity;
+  transition-timing-function: ease;
+  z-index: 9;
+
+  &[data-mt-visible] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > [data-mt-component~="dialog.modal"] {
+    @include flex(column, stretch, flex-start, 1rem);
+    top: 50%;
+    left: 50%;
+    background-color: $global-color-text;
+    color: $global-color-background;
+    max-width: min(30rem, calc(100% - 2rem));
+    max-height: calc(100% - 2rem);
+    min-width: 15rem;
+    border-radius: 0.25rem;
+    opacity: 0;
+    overflow: hidden;
+    padding: 1.25rem 1.5rem;
+    position: absolute;
+    transform: scale(97.5%) translate(-50%, -50%);
+    transform-origin: top left;
+    transition-duration: 175ms;
+    transition-property: filter, opacity, transform;
+    transition-timing-function: ease;
+
+    &[data-mt-visible] {
+      opacity: 1;
+      transform: scale(100%) translate(-50%, -50%);
+    }
+
+    &.-collapsed {
+      filter: brightness(75%);
+      pointer-events: none;
+      transform: rotateY(-10deg) scale(97.5%) translate(-50%, -50%);
+    }
+
+    > [data-mt-component~="dialog.modal.title"] {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    > [data-mt-component~="dialog.modal.content"] {
+      flex-grow: 1;
+      flex-shrink: 1;
+      line-height: 1.7;
+      white-space: break-spaces;
+      overflow: hidden auto;
+    }
+
+    > [data-mt-component~="dialog.modal.buttonContainer"] {
+      @include flex(row, stretch, flex-end, 0.5rem);
+      margin-top: 1rem;
+    }
+  }
+}

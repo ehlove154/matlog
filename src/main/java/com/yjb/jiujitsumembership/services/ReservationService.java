@@ -47,6 +47,14 @@ public class ReservationService {
                     .build();
         }
 
+        if ("NONE".equalsIgnoreCase(signedUser.getMembership()) ||
+                (signedUser.getMembershipExpireDate() != null &&
+                        signedUser.getMembershipExpireDate().isBefore(java.time.LocalDate.now()))) {
+            return ResultTuple.<ReservationDto>builder()
+                    .result(CommonResult.FAILURE_MEMBERSHIP_REQUIRED)
+                    .build();
+        }
+
         ClassReservationEntity entity = ClassReservationEntity.builder()
                 .userEmail(signedUser.getEmail())
                 .classId(classId)
