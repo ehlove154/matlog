@@ -55,7 +55,7 @@ import '../common.js';
         });
         window.$loading = document.getElementById('loading');
 
-        const isMaster = (document.body.dataset.master || '').toLowerCase() === 'true';
+        let isMaster = (document.body.dataset.master || '').toLowerCase() === 'true';
 
         if (classId) {
             fetch(`/book/reservations?classId=${classId}`)
