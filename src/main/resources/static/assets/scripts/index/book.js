@@ -46,6 +46,22 @@ import '../common.js';
                 if (data.email) {
                     document.body.dataset.email = data.email;
                 }
+
+                if (data.role) {
+                    document.body.dataset.master = String(data.role.toLowerCase() === 'master');
+                    isMaster = (document.body.dataset.master || '').toLowerCase() === 'true';
+                } else {
+                    fetch('/user/role')
+                        .then(res => res.ok ? res.json() : null)
+                        .then(roleData => {
+                            const role = roleData && (roleData.role || roleData.userRole);
+                            if (role) {
+                                document.body.dataset.master = String(role.toLowerCase() === 'master');
+                                isMaster = (document.body.dataset.master || '').toLowerCase() === 'true';
+                            }
+                        });
+                }
+
                 updateReservationStatus();
             }
         });
