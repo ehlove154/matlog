@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjb.jiujitsumembership.mappers.MembershipMapper">
+    <select id="selectAll" resultType="com.yjb.jiujitsumembership.entities.MembershipEntity">
+        select `membership_code` as `membershipCode`,
+               `display_text`    as `displayText`,
+               `duration_month`  as `durationMonth`,
+               `price`           as `price`
+        from `jiujitsu`.`memberships`
+    </select>
+</mapper>

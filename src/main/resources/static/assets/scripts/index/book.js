@@ -75,6 +75,8 @@ import '../common.js';
         if ($membershipDialog) {
             const $closeBtn = $membershipDialog.querySelector('button[name="close"]');
             const $payBtn = $membershipDialog.querySelector('button[name="pay"]');
+            const $select = $membershipDialog.querySelector('#membership');
+
             $membershipDialog.onclick = (e) => {
                 if (e.target === $membershipDialog) {
                     $membershipDialog.hide();
@@ -82,6 +84,21 @@ import '../common.js';
             };
             $closeBtn?.addEventListener('click', () => $membershipDialog.hide());
             $payBtn?.addEventListener('click', () => { location.href = '/user/myPage'; });
+
+            if ($select) {
+                fetch('/memberships')
+                    .then(res => res.ok ? res.json() : [])
+                    .then(list => {
+                        if (!Array.isArray(list)) return;
+                        list.forEach(m => {
+                            const opt = document.createElement('option');
+                            opt.value = m.membershipCode;
+                            const text = m.displayText ? `${m.displayText} | ${Number(m.price).toLocaleString()}원` : `${m.durationMonth}개월 | ${Number(m.price).toLocaleString()}원`;
+                            opt.textContent = text;
+                            $select.appendChild(opt);
+                        });
+                    });
+            }
         }
 
         let isMaster = (document.body.dataset.master || '').toLowerCase() === 'true';
