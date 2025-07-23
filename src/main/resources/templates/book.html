@@ -13,7 +13,7 @@
 </head>
 <body th:attr="data-master=${#strings.equalsIgnoreCase(session.signedUser?.userRole, 'MASTER') ? 'true' : 'false'},
              data-email=${session.signedUser?.email},
-             data-membership=${session.signedUser?.membership}">>
+             data-membership=${session.signedUser?.membership != null ? session.signedUser.membership : 'NONE'}">>
 
 <th:block th:replace="~{/fragments/loading :: loading}"></th:block>
 <th:block th:replace="~{/fragments/loading :: dialog}"></th:block>
