@@ -25,7 +25,8 @@
     <div class="filterBar" data-mt-name="filterBar">
         <label data-mt-object="label" data-mt-component="row">
             <input autocomplete="off" name="datePiker" type="date" data-mt-object="field"
-                   data-mt-component="label.field">
+                   data-mt-component="label.field"
+                   th:value="${#temporals.format(T(java.time.LocalDate).now(), 'yyyy-MM-dd')}">
             <span data-mt-component="label.row" class="taps-wrapper">
                 <label data-mt-object="label" data-mt-name="tabs">
                     <input name="tabs" type="radio" data-mt-object="field" data-mt-component="label.field" value="ALL" checked>

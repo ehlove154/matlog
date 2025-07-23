@@ -85,6 +85,8 @@
                `last_signed_at`          as `lastSignedAt`,
                `last_signed_ua`          as `lastSignedUa`,
                `membership`              as `membership`,
+               `membership_joined_date` as `membershipJoinedDate`,
+               `membership_expire_date` as `membershipExpireDate`,
                `user_role`               as `userRole`,
                `is_delete`               as `isDelete`,
                `is_suspended`            as `isSuspended`,
