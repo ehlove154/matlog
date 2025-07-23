@@ -128,4 +128,24 @@
           and `is_deleted` = false
     </select>
 
+    <select id="selectByEmailPage" resultType="com.yjb.jiujitsumembership.dtoes.UserSessionDto">
+        SELECT CR.reservation_id  AS reservationId,
+               CR.user_email     AS userEmail,
+               CR.class_id       AS classId,
+               CR.reserved_at    AS reservedAt,
+               CR.is_attended    AS isAttended,
+               CR.attended_at    AS attendedAt,
+               C.class_name      AS className,
+               C.coach           AS coach,
+               C.start_time      AS startTime,
+               C.end_time        AS endTime,
+               C.day             AS day
+        FROM `jiujitsu`.`class_reservations` CR
+                 JOIN `jiujitsu`.`classes` C ON CR.class_id = C.class_id
+        WHERE CR.user_email = #{email}
+          AND CR.is_deleted = false
+        ORDER BY CR.reservation_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
 </mapper>

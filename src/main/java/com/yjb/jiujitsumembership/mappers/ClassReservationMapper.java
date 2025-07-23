@@ -40,5 +40,9 @@ public interface ClassReservationMapper {
                                                      @Param(value = "limit") int limit,
                                                      @Param(value = "offset") int offset);
 
+    List<com.yjb.jiujitsumembership.dtoes.UserSessionDto> selectByEmailPage(@Param(value = "email") String email,
+                                                                            @Param(value = "limit") int limit,
+                                                                            @Param(value = "offset") int offset);
+
     int countByEmail(@Param(value = "email") String email);
 }

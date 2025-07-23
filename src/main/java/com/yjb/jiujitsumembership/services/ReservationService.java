@@ -203,4 +203,16 @@ public class ReservationService {
         return this.reservationMapper.countByEmail(email);
     }
 
+    public PageVo getUserReservationPageVo(String email, int page) {
+        int totalCount = this.reservationMapper.countByEmail(email);
+        return new PageVo(12, page, totalCount);
+    }
+
+    public List<com.yjb.jiujitsumembership.dtoes.UserSessionDto> getUserReservations(String email, PageVo pageVo) {
+        if (pageVo.totalCount == 0) {
+            return List.of();
+        }
+        return this.reservationMapper.selectByEmailPage(email, pageVo.rowCount, pageVo.dbOffset);
+    }
+
 }
