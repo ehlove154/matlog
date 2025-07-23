@@ -94,4 +94,31 @@
         limit 1
     </select>
 
+    <select id="countByClassId" resultType="java.lang.Integer">
+        select count(0)
+        from `jiujitsu`.`class_reservations`
+        where `class_id` = #{classId}
+        and `is_deleted` = false
+        <if test="email != null">
+            and `user_email` = #{email}
+        </if>
+    </select>
+
+    <select id="selectByClassIdPage" resultType="com.yjb.jiujitsumembership.entities.ClassReservationEntity">
+        select `reservation_id` as `reservationId`,
+        `user_email`     as `userEmail`,
+        `class_id`       as `classId`,
+        `reserved_at`    as `reservedAt`,
+        `is_attended`    as `isAttended`,
+        `attended_at`    as `attendedAt`
+        from `jiujitsu`.`class_reservations`
+        where `class_id` = #{classId}
+        and `is_deleted` = false
+        <if test="email != null">
+            and `user_email` = #{email}
+        </if>
+        order by `reservation_id`
+        limit #{limit} offset #{offset}
+    </select>
+
 </mapper>

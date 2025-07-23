@@ -11,6 +11,7 @@ import '../common.js';
         const classId = params.get('classId');
         const $list = document.querySelector('.list');
         const $bookList = document.querySelector('.bookList');
+        const $pageContainer = document.querySelector('.page-container');
         if (!$bookList) {
             return;
         }
@@ -19,6 +20,118 @@ import '../common.js';
         let signedEmail = document.body.dataset.email?.toLowerCase();
         let membership = document.body.dataset.membership?.toUpperCase();
         let reservationId = null;
+        let currentPage = 1;
+        let maxPage = 1;
+
+        const renderPageContainer = () => {
+            if (!$pageContainer) return;
+            $pageContainer.innerHTML = '';
+            const $prev = document.createElement('a');
+            $prev.href = '#';
+            $prev.classList.add('previous');
+            if (currentPage === 1) $prev.classList.add('disabled');
+            $prev.innerHTML = '<img src="/assets/images/previous.png" alt="" class="icon">';
+            $pageContainer.appendChild($prev);
+
+            for (let i = 1; i <= maxPage; i++) {
+                const $p = document.createElement('a');
+                $p.href = '#';
+                $p.classList.add('page');
+                if (i === currentPage) $p.classList.add('-selected');
+                $p.dataset.page = String(i);
+                $p.textContent = String(i);
+                $pageContainer.appendChild($p);
+            }
+
+            const $next = document.createElement('a');
+            $next.href = '#';
+            $next.classList.add('next');
+            if (currentPage === maxPage) $next.classList.add('disabled');
+            $next.innerHTML = '<img src="/assets/images/next.png" alt="" class="icon">';
+            $pageContainer.appendChild($next);
+        };
+
+        const renderReservations = (list) => {
+            $list.innerHTML = '';
+            $bookList.innerHTML = '';
+            list.forEach(r => {
+                const li = document.createElement('li');
+                li.classList.add('item');
+                li.textContent = r.name;
+                li.dataset.reservationId = r.reservationId;
+                $list.appendChild(li);
+
+                const bookLi = document.createElement('li');
+                bookLi.classList.add('item');
+                bookLi.dataset.reservationId = r.reservationId;
+                const img = document.createElement('img');
+                const stripe = r.stripeCount ? r.stripeCount : '';
+                img.src = `/assets/images/user/belt/${r.belt.toLowerCase()}${stripe}.png`;
+                img.alt = '';
+                img.classList.add('icon');
+                const span = document.createElement('span');
+                span.classList.add('caption');
+                span.textContent = r.name;
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.setAttribute('data-mt-object', 'button');
+                const attended = r.isAttended;
+                button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
+                button.textContent = attended ? '출석' : '미출석';
+                if (isMaster) {
+                    button.setAttribute('data-mt-visible', '');
+                    button.addEventListener('click', () => {
+                        const color = button.getAttribute('data-mt-color');
+                        if (color === 'gray') {
+                            button.setAttribute('data-mt-color', 'green');
+                            button.textContent = '출석';
+                        } else {
+                            button.setAttribute('data-mt-color', 'gray');
+                            button.textContent = '미출석';
+                        }
+                    });
+                }
+                bookLi.appendChild(img);
+                bookLi.appendChild(span);
+                bookLi.appendChild(button);
+                $bookList.appendChild(bookLi);
+
+                if (signedEmail && r.email && r.email.toLowerCase() === signedEmail) {
+                    reservationId = r.reservationId;
+                }
+            });
+        };
+
+        const loadPage = (page = 1) => {
+            fetch(`/book/reservations?classId=${classId}&page=${page}`)
+                .then(res => res.ok ? res.json() : {})
+                .then(data => {
+                    if (data.result !== 'success' || !Array.isArray(data.reservations)) return;
+                    currentPage = data.page || 1;
+                    maxPage = data.maxPage || 1;
+                    renderReservations(data.reservations);
+                    renderPageContainer();
+                });
+        };
+
+        if ($pageContainer) {
+            $pageContainer.addEventListener('click', (e) => {
+                const prev = e.target.closest('a.previous');
+                const next = e.target.closest('a.next');
+                const pageEl = e.target.closest('a.page');
+                if (prev) {
+                    e.preventDefault();
+                    if (currentPage > 1) loadPage(currentPage - 1);
+                } else if (next) {
+                    e.preventDefault();
+                    if (currentPage < maxPage) loadPage(currentPage + 1);
+                } else if (pageEl) {
+                    e.preventDefault();
+                    const p = parseInt(pageEl.dataset.page);
+                    if (!isNaN(p)) loadPage(p);
+                }
+            });
+        }
 
         const updateReservationStatus = () => {
             signedEmail = document.body.dataset.email?.toLowerCase();
@@ -170,60 +283,7 @@ import '../common.js';
 
         console.log('isMaster =', document.body.dataset.master);
         if (classId) {
-            fetch(`/book/reservations?classId=${classId}`)
-                .then(res => res.ok ? res.json() : {})
-                .then(data => {
-                    if (data.result !== 'success' || !Array.isArray(data.reservations)) return;
-                    data.reservations.forEach(r => {
-                        const li = document.createElement('li');
-                        li.classList.add('item');
-                        li.textContent = r.name;
-                        li.dataset.reservationId = r.reservationId;
-                        $list.appendChild(li);
-
-                        const bookLi = document.createElement('li');
-                        bookLi.classList.add('item');
-                        bookLi.dataset.reservationId = r.reservationId;
-                        const img = document.createElement('img');
-                        const stripe = r.stripeCount ? r.stripeCount : '';
-                        img.src = `/assets/images/user/belt/${r.belt.toLowerCase()}${stripe}.png`;
-                        img.alt = '';
-                        img.classList.add('icon');
-
-                        const span = document.createElement('span');
-                        span.classList.add('caption');
-                        span.textContent = r.name;
-
-                        const button = document.createElement('button');
-                        button.type = 'button';
-                        button.setAttribute('data-mt-object', 'button');
-                        const attended = r.isAttended;
-                        button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
-                        button.textContent = attended ? '출석' : '미출석';
-                        if (isMaster) {
-                            button.setAttribute('data-mt-visible', '');
-                            button.addEventListener('click', () => {
-                                const color = button.getAttribute('data-mt-color');
-                                if (color === 'gray') {
-                                    button.setAttribute('data-mt-color', 'green');
-                                    button.textContent = '출석';
-                                } else {
-                                    button.setAttribute('data-mt-color', 'gray');
-                                    button.textContent = '미출석';
-                                }
-                            });
-                        }
-
-                        bookLi.appendChild(img);
-                        bookLi.appendChild(span);
-                        bookLi.appendChild(button);
-                        $bookList.appendChild(bookLi);
-
-                        if (signedEmail && r.email && r.email.toLowerCase() === signedEmail) {
-                            reservationId = r.reservationId;
-                        }
-                    });
-                });
+            loadPage(1);
         }
         $bookForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -260,52 +320,10 @@ import '../common.js';
                         const attendee = data.attendee;
                         if (!attendee) return;
 
-                        const li = document.createElement('li');
-                        li.classList.add('item');
-                        li.textContent = attendee.name;
-                        li.dataset.reservationId = attendee.reservationId;
-                        $list.appendChild(li);
-
-                        const bookLi = document.createElement('li');
-                        bookLi.classList.add('item');
-                        bookLi.dataset.reservationId = attendee.reservationId;
-                        const img = document.createElement('img');
-                        const stripe = attendee.stripeCount ? attendee.stripeCount : '';
-                        img.src = `/assets/images/user/belt/${attendee.belt.toLowerCase()}${stripe}.png`;
-                        img.alt = '';
-                        img.classList.add('icon');
-                        const span = document.createElement('span');
-                        span.classList.add('caption');
-                        span.textContent = attendee.name;
-
-                        const button = document.createElement('button');
-                        button.type = 'button';
-                        button.setAttribute('data-mt-object', 'button');
-                        const attended = false;
-                        button.setAttribute('data-mt-color', attended ? 'green' : 'gray');
-                        button.textContent = attended ? '출석' : '미출석';
-                        if (isMaster) {
-                            button.setAttribute('data-mt-visible', '');
-                            button.addEventListener('click', () => {
-                                const color = button.getAttribute('data-mt-color');
-                                if (color === 'gray') {
-                                    button.setAttribute('data-mt-color', 'green');
-                                    button.textContent = '출석';
-                                } else {
-                                    button.setAttribute('data-mt-color', 'gray');
-                                    button.textContent = '미출석';
-                                }
-                            });
-                        }
-
-                        bookLi.appendChild(img);
-                        bookLi.appendChild(span);
-                        bookLi.appendChild(button);
-                        $bookList.appendChild(bookLi);
-
                         reservationId = attendee.reservationId;
                         $submitButton.setAttribute('data-mt-color', 'red');
                         $submitButton.textContent = '예약 취소 하기';
+                        loadPage(currentPage);
                     })
                     .catch(() => {
                         dialog.showSimpleOk('예약', '요청을 처리하는 도중 오류가 발생하였습니다.');
@@ -321,11 +339,10 @@ import '../common.js';
                             dialog.showSimpleOk('예약 취소', '예약 취소에 실패하였습니다.');
                             return;
                         }
-                        $list.querySelector(`[data-reservation-id="${reservationId}"]`)?.remove();
-                        $bookList.querySelector(`[data-reservation-id="${reservationId}"]`)?.remove();
                         reservationId = null;
                         $submitButton.setAttribute('data-mt-color', 'green');
                         $submitButton.textContent = '예약하기';
+                        loadPage(currentPage);
                     })
                     .catch(() => {
                         dialog.showSimpleOk('예약 취소', '요청을 처리하는 도중 오류가 발생하였습니다.');

@@ -282,7 +282,7 @@
   transition-duration: 175ms;
   transition-property: opacity;
   transition-timing-function: ease;
-  z-index: 9;
+  z-index: 10;
 }
 [data-mt-object=dialog][data-mt-visible] {
   opacity: 1;

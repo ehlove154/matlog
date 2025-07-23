@@ -7,6 +7,7 @@ import com.yjb.jiujitsumembership.entities.UserEntity;
 import com.yjb.jiujitsumembership.results.CommonResult;
 import com.yjb.jiujitsumembership.results.ResultTuple;
 import com.yjb.jiujitsumembership.services.ReservationService;
+import com.yjb.jiujitsumembership.vos.PageVo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,17 @@ public class BookController {
 
     @RequestMapping(value = "/book/reservations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getReservations(@RequestParam(value = "classId", required = false) Integer classId,  @RequestParam(value = "email", required = false) String email) {
+    public String getReservations(@RequestParam(value = "classId", required = false) Integer classId,
+                                  @RequestParam(value = "email", required = false) String email,
+                                  @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
         JSONObject response = new JSONObject();
         if (classId == null) {
             response.put("result", "failure");
             return response.toString();
         }
+        PageVo pageVo = this.reservationService.getReservationPageVo(classId, email, page);
         JSONArray reservations = new JSONArray();
-        for (ReservationDto dto : this.reservationService.getReservations(classId, email)) {
+        for (ReservationDto dto : this.reservationService.getReservationsByPage(classId, email, pageVo)) {
             JSONObject attendee = new JSONObject();
             attendee.put("reservationId", dto.getReservationId());
             attendee.put("email", dto.getEmail());
@@ -45,6 +49,8 @@ public class BookController {
             attendee.put("stripeCount", dto.getStripeCount());
             attendee.put("beltWithStripe", dto.getBeltWithStripe());
             attendee.put("isAttended", dto.isAttended());
+            response.put("page", pageVo.page);
+            response.put("maxPage", pageVo.maxPage);
             reservations.put(attendee);
         }
         response.put("result", "success");

@@ -31,4 +31,12 @@ public interface ClassReservationMapper {
 
     ClassReservationEntity selectOneByClassIdAndEmail(@Param(value = "classId") int classId,
                                                       @Param(value = "email") String email);
+
+    int countByClassId(@Param(value = "classId") int classId,
+                       @Param(value = "email") String email);
+
+    List<ClassReservationEntity> selectByClassIdPage(@Param(value = "classId") int classId,
+                                                     @Param(value = "email") String email,
+                                                     @Param(value = "limit") int limit,
+                                                     @Param(value = "offset") int offset);
 }
