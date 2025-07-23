@@ -81,14 +81,32 @@ import '../common.js';
                 if (isMaster) {
                     button.setAttribute('data-mt-visible', '');
                     button.addEventListener('click', () => {
-                        const color = button.getAttribute('data-mt-color');
-                        if (color === 'gray') {
-                            button.setAttribute('data-mt-color', 'green');
-                            button.textContent = '출석';
-                        } else {
-                            button.setAttribute('data-mt-color', 'gray');
-                            button.textContent = '미출석';
-                        }
+                        const prevColor = button.getAttribute('data-mt-color');
+                        const newAttended = prevColor === 'gray';
+
+                        // 미리 버튼 상태를 변경한다.
+                        button.setAttribute('data-mt-color', newAttended ? 'green' : 'gray');
+                        button.textContent = newAttended ? '출석' : '미출석';
+
+                        fetch('/book/attendance', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            body: new URLSearchParams({
+                                reservationId: bookLi.dataset.reservationId,
+                                attended: String(newAttended)
+                            }).toString()
+                        }).then(res => res.ok ? res.json() : Promise.reject())
+                            .then(data => {
+                                if (!data || data.result !== 'success') {
+                                    throw new Error();
+                                }
+                            })
+                            .catch(() => {
+                                // 실패 시 원래 상태로 되돌림
+                                button.setAttribute('data-mt-color', prevColor);
+                                button.textContent = prevColor === 'gray' ? '미출석' : '출석';
+                                dialog.showSimpleOk('출석 관리', '출석 상태 변경에 실패하였습니다.');
+                            });
                     });
                 }
                 bookLi.appendChild(img);
