@@ -10,6 +10,7 @@ import com.yjb.jiujitsumembership.results.CommonResult;
 import com.yjb.jiujitsumembership.results.Result;
 import com.yjb.jiujitsumembership.results.ResultTuple;
 import com.yjb.jiujitsumembership.services.ClassService;
+import com.yjb.jiujitsumembership.services.ReservationService;
 import com.yjb.jiujitsumembership.services.UserService;
 import com.yjb.jiujitsumembership.vos.PageVo;
 import com.yjb.jiujitsumembership.vos.UserListVo;
@@ -35,13 +36,15 @@ public class UserController {
     private final UserMapper userMapper;
     private final GymMapper gymMapper;
     private final ClassService classService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public UserController(UserService userService, UserMapper userMapper, GymMapper gymMapper, ClassService classService) {
+    public UserController(UserService userService, UserMapper userMapper, GymMapper gymMapper, ClassService classService, ReservationService reservationService) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.gymMapper = gymMapper;
         this.classService = classService;
+        this.reservationService = reservationService;
     }
 
     @RequestMapping(value = "/check-email", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -156,6 +159,9 @@ public class UserController {
         }
         model.addAttribute("gym", gym);
         model.addAttribute("day", day);
+
+        int totalReserved = this.reservationService.getReservationCountByEmail(signedUser.getEmail());
+        model.addAttribute("totalReserved", totalReserved);
 
         List<ClassEntity> sessions = this.classService.getSessions(signedUser);
         Map<String, List<ClassEntity>> sessionsByDay = sessions.stream()

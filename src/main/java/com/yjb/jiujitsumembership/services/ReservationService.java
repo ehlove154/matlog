@@ -196,4 +196,11 @@ public class ReservationService {
                 .build();
     }
 
+    public int getReservationCountByEmail(String email) {
+        if (email == null) {
+            return 0;
+        }
+        return this.reservationMapper.countByEmail(email);
+    }
+
 }

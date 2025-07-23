@@ -121,4 +121,11 @@
         limit #{limit} offset #{offset}
     </select>
 
+    <select id="countByEmail" resultType="java.lang.Integer">
+        select count(0)
+        from `jiujitsu`.`class_reservations`
+        where `user_email` = #{email}
+          and `is_deleted` = false
+    </select>
+
 </mapper>

@@ -7,15 +7,18 @@
         <span data-mt-component="row">
             <span data-mt-component="column">
                 <span data-mt-component="div.caption">시작일</span>
-                <span data-mt-component="div.description">2025.07.01</span>
+                <span data-mt-component="div.description"
+                      th:text="${signedUser.membershipJoinedDate != null ? #temporals.format(signedUser.membershipJoinedDate, 'yyyy.MM.dd') : '-'}"></span>
             </span>
             <span data-mt-component="column">
                 <span data-mt-component="div.caption">종료일</span>
-                <span data-mt-component="div.description">2025.09.01</span>
+                <span data-mt-component="div.description"
+                      th:text="${signedUser.membershipExpireDate != null ? #temporals.format(signedUser.membershipExpireDate, 'yyyy.MM.dd') : '-'}"></span>
             </span>
             <span data-mt-component="column">
                 <span data-mt-component="div.caption">총 예약 세션 수</span>
-                <span data-mt-component="div.description">5회</span>
+                <span data-mt-component="div.description"
+                      th:text="${totalReserved} + '회'"></span>
             </span>
         </span>
     </div>
@@ -25,7 +28,7 @@
                    data-mt-component="label.field">
             <span data-mt-component="label.row" class="taps-wrapper">
                 <label data-mt-object="label" data-mt-name="tabs">
-                    <input name="tabs" type="radio" data-mt-object="field" data-mt-component="label.field" value="ALL">
+                    <input name="tabs" type="radio" data-mt-object="field" data-mt-component="label.field" value="ALL" checked>
                     <span data-mt-component="label.caption">전체</span>
                 </label>
                 <label data-mt-object="label" data-mt-name="tabs">
@@ -190,7 +193,7 @@
                 </div>
                 <div class="button-container" data-mt-component="row">
                     <div data-mt-stretch></div>
-                    <button disabled name="pending" type="button" data-mt-object="button" data-mt-color="green">수강 중
+                    <button name="pending" type="button" data-mt-object="button" data-mt-color="green">수강 중
                     </button>
                 </div>
             </div>
