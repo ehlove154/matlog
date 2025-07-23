@@ -52,9 +52,14 @@ public interface UserMapper {
     int updateIsDeleted(@Param(value = "email") String email,
                         @Param(value = "isDeleted")boolean isDeleted);
 
-    List<UserListVo> selectForUserPage(@Param("email") String email,
-                                       @Param("offset") int offset,
-                                       @Param("limit") int limit);
+    List<UserListVo> selectForUserPage(@Param(value = "email") String email,
+                                       @Param(value = "offset") int offset,
+                                       @Param(value = "limit") int limit);
 
-    int countForUser(@Param("email") String email);
+    int countForUser(@Param(value = "email") String email);
+
+    int updateMembership(@Param(value = "email") String email,
+                         @Param(value = "membership") String membership,
+                         @Param(value = "joinedDate") LocalDate joinedDate,
+                         @Param(value = "expireDate") LocalDate expireDate);
 }

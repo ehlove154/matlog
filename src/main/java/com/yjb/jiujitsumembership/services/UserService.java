@@ -386,4 +386,35 @@ public class UserService {
         }
         return;
     }
+
+    public Result updateMembership(String email, String membershipCode, int amount) {
+        if (email == null || membershipCode == null) {
+            return CommonResult.FAILURE;
+        }
+
+        UserEntity user = this.userMapper.selectByEmail(email);
+        if (user == null || user.isDelete() || user.isSuspended()) {
+            return CommonResult.FAILURE;
+        }
+
+        MembershipEntity membership = this.userMapper.selectByCode(membershipCode);
+        if (membership == null || membership.getPrice() != amount) {
+            return CommonResult.FAILURE;
+        }
+
+        LocalDate joinedDate = LocalDate.now();
+        LocalDate expireDate = null;
+        if (membership.getDurationMonth() != null) {
+            expireDate = joinedDate.plusMonths(membership.getDurationMonth());
+        }
+
+        int affected = this.userMapper.updateMembership(email, membershipCode, joinedDate, expireDate);
+        if (affected > 0) {
+            user.setMembership(membershipCode);
+            user.setMembershipJoinedDate(joinedDate);
+            user.setMembershipExpireDate(expireDate);
+            return CommonResult.SUCCESS;
+        }
+        return CommonResult.FAILURE;
+    }
 }

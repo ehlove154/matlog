@@ -179,4 +179,41 @@ public class UserController {
         return "user/myPage";
     }
 
+    @PostMapping(value = "/membership", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String postMembership(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
+                                 @RequestParam(value = "membership", required = false) String membership,
+                                 HttpSession session) {
+        JSONObject response = new JSONObject();
+
+        if (signedUser == null) {
+            response.put("result", CommonResult.FAILURE_SESSION_EXPIRED.nameToLower());
+            return response.toString();
+        }
+
+        if (membership == null || membership.isBlank()) {
+            response.put("result", CommonResult.FAILURE.nameToLower());
+            return response.toString();
+        }
+
+        UserListVo vo = UserListVo.builder()
+                .email(signedUser.getEmail())
+                .membership(membership)
+                .build();
+
+        this.userService.registerMembership(vo);
+        this.userMapper.updateMembershipDate(vo);
+
+        signedUser.setMembership(membership);
+        signedUser.setMembershipJoinedDate(vo.getJoinedDate());
+        signedUser.setMembershipExpireDate(vo.getExpireDate());
+        session.setAttribute("signedUser", signedUser);
+
+        response.put("result", CommonResult.SUCCESS.nameToLower());
+        response.put("membership", membership);
+        response.put("joinedDate", vo.getJoinedDate());
+        response.put("expireDate", vo.getExpireDate());
+        return response.toString();
+    }
+
 }

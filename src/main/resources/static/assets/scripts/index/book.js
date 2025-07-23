@@ -95,8 +95,55 @@ import '../common.js';
                 $membershipDialog.setVisible(false);
                 $modal.setVisible(false);
             });
+            const membershipPrices = {};
+
             $payBtn?.addEventListener('click', () => {
-                location.href = '/user/myPage';
+                const selected = $select?.value;
+                if (!selected || selected === '-1') {
+                    dialog.showSimpleOk('멤버십 결제', '멤버십을 선택해 주세요.');
+                    return;
+                }
+
+                if (!window.IMP) {
+                    dialog.showSimpleOk('멤버십 결제', '결제 모듈이 로드되지 않았습니다.');
+                    return;
+                }
+
+                const amount = membershipPrices[selected] ?? 0;
+                IMP.init('imp36544176');
+                IMP.request_pay({
+                    pg: 'kakaopay.TC0ONETIME',
+                    pay_method: 'card',
+                    name: 'Matlog 멤버십 결제',
+                    amount
+                }, (rsp) => {
+                    if (rsp.success) {
+                        fetch('/api/membership/update', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                membership: selected,
+                                impUid: rsp.imp_uid,
+                                merchantUid: rsp.merchant_uid,
+                                amount: rsp.paid_amount
+                            })
+                        }).then(res => res.ok ? res.json() : null)
+                            .then(data => {
+                                if (data && data.result === 'success') {
+                                    dialog.showSimpleOk('멤버십 결제', '결제가 완료되었습니다.');
+                                    $membershipDialog.setVisible(false);
+                                    $modal.setVisible(false);
+                                } else {
+                                    dialog.showSimpleOk('멤버십 결제', '결제 정보 전송에 실패하였습니다.');
+                                }
+                            })
+                            .catch(() => {
+                                dialog.showSimpleOk('멤버십 결제', '결제 정보 전송 중 오류가 발생하였습니다.');
+                            });
+                    } else {
+                        dialog.showSimpleOk('멤버십 결제', '결제가 취소되었습니다.');
+                    }
+                });
             });
 
             if ($select) {
@@ -112,6 +159,7 @@ import '../common.js';
                             opt.value = m.membershipCode;
                             const text = m.displayText ? `${m.displayText} | ${Number(m.price).toLocaleString()}원` : `${m.durationMonth}개월 | ${Number(m.price).toLocaleString()}원`;
                             opt.textContent = text;
+                            membershipPrices[m.membershipCode] = m.price;
                             $select.appendChild(opt);
                         });
                     });

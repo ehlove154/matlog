@@ -55,6 +55,14 @@
         where `email` = #{email}
     </update>
 
+    <update id="updateMembership" parameterType="map">
+        update `jiujitsu`.`users`
+        set `membership`              = #{membership},
+            `membership_joined_date`   = #{joinedDate},
+            `membership_expire_date`   = #{expireDate}
+        where `email` = #{email}
+    </update>
+
     <select id="countForUser" resultType="java.lang.Integer">
         select count(0)
         from `jiujitsu`.`users` as `U`
