@@ -95,17 +95,46 @@ import '../common.js';
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchAllReservations().then(reservations => {
-                computeAndRenderStats(reservations);
+        function resetStatsUI() {
+            const barItems = $wrapper.querySelectorAll('.axis_x .item');
+            barItems.forEach(li => {
+                li.dataset.count = '0';
+                const bar = li.querySelector('.bar');
+                if (bar) bar.style.height = '0';
             });
+            const totalCap = $wrapper.querySelector('.total .caption');
+            if (totalCap) totalCap.textContent = '-';
+
+            const weeklyCap = $wrapper.querySelector('.weekly .caption');
+            if (weeklyCap) weeklyCap.textContent = '-';
+
+            const variationCap = $wrapper.querySelector('.variation .caption');
+            const variationDesc = $wrapper.querySelector('.variation .description');
+            const variationIcon = $wrapper.querySelector('.variation img.icon');
+            if (variationCap) variationCap.textContent = '-';
+            if (variationDesc) variationDesc.textContent = '지난 달 대비 증감';
+            if (variationIcon) variationIcon.src = '/assets/images/myPage/dash.png';
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const reservations = await fetchAllReservations();
+                computeAndRenderStats(reservations);
+            } catch (e) {
+                resetStatsUI();
+                dialog?.showSimpleOk('안내', '데이터 로딩에 실패했습니다.');
+            }
         });
 
         // ↓↓↓ 전역 함수 등록: 메뉴에서 월별 통계 탭을 클릭할 때 호출
-        window.loadSessionMonthly = () => {
-            fetchAllReservations().then(reservations => {
+        window.loadSessionMonthly = async () => {
+            try {
+                const reservations = await fetchAllReservations();
                 computeAndRenderStats(reservations);
-            });
+            } catch (e) {
+                resetStatsUI();
+                dialog?.showSimpleOk('안내', '데이터 로딩에 실패했습니다.');
+            }
         };
 
         // 페이지 로드 시 데이터 수집 후 렌더링
