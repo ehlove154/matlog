@@ -1,7 +1,7 @@
 import '../common.js';
 
 {
-    const $registration = document.querySelector('[data-mt-name="sessionRegistration"][data-mt-visible]');
+    const $registration = document.querySelector('[data-mt-name="registration"][data-mt-visible]');
     if ($registration) {
         window.dialog = new Dialog({
             $element: document.body.querySelector(':scope > [data-mt-object="dialog"]')
