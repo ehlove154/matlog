@@ -95,11 +95,24 @@ import '../common.js';
             }
         }
 
-        // 페이지 로드 시 데이터 수집 후 렌더링
-        fetchAllReservations().then(reservations => {
-            computeAndRenderStats(reservations);
-        }).catch(() => {
-            console.error('예약 데이터를 불러오지 못했습니다.');
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAllReservations().then(reservations => {
+                computeAndRenderStats(reservations);
+            });
         });
+
+        // ↓↓↓ 전역 함수 등록: 메뉴에서 월별 통계 탭을 클릭할 때 호출
+        window.loadSessionMonthly = () => {
+            fetchAllReservations().then(reservations => {
+                computeAndRenderStats(reservations);
+            });
+        };
+
+        // 페이지 로드 시 데이터 수집 후 렌더링
+        // fetchAllReservations().then(reservations => {
+        //     computeAndRenderStats(reservations);
+        // }).catch(() => {
+        //     console.error('예약 데이터를 불러오지 못했습니다.');
+        // });
     }
 }
