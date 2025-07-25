@@ -99,12 +99,9 @@ import '../common.js';
           <div class="time">${item.startTime} - ${item.endTime}</div>
           <div class="coach">코치 : ${item.coach}</div>
         </div>
-        <div class="button-container">
-          <button type="button" name="${status.name}"
-                  data-mt-object="button"
-                  data-mt-color="${status.color}">
-            ${status.text}
-          </button>
+        <div class="button-container" data-mt-component="row">
+            <span role="none" data-mt-stretch></span>
+            <button type="button" name="${status.name}" data-mt-object="button" data-mt-color="${status.color}">${status.text}</button>
         </div>
       `;
             listContainer.appendChild($session);

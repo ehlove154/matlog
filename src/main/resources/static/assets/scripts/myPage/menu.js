@@ -31,11 +31,11 @@ import '../common.js';
                     target.setAttribute('data-mt-visible', '');
 
                     // 세션 예약 섹션이면 데이터 로드
-                    if (targetName === 'reservation' && window.loadSessionReservation) {
+                    if (targetName === 'sessionReservation' && window.loadSessionReservation) {
                         window.loadSessionReservation();
                     }
                     // 월별 통계 섹션이면 데이터 로드
-                    if (targetName === 'monthly' && window.loadSessionMonthly) {
+                    if (targetName === 'sessionMonthly' && window.loadSessionMonthly) {
                         window.loadSessionMonthly();
                     }
                 }
