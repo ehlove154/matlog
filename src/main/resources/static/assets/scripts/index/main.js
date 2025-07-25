@@ -111,17 +111,31 @@ import '../common.js';
             else if (window.matchMedia('(max-width: 80rem)').matches) count = 3;
             else if (window.matchMedia('(max-width: 100rem)').matches) count = 4;
 
-            const visible = [];
-            if (count === 1) {
-                visible.push(activeDay);
-            } else {
-                const today = new Date();
-                let start = (today.getDay() + 6) % 7;
-                if (start >= $timeColumns.length) start = 0;
+            const totalDays = $timeColumns.length; // 예: 5 (월~금)
+            let start;
 
-                for (let offset = 0; offset < $timeColumns.length && visible.length < count; offset++) {
-                    visible.push((start + offset) % $timeColumns.length);
+            if (count >= totalDays) {
+                // 전체를 표시할 경우
+                start = 0;
+            } else {
+                if (count === 4) {
+                    // 4개 표시: 선택된 요일을 맨 오른쪽에 두고 앞의 3일을 포함
+                    start = activeDay - 3;
+                } else if (count === 3) {
+                    // 3개 표시: 선택된 요일을 가운데에 두도록 앞뒤 한 칸씩
+                    start = activeDay - 1;
+                } else {
+                    // 2개 이하: 선택된 요일부터 표시
+                    start = activeDay;
                 }
+                // 범위 보정: 인덱스가 음수이거나 끝을 넘지 않도록 조정
+                if (start < 0) start = 0;
+                if (start > totalDays - count) start = totalDays - count;
+            }
+
+            const visible = [];
+            for (let i = 0; i < count; i++) {
+                visible.push(start + i);
             }
             $timeColumns.forEach((col, i) => {
                 col.style.display = visible.includes(i) ? 'flex' : 'none';

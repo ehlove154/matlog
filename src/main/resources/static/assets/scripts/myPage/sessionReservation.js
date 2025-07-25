@@ -14,6 +14,58 @@ import '../common.js'
         let currentPage = 1;
         let maxPage = 1;
 
+        /**
+         * 세션 상태를 계산한다.
+         * reservedAt의 날짜 + startTime, endTime을 조합해 세션 진행 여부를 판단한다.
+         * startTime/endTime 또는 reservedAt이 없으면 기본적으로 취소 가능 상태로 둔다.
+         */
+        function getStatus(item) {
+            if (!item.startTime || !item.endTime || !item.reservedAt) {
+                return { name: 'cancel', text: '예약 취소', color: 'red' };
+            }
+            const dateStr = item.reservedAt.split('T')[0];
+            const startDateTime = new Date(`${dateStr}T${item.startTime}`);
+            const endDateTime = new Date(`${dateStr}T${item.endTime}`);
+            const now = new Date();
+
+            if (now >= endDateTime) {
+                return { name: 'done', text: '수강완료', color: 'simple' };
+            } else if (now >= startDateTime) {
+                return { name: 'pending', text: '수강중', color: 'green' };
+            }
+            return { name: 'cancel', text: '예약 취소', color: 'red' };
+        }
+
+        /**
+         * 예약 취소 요청을 서버에 전송한다.
+         * 성공 시 allReservations에서 제거하고 화면을 갱신한다.
+         */
+        function cancelReservation(reservationId, $session) {
+            fetch('/book/cancel', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ reservationId }).toString()
+            })
+                .then(res => (res.ok ? res.json() : null))
+                .then(data => {
+                    if (data && data.result === 'success') {
+                        allReservations = allReservations.filter(r => r.reservationId !== reservationId);
+                        $session.remove();
+                        applyFilterAndRender();
+                    } else {
+                        dialog.showSimpleOk('예약', '예약 취소에 실패했습니다.');
+                    }
+                })
+                .catch(() => {
+                    dialog.showSimpleOk('예약', '요청 처리 중 오류가 발생했습니다.');
+                });
+        }
+
+        /**
+         * 세션 목록을 렌더링한다.
+         * 상태에 따라 버튼의 이름(name), 색상(data-mt-color), 텍스트를 지정한다.
+         * 취소 가능한 경우에만 클릭 이벤트를 바인딩한다.
+         */
         function renderSessions(items) {
             $listContainer.innerHTML = '';
             items.forEach(item => {
@@ -21,19 +73,32 @@ import '../common.js'
                 $session.className = 'session-container';
                 $session.setAttribute('data-mt-component', 'column');
                 const reservedDate = item.reservedAt ? item.reservedAt.split('T')[0] : '';
+                const status = getStatus(item);
 
                 $session.innerHTML = `
                     <div class="content">
                         <div class="class">${item.className}</div>
-                        <div class="date">${item.reservedAt ? item.reservedAt.split('T')[0] : ''}</div>
+                        <div class="date">${reservedDate}</div>
                         <div class="time">${item.startTime} - ${item.endTime}</div>
                         <div class="coach">코치 : ${item.coach}</div>
                     </div>
                     <div class="button-container" data-mt-component="row">
                         <div data-mt-stretch></div>
-                        <button name="cancel" type="button" data-mt-object="button" data-mt-color="red">예약 취소</button>
+                        <button type="button" name="${status.name}"
+                    data-mt-object="button"
+                    data-mt-color="${status.color}">
+              ${status.text}
+            </button>
                     </div>`;
                 $listContainer.appendChild($session);
+
+                // 예약 취소 버튼은 'cancel' 상태일 때만 동작
+                const $button = $session.querySelector('button[name="cancel"]');
+                if ($button) {
+                    $button.addEventListener('click', () => {
+                        cancelReservation(item.reservationId, $session);
+                    });
+                }
             });
         }
 
@@ -93,9 +158,7 @@ import '../common.js'
             // 2. 탭 필터: ALL, THISWEEK, NEXTWEEK
             const selectedTab = $tabInputs.find(tab => tab.checked).value;
             if (selectedTab === 'THISWEEK' || selectedTab === 'NEXTWEEK') {
-                // 이번주(또는 다음주)의 시작일과 종료일 계산
                 const today = new Date();
-                // 월요일을 주 시작으로 계산 (일요일=0이므로 1~7 → 1은 월요일)
                 const day = today.getDay() || 7;
                 const monday = new Date(today);
                 monday.setDate(monday.getDate() - (day - 1));
