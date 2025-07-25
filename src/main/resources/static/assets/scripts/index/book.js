@@ -261,6 +261,23 @@ import '../common.js';
                         }).then(res => res.ok ? res.json() : null)
                             .then(data => {
                                 if (data && data.result === 'success') {
+                                    // TODO 유저 결제내역 기록 테이블 생성
+                                    const xhr = new XMLHttpRequest();
+                                    const formData = new FormData();
+                                    
+                                    xhr.onreadystatechange = () => {
+                                        if (xhr.readyState !== XMLHttpRequest.DONE) {
+                                            return;
+                                        }
+                                        if (xhr.status < 200 || xhr.status >= 300) {
+                                        
+                                            return;
+                                        }
+                                    
+                                    };
+                                    xhr.open('POST', );
+                                    xhr.send(formData);
+
                                     dialog.showSimpleOk('멤버십 결제', '결제가 완료되었습니다.');
                                     $membershipDialog.setVisible(false);
                                     $modal.setVisible(false);
