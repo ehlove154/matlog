@@ -2,6 +2,7 @@ package com.yjb.jiujitsumembership.mappers;
 
 import com.yjb.jiujitsumembership.dtoes.UserDto;
 import com.yjb.jiujitsumembership.entities.MembershipEntity;
+import com.yjb.jiujitsumembership.entities.MembershipHistoryEntity;
 import com.yjb.jiujitsumembership.entities.PromotionHistoryEntity;
 import com.yjb.jiujitsumembership.entities.UserEntity;
 import com.yjb.jiujitsumembership.vos.UserListVo;
@@ -62,4 +63,6 @@ public interface UserMapper {
                          @Param(value = "membership") String membership,
                          @Param(value = "joinedDate") LocalDate joinedDate,
                          @Param(value = "expireDate") LocalDate expireDate);
+
+    int insertMembershipHistory(@Param(value = "history") MembershipHistoryEntity history);
 }

@@ -251,7 +251,7 @@ import '../common.js';
                     if (rsp.success) {
                         fetch('/api/membership/update', {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify({
                                 membership: selected,
                                 impUid: rsp.imp_uid,
@@ -261,26 +261,42 @@ import '../common.js';
                         }).then(res => res.ok ? res.json() : null)
                             .then(data => {
                                 if (data && data.result === 'success') {
-                                    // TODO 유저 결제내역 기록 테이블 생성
+
                                     const xhr = new XMLHttpRequest();
                                     const formData = new FormData();
-                                    
+
+                                    formData.append('email', signedEmail);
+                                    formData.append('membershipCode', selected);
+                                    formData.append('amount', String(rsp.paid_amount));
+
+
                                     xhr.onreadystatechange = () => {
                                         if (xhr.readyState !== XMLHttpRequest.DONE) {
                                             return;
                                         }
                                         if (xhr.status < 200 || xhr.status >= 300) {
-                                        
-                                            return;
+                                            let res;
+                                            try {
+                                                res = JSON.parse(xhr.responseText);
+                                            } catch (_) {
+                                                dialog.showSimpleOk('멤버십 결제', '결제 요청 처리에 실패했습니다.');
+                                                return;
+                                            }
+                                            if (res && res.result === 'success') {
+                                                dialog.showSimpleOk('멤버십 결제', '결제가 완료되었습니다.');
+                                                $membershipDialog.setVisible(false);
+                                                $modal.setVisible(false);
+                                            } else {
+                                                dialog.showSimpleOk('멤버십 결제', '결제 요청 처리에 실패했습니다.');
+                                            }
+                                        } else {
+                                            dialog.showSimpleOk('멤버십 결제', '결제 요청 처리에 실패했습니다.');
                                         }
-                                    
+
                                     };
-                                    xhr.open('POST', );
+                                    xhr.open('POST', '/membership/payment');
                                     xhr.send(formData);
 
-                                    dialog.showSimpleOk('멤버십 결제', '결제가 완료되었습니다.');
-                                    $membershipDialog.setVisible(false);
-                                    $modal.setVisible(false);
                                 } else {
                                     dialog.showSimpleOk('멤버십 결제', '결제 정보 전송에 실패하였습니다.');
                                 }

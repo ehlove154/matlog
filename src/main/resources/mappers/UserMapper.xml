@@ -11,6 +11,11 @@
         values (#{promotion.promotionId}, #{promotion.userEmail}, #{promotion.beltCode}, #{promotion.stripeCount}, #{promotion.promotedAt})
     </insert>
 
+    <insert id="insertMembershipHistory" parameterType="com.yjb.jiujitsumembership.entities.MembershipHistoryEntity">
+        insert into `jiujitsu`.`membership_histories` (`membership_histories_id`, `user_email`, `membership_code`, `price`, `payment_method`, `joined_date`, `end_date`, `is_active`, `created_at`)
+        values (#{history.membershipHistoriesId}, #{history.userEmail}, #{history.membershipCode}, #{history.price}, #{history.paymentMethod}, #{history.joinedDate}, #{history.endDate}, #{history.isActive}, #{history.createdAt})
+    </insert>
+
     <update id="updateGymId" parameterType="com.yjb.jiujitsumembership.entities.UserEntity">
         update `jiujitsu`.`users`
         set 'gym_id' = #{gymId}

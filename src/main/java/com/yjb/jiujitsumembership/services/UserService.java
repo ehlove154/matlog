@@ -1,9 +1,6 @@
 package com.yjb.jiujitsumembership.services;
 
-import com.yjb.jiujitsumembership.entities.GymEntity;
-import com.yjb.jiujitsumembership.entities.MembershipEntity;
-import com.yjb.jiujitsumembership.entities.PromotionHistoryEntity;
-import com.yjb.jiujitsumembership.entities.UserEntity;
+import com.yjb.jiujitsumembership.entities.*;
 import com.yjb.jiujitsumembership.mappers.GymMapper;
 import com.yjb.jiujitsumembership.results.CommonResult;
 import com.yjb.jiujitsumembership.results.Result;
@@ -413,6 +410,25 @@ public class UserService {
             user.setMembership(membershipCode);
             user.setMembershipJoinedDate(joinedDate);
             user.setMembershipExpireDate(expireDate);
+
+            MembershipHistoryEntity history = MembershipHistoryEntity.builder()
+                    .userEmail(email)
+                    .membershipCode(membershipCode)
+                    .price(amount)
+                    .paymentMethod("manual")
+                    .joinedDate(joinedDate)
+                    .endDate(expireDate)
+                    .isActive(true)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+
+            try {
+                this.userMapper.insertMembershipHistory(history);
+            } catch (Exception e) {
+                System.out.println("멤버십 결제 내역 저장 실패");
+                return CommonResult.FAILURE;
+            }
+
             return CommonResult.SUCCESS;
         }
         return CommonResult.FAILURE;
