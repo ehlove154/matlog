@@ -1,7 +1,7 @@
 import '../common.js'
 
 {
-    const $wrapper = document.querySelector('[data-mt-name="sessionReservation"][data-mt-visible]');
+    const $wrapper = document.querySelector('[data-mt-name="sessionReservation"]');
     if ($wrapper) {
         const $listContainer = $wrapper.querySelector('[data-mt-name="listContainer"]');
         const $pageContainer = $wrapper.querySelector('[data-mt-name="pagination"]');
@@ -147,7 +147,7 @@ import '../common.js'
             let filtered = [...allReservations];
 
             // 1. 날짜 필터: datePiker 입력이 존재할 때 그 날짜에 예약된 세션만 선택
-            const selectedDate = $dateInput.value; // 형식: YYYY-MM-DD
+            const selectedDate = $dateInput ? $dateInput.value : '';
             if (selectedDate) {
                 filtered = filtered.filter(item => {
                     if (!item.reservedAt) return false;
@@ -156,7 +156,8 @@ import '../common.js'
             }
 
             // 2. 탭 필터: ALL, THISWEEK, NEXTWEEK
-            const selectedTab = $tabInputs.find(tab => tab.checked).value;
+            const checkedTab = $tabInputs.find(tab => tab.checked);
+            const selectedTab = checkedTab ? checkedTab.value : 'ALL';
             if (selectedTab === 'THISWEEK' || selectedTab === 'NEXTWEEK') {
                 const today = new Date();
                 const day = today.getDay() || 7;
@@ -182,15 +183,19 @@ import '../common.js'
         }
 
         // 필터 입력 이벤트 등록
-        $dateInput.addEventListener('change', () => {
-            applyFilterAndRender();
-        });
-        $tabInputs.forEach(tab => {
-            tab.addEventListener('change', () => {
-                // 탭을 변경하면 날짜 입력을 초기화할 수도 있음
+        if ($dateInput) {
+            $dateInput.addEventListener('change', () => {
                 applyFilterAndRender();
             });
-        });
+        }
+        if ($tabInputs && $tabInputs.length > 0) {
+            $tabInputs.forEach(tab => {
+                tab.addEventListener('change', () => {
+                    // 탭을 변경하면 날짜 입력을 초기화할 수도 있음
+                    applyFilterAndRender();
+                });
+            });
+        }
 
         load(1);
     }

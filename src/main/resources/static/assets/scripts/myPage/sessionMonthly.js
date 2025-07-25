@@ -2,7 +2,7 @@ import '../common.js';
 
 {
     // sessionMonthly 영역이 화면에 표시될 때만 로직 수행
-    const $wrapper = document.querySelector('[data-mt-name="sessionMonthly"][data-mt-visible]');
+    const $wrapper = document.querySelector('[data-mt-name="sessionMonthly"]');
     if ($wrapper) {
         // 모든 예약 데이터를 페이지 단위로 수집
         async function fetchAllReservations() {
