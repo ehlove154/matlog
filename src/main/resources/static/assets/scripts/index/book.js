@@ -383,6 +383,7 @@ import '../common.js';
                         $submitButton.setAttribute('data-mt-color', 'red');
                         $submitButton.textContent = '예약 취소 하기';
                         loadPage(currentPage);
+                        if (window.loadSessionMonthly) window.loadSessionMonthly();
                     })
                     .catch(() => {
                         dialog.showSimpleOk('예약', '요청을 처리하는 도중 오류가 발생하였습니다.');
@@ -402,6 +403,7 @@ import '../common.js';
                         $submitButton.setAttribute('data-mt-color', 'green');
                         $submitButton.textContent = '예약하기';
                         loadPage(currentPage);
+                        if (window.loadSessionMonthly) window.loadSessionMonthly();
                     })
                     .catch(() => {
                         dialog.showSimpleOk('예약 취소', '요청을 처리하는 도중 오류가 발생하였습니다.');

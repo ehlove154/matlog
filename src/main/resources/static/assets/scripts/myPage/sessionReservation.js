@@ -68,6 +68,7 @@ import '../common.js';
                     allReservations = allReservations.filter(r => r.reservationId !== reservationId);
                     $session?.remove();
                     applyFilterAndRender();
+                    if (window.loadSessionMonthly) window.loadSessionMonthly();
                 } else {
                     dialog.showSimpleOk('예약', '예약 취소에 실패했습니다.');
                 }
