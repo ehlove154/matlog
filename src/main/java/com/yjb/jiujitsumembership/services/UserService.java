@@ -248,36 +248,41 @@ public class UserService {
         }
     }
 
-    public ResultTuple<GymEntity> gymInfo(UserEntity signedUser, String gymName, String addressPostal, String addressPrimary, String addressSecondary, Boolean isActive) { // 체육관 정보 입력
+    public ResultTuple gymInfo(UserEntity signedUser,
+                                          String gymName,
+                                          String addressPostal,
+                                          String addressPrimary,
+                                          String addressSecondary,
+                                          Boolean isActive) {
         // 사용자 유효성 검사
         if (signedUser == null || signedUser.isSuspended() || signedUser.isDelete() || Objects.equals(signedUser.getUserRole(), "MEMBER")) {
             System.out.println("gymInfo failure 1");
-            return ResultTuple.<GymEntity>builder().result(CommonResult.FAILURE).build();
+            return ResultTuple.builder().result(CommonResult.FAILURE).build();
         }
 
         // 기존 체육관 정보 조회
-        GymEntity gym = gymMapper.selectByEmail(signedUser.getEmail()); // 또는 getId() 등 사용자 기준
+        GymEntity gym = gymMapper.selectByEmail(signedUser.getEmail());
         if (gym == null) {
             System.out.println("gymInfo failure 2 - gym not found");
-            return ResultTuple.<GymEntity>builder().result(CommonResult.FAILURE).build();
+            return ResultTuple.builder().result(CommonResult.FAILURE).build();
         }
 
-        // 상호명 유효성 검사
-        if (gymName == null || !UserRegex.gymName.matcher(gymName).matches()) {
+        // 상호명 유효성 검사: 공백 제거 후 최소 2자 이상인지 체크
+        String trimmedName = gymName != null ? gymName.trim() : null;
+        if (trimmedName == null || trimmedName.isEmpty() || !UserRegex.gymName.matcher(trimmedName).matches()) {
             System.out.println("gymInfo failure 3 - invalid name");
-            return ResultTuple.<GymEntity>builder().result(CommonResult.FAILURE).build();
+            return ResultTuple.builder().result(CommonResult.FAILURE).build();
         }
 
-        // 주소 유효성 검사
+        // 주소 유효성 검사 및 공백 제거
         boolean anyAddressProvided = Stream.of(addressPostal, addressPrimary, addressSecondary)
                 .anyMatch(value -> value != null && !value.trim().isEmpty());
 
         if (anyAddressProvided) {
             if (Stream.of(addressPostal, addressPrimary, addressSecondary).anyMatch(value -> value == null || value.trim().isEmpty())) {
                 System.out.println("gymInfo failure 4 - address incomplete");
-                return ResultTuple.<GymEntity>builder().result(CommonResult.FAILURE).build();
+                return ResultTuple.builder().result(CommonResult.FAILURE).build();
             }
-
             addressPostal = addressPostal.trim();
             addressPrimary = addressPrimary.trim();
             addressSecondary = addressSecondary.trim();
@@ -287,16 +292,21 @@ public class UserService {
             addressSecondary = null;
         }
 
-        // 값 반영
-        gym.setGymName(gymName);
+        // 값 반영 및 수정 시각 갱신
+        gym.setGymName(trimmedName);
         gym.setAddressPostal(addressPostal);
         gym.setAddressPrimary(addressPrimary);
         gym.setAddressSecondary(addressSecondary);
         gym.setActive(isActive != null && isActive);
+        gym.setModifiedAt(LocalDateTime.now());
 
-        gymMapper.update(gym); // 실제 DB 반영 메서드 필요 (예: updateByEmail 등)
+        int updated = gymMapper.update(gym);
+        if (updated == 0) {
+            System.out.println("gymInfo failure 5 - update failed");
+            return ResultTuple.builder().result(CommonResult.FAILURE).build();
+        }
 
-        return ResultTuple.<GymEntity>builder()
+        return ResultTuple.builder()
                 .result(CommonResult.SUCCESS)
                 .payload(gym)
                 .build();
