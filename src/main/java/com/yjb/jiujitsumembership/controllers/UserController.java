@@ -157,6 +157,9 @@ public class UserController {
         if (userDto != null && userDto.getEmail() != null) {
             gym = this.gymMapper.selectByEmail(userDto.getEmail());
         }
+        if (gym == null) {
+            gym = new GymEntity(); // 기본값을 가진 빈 객체
+        }
         model.addAttribute("gym", gym);
         model.addAttribute("day", day);
 

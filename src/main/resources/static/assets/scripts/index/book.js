@@ -249,6 +249,7 @@ import '../common.js';
                     amount
                 }, (rsp) => {
                     if (rsp.success) {
+                        // 1. 멤버십 정보 서버로 전송
                         fetch('/api/membership', {
                             method: 'POST',
                             headers: {'Content-Type': 'application/json'},
@@ -262,10 +263,47 @@ import '../common.js';
                         }).then(res => res.ok ? res.json() : null)
                             .then(data => {
                                 if (data && data.result === 'success') {
+                                    // 멤버십 등록 성공
                                     dialog.showSimpleOk('멤버십 결제', '결제가 완료되었습니다.');
                                     $membershipDialog.setVisible(false);
                                     $modal.setVisible(false);
+
+                                    // 클라이언트 측 멤버십 정보 갱신
+                                    document.body.dataset.membership = selected.toUpperCase();
+                                    membership = selected.toUpperCase();
+
+                                    // 2. 결제 성공 후 자동 예약 호출
+                                    if (classId) {
+                                        fetch('/book/reserve', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                            body: new URLSearchParams({ classId }).toString()
+                                        })
+                                            .then((res) => (res.ok ? res.json() : Promise.reject()))
+                                            .then((reserveData) => {
+                                                if (reserveData && reserveData.result === 'success') {
+                                                    // 예약 성공 시 화면 상태 업데이트
+                                                    const attendee = reserveData.attendee;
+                                                    if (attendee) {
+                                                        reservationId = attendee.reservationId;
+                                                        $submitButton.setAttribute('data-mt-color', 'red');
+                                                        $submitButton.textContent = '예약 취소 하기';
+                                                        loadPage(currentPage);
+                                                    }
+                                                    dialog.showSimpleOk('예약', '예약이 완료되었습니다.');
+                                                } else if (reserveData && reserveData.result === 'membership_required') {
+                                                    // 이 경우는 거의 발생하지 않지만 방어적으로 처리
+                                                    dialog.showSimpleOk('예약', '멤버십 정보가 올바르지 않습니다.');
+                                                } else {
+                                                    dialog.showSimpleOk('예약', '예약에 실패하였습니다.');
+                                                }
+                                            })
+                                            .catch(() => {
+                                                dialog.showSimpleOk('예약', '요청을 처리하는 도중 오류가 발생하였습니다.');
+                                            });
+                                    }
                                 } else {
+                                    // 멤버십 정보 전송 실패
                                     dialog.showSimpleOk('멤버십 결제', '결제 정보 전송에 실패하였습니다.');
                                 }
                             })
@@ -273,9 +311,11 @@ import '../common.js';
                                 dialog.showSimpleOk('멤버십 결제', '결제 정보 전송 중 오류가 발생하였습니다.');
                             });
                     } else {
+                        // 결제 취소/실패
                         dialog.showSimpleOk('멤버십 결제', '결제가 취소되었습니다.');
                     }
-                });
+                    }
+                );
             });
 
             if ($select) {
