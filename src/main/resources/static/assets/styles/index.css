@@ -2887,11 +2887,71 @@
 #main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > [data-mt-name=nameAndActive] > .active-wrapper > label > input {
   display: none;
 }
-#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > [data-mt-name=address] > [data-mt-component="label.caption"] {
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > [data-mt-name=gymAddress] > [data-mt-component="label.caption"] {
   font-size: 0.8rem;
 }
-#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > [data-mt-name=address] > [data-mt-component="label.row"] > [name=addressPostal] {
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > [data-mt-name=gymAddress] > [data-mt-component="label.row"] > [name=addressPostal] {
   flex-grow: 1;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > [data-mt-component="label.caption"] {
+  font-size: 0.8rem;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper {
+  box-shadow: 0 0.125rem 0.5rem #eeecee;
+  border: 0.0625rem solid rgb(211.5, 211.5, 211.5);
+  background-color: rgba(247, 248, 250, 0.75);
+  border-radius: 0.25rem;
+  padding: 1.5rem;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper > [data-mt-object=label] {
+  width: 100%;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper > [data-mt-object=label] > [data-mt-component="label.caption"] {
+  width: 21%;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper > .button-container > .delete-price {
+  margin-top: 0.5rem;
+  width: 4rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper > label {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.375rem;
+  justify-content: flex-start;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper > label > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper > label > [data-mt-stretch] {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper > label > [data-mt-component="label.caption"] {
+  width: 20%;
+  font-size: 0.8rem;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .price-wrapper > label > input {
+  width: 78%;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .button-container {
+  justify-content: flex-end;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .button-container > button {
+  width: 7rem;
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .button-container > button[data-mt-color=simple] {
+  border: 0.0625rem solid rgb(109.5, 109.5, 109.5);
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .button-container > button[data-mt-color=simple]:hover {
+  background-color: rgb(211.5, 211.5, 211.5);
+}
+#main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .membership-container > .button-container > button[data-mt-color=simple]:active {
+  background-color: #bababa;
 }
 #main > #myPageForm > .container > .content-container > [data-mt-name=gymInfo] > .button-container {
   justify-content: center;

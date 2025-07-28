@@ -40,7 +40,28 @@
                data-mt-name="gymAddressSecondary" name="gymAddressSecondary"
                placeholder="상세 주소 (건물 이름, 동, 호)" type="text"
                th:value="${gym != null ? gym.addressSecondary : ''}">
-        <span data-mt-component="label.warning"><!--warning--></span>
+    </label>
+    <label class="membership-container" data-mt-component="column">
+        <span data-mt-component="label.caption">회원권</span>
+        <span class="price-wrapper" data-mt-component="column">
+            <label data-mt-object="label" data-mt-name="price">
+                <span data-mt-component="label.caption">회원권 이름</span>
+                <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field" type="text" maxlength="100" minlength="2" name="membershipName" placeholder="회원권 종류를 입력해 주세요.">
+                <span data-mt-component="label.warning"><!--warning--></span>
+            </label>
+            <label data-mt-object="label" data-mt-name="price">
+                <span data-mt-component="label.caption">회원권 가격</span>
+                <input required autocomplete="off" data-mt-object="field" data-mt-component="label.field" type="text" maxlength="5" minlength="2" name="coach" placeholder="회원권 가격을 입력해 주세요.">
+                <span data-mt-component="label.warning"><!--warning--></span>
+            </label>
+            <span class="button-container" data-mt-component="row">
+                <span role="none" data-mt-stretch></span>
+                <button type="button" data-mt-object="button" class="delete-price" data-mt-color="red">삭제</button>
+            </span>
+        </span>
+        <span class="button-container" data-mt-component="row">
+            <button type="button" data-mt-name="name" data-mt-object="button" data-mt-color="simple">+ 회원권 추가</button>
+        </span>
     </label>
     <span class="button-container" data-mt-component="row">
         <button type="submit" data-mt-name="gymInfoSave" data-mt-object="button" data-mt-color="green">저장</button>
