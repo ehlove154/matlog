@@ -4,20 +4,20 @@
     <select id="selectAll" resultType="com.yjb.jiujitsumembership.entities.MembershipEntity">
         select `membership_code` as `membershipCode`,
                `display_text`    as `displayText`,
-               `duration_month`  as `durationMonth`,
+               `duration_day`  as `durationDay`,
                `price`           as `price`
         from `jiujitsu`.`memberships`
     </select>
 
     <insert id="insert" parameterType="com.yjb.jiujitsumembership.entities.MembershipEntity">
-        insert into `jiujitsu`.`memberships` (`membership_code`, `display_text`, `duration_month`, `price`)
-        values (#{membership.membershipCode}, #{membership.displayText}, #{membership.durationMonth}, #{membership.price})
+        insert into `jiujitsu`.`memberships` (`membership_code`, `display_text`, `duration_day`, `price`)
+        values (#{membership.membershipCode}, #{membership.displayText}, #{membership.durationDay}, #{membership.price})
     </insert>
 
     <update id="update" parameterType="com.yjb.jiujitsumembership.entities.MembershipEntity">
         update `jiujitsu`.`memberships`
         set `display_text`   = #{membership.displayText},
-            `duration_month` = #{membership.durationMonth},
+            `duration_day` = #{membership.durationDay},
             `price`          = #{membership.price}
         where `membership_code` = #{membership.membershipCode}
     </update>

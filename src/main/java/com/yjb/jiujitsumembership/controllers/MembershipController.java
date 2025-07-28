@@ -31,7 +31,7 @@ public class MembershipController {
             JSONObject obj = new JSONObject();
             obj.put("membershipCode", m.getMembershipCode());
             obj.put("displayText", m.getDisplayText());
-            obj.put("durationMonth", m.getDurationMonth());
+            obj.put("durationMonth", m.getDurationDay());
             obj.put("price", m.getPrice());
             array.put(obj);
         }

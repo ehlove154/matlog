@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class MembershipEntity {
     private String membershipCode;
     private String displayText;
-    private Integer durationMonth;
+    private Integer durationDay;
     private int price;
     private boolean isDeleted;
 }

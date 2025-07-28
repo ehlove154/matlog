@@ -26,7 +26,9 @@ public class MembershipManageController {
         this.membershipService = membershipService;
     }
 
-    @PatchMapping(value = "/memberships", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/memberships",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String patchMemberships(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
                                    @RequestBody(required = false) List<MembershipEntity> memberships) {

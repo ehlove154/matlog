@@ -388,8 +388,8 @@ public class UserService {
         LocalDate joinedDate = LocalDate.now();
         userListVo.setJoinedDate(joinedDate);
 
-        if (membership.getDurationMonth() != null) {
-            LocalDate expireDate = LocalDate.now().plusMonths(membership.getDurationMonth());
+        if (membership.getDurationDay() != null) {
+            LocalDate expireDate = LocalDate.now().plusMonths(membership.getDurationDay());
             userListVo.setExpireDate(expireDate);
         }
         return;
@@ -412,8 +412,8 @@ public class UserService {
 
         LocalDate joinedDate = LocalDate.now();
         LocalDate expireDate = null;
-        if (membership.getDurationMonth() != null) {
-            expireDate = joinedDate.plusMonths(membership.getDurationMonth());
+        if (membership.getDurationDay() != null) {
+            expireDate = joinedDate.plusMonths(membership.getDurationDay());
         }
 
         int affected = this.userMapper.updateMembership(email, membershipCode, joinedDate, expireDate);
