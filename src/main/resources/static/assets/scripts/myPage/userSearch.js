@@ -10,6 +10,11 @@ function initUserSearch() {
     if (!userSearch) {
         return;
     }
+    // 이미 초기화된 경우 다시 초기화하지 않음
+    if (window.userSearchInitialized) {
+        return;
+    }
+    window.userSearchInitialized = true;
 
     const $myPageForm = document.getElementById('myPageForm');
 
