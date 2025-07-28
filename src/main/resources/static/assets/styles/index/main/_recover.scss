@@ -67,6 +67,20 @@
       display: none;
       width: 30rem;
       align-self: center;
+
+      > [data-mt-name="email"] {
+        width: 100%;
+
+        > [data-mt-component="label.row"] {
+          > [name="eName"] {
+            width: 30%;
+          }
+
+          > [name="eBirth"] {
+            width: 20%;
+          }
+        }
+      }
     }
   }
 
@@ -110,7 +124,7 @@
           background-color: $global-color-border-lighten-50;
           border: 0.0625rem solid $global-color-border-lighten-50;
           cursor: auto;
-      }
+        }
 
         > [data-mt-component="label.field"] {
           flex-grow: 1;
@@ -183,20 +197,20 @@
   }
 }
 
-  @media screen and (max-width: 50rem) {
-    #main > #recoverForm {
-      width: 30rem;
+@media screen and (max-width: 50rem) {
+  #main > #recoverForm {
+    width: 30rem;
 
-      > .container {
-        &.email, &.password {
-          width: 20rem;
-        }
+    > .container {
+      &.email, &.password {
+        width: 20rem;
       }
     }
   }
+}
 
-  @media screen and (max-width: 40rem) {
-    #main > #recoverForm {
-      width: 20rem;
-    }
+@media screen and (max-width: 40rem) {
+  #main > #recoverForm {
+    width: 20rem;
   }
+}

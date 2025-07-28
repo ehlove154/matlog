@@ -16,5 +16,5 @@ public interface GymMapper {
 
     GymEntity selectByEmail(@Param(value = "email")String email);
 
-    int update(@Param(value = "gym") GymEntity gym);
+    int update(GymEntity gym);
 }

@@ -1303,6 +1303,15 @@
   flex-grow: 1;
   flex-shrink: 1;
 }
+#main > #recoverForm > .container.email > [data-mt-name=email], #main > #recoverForm > .container.password > [data-mt-name=email] {
+  width: 100%;
+}
+#main > #recoverForm > .container.email > [data-mt-name=email] > [data-mt-component="label.row"] > [name=eName], #main > #recoverForm > .container.password > [data-mt-name=email] > [data-mt-component="label.row"] > [name=eName] {
+  width: 30%;
+}
+#main > #recoverForm > .container.email > [data-mt-name=email] > [data-mt-component="label.row"] > [name=eBirth], #main > #recoverForm > .container.password > [data-mt-name=email] > [data-mt-component="label.row"] > [name=eBirth] {
+  width: 20%;
+}
 #main > #recoverForm > .type:has(> label > .input[value=email]:checked) ~ .container.empty {
   display: none;
 }

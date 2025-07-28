@@ -11,14 +11,14 @@
                 #{addressSecondary}, #{createdAt}, #{modifiedAt})
     </insert>
 
-    <update id="update">
+    <update id="update" parameterType="com.yjb.jiujitsumembership.entities.GymEntity">
         update `jiujitsu`.`gyms`
-        set `gym_name`          = #{gym.gymName},
-            `is_active`         = #{gym.isActive},
-            `address_postal`    = #{gym.addressPostal},
-            `address_primary`   = #{gym.addressPrimary},
-            `address_secondary` = #{gym.addressSecondary}
-        where `gym_id` = #{gym.gymId}
+        set `gym_name`          = #{gymName},
+            `is_active`         = #{isActive},
+            `address_postal`    = #{addressPostal},
+            `address_primary`   = #{addressPrimary},
+            `address_secondary` = #{addressSecondary}
+        where `gym_id` = #{gymId}
         limit 1
     </update>
 
