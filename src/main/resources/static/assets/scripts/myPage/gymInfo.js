@@ -187,28 +187,55 @@ function initGymInfo() {
             });
         }
 
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== XMLHttpRequest.DONE) {
-                return;
-            }
-            if (xhr.status < 200 || xhr.status >= 300) {
+        const gymFormData = new FormData();
+        gymFormData.append('gymName', $gymName.value.trim());
+        gymFormData.append('addressPostal', $postal.value.trim());
+        gymFormData.append('addressPrimary', $primary.value.trim());
+        gymFormData.append('addressSecondary', $secondary.value.trim());
+        gymFormData.append('isActive', activeVal);
+
+        const sendMemberships = () => {
+            const membershipXhr = new XMLHttpRequest();
+            membershipXhr.onreadystatechange = () => {
+                if (membershipXhr.readyState !== XMLHttpRequest.DONE) return;
+                $loading.hide();
+                if (membershipXhr.status < 200 || membershipXhr.status >= 300) {
+                    dialog.showSimpleOk('회원권 정보', '요청을 처리하는 도중 오류가 발생하였습니다.\n잠시 후 다시 시도해 주세요.');
+                    return;
+                }
+                const res = JSON.parse(membershipXhr.responseText);
+                const r = (res.result || '').toLowerCase();
+                if (r === 'success') {
+                    dialog.showSimpleOk('회원권 정보', '회원권 정보 등록이 완료되었습니다.');
+                } else {
+                    dialog.showSimpleOk('회원권 정보', '회원권 정보 등록에 실패하였습니다.\n잠시 후 다시 시도해 주세요.');
+                }
+            };
+            membershipXhr.open('PATCH', '/user/myPage/memberships');
+            membershipXhr.setRequestHeader('Content-Type', 'application/json');
+            membershipXhr.send(JSON.stringify(memberships));
+        };
+
+        const gymXhr = new XMLHttpRequest();
+        gymXhr.onreadystatechange = () => {
+            if (gymXhr.readyState !== XMLHttpRequest.DONE) return;
+            if (gymXhr.status < 200 || gymXhr.status >= 300) {
+                $loading.hide();
                 dialog.showSimpleOk('체육관 정보', '요청을 처리하는 도중 오류가 발생하였습니다.\n잠시 후 다시 시도해 주세요.');
                 return;
             }
             // 결과 파싱
-            const response = JSON.parse(xhr.responseText);
+            const response = JSON.parse(gymXhr.responseText);
             const result = (response.result || '').toLowerCase();
             if (result === 'success') {
-                dialog.showSimpleOk('체육관 정보', '체육관 정보 등록이 완료되었습니다.');
+                sendMemberships();
             } else {
+                $loading.hide();
                 dialog.showSimpleOk('체육관 정보', '체육관 정보 등록에 실패하였습니다.\n잠시 후 다시 시도해 주세요.');
             }
         };
-        xhr.open('PATCH', '/user/myPage/memberships');
-        // xhr.send(formData);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(memberships));
+        gymXhr.open('PATCH', '/user/myPage/gymInfo');
+        gymXhr.send(gymFormData);
         $loading.show();
     });
 }
