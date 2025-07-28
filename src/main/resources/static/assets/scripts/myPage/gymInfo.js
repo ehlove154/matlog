@@ -146,30 +146,17 @@ function initGymInfo() {
             return;
         }
 
-        // 서버로 보낼 데이터 구성
-        // const formData = new FormData();
-        // formData.append('gymName', $gymName.value.trim());
-        // formData.append('isActive', activeVal);
-        // formData.append('addressPostal', $postal.value.trim());
-        // formData.append('addressPrimary', $primary.value.trim());
-        // formData.append('addressSecondary', $secondary.value.trim());
-
         const memberships = [];
 
         if ($membershipContainer) {
-            // const memberships = [];
+
             $membershipContainer.querySelectorAll('.price-wrapper').forEach($el => {
-                // const name = $el.querySelector('input[name="membershipName"]')?.value.trim();
-                // const price = $el.querySelector('input[name="membershipPrice"]')?.value.trim();
-                // if (name && price) {
-                //     memberships.push({name, price});
                 const displayText = $el.querySelector('input[name="membershipName"]')?.value.trim();
                 const price = $el.querySelector('input[name="membershipPrice"]')?.value.trim();
                 if (displayText && price) {
                     memberships.push({ displayText, price: parseInt(price, 10) });
                 }
             });
-            // formData.append('memberships', JSON.stringify(memberships));
         }
 
         const xhr = new XMLHttpRequest();
