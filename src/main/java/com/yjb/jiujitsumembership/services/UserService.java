@@ -294,6 +294,7 @@ public class UserService {
 
         // 값 반영 및 수정 시각 갱신
         gym.setGymName(trimmedName);
+        signedUser.setGymName(trimmedName);
         gym.setAddressPostal(addressPostal);
         gym.setAddressPrimary(addressPrimary);
         gym.setAddressSecondary(addressSecondary);
