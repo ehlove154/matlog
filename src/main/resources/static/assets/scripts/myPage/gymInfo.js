@@ -56,14 +56,16 @@ function initGymInfo() {
     });
 
     // 저장 버튼 클릭 핸들러
-    const $saveButton = document.querySelector('[data-mt-name="name"][data-mt-object="button"]');
+    const $gymInfoSection = $myPageForm.querySelector('[data-mt-name="gymInfo"]');
+    const $saveButton = $gymInfoSection.querySelector('[data-mt-name="name"][data-mt-object="button"]');
+
     $saveButton.addEventListener('click', (e) => {
         e.preventDefault();
 
-        const $postal   = $myPageForm.querySelector('input[name="gymAddressPostal"]');
-        const $primary  = $myPageForm.querySelector('input[name="gymAddressPrimary"]');
-        const $secondary= $myPageForm.querySelector('input[name="gymAddressSecondary"]');
-        const $gymName  = $myPageForm.querySelector('input[name="gymName"]');
+        const $postal    = $gymInfoSection.querySelector('input[name="gymAddressPostal"]');
+        const $primary   = $gymInfoSection.querySelector('input[name="gymAddressPrimary"]');
+        const $secondary = $gymInfoSection.querySelector('input[name="gymAddressSecondary"]');
+        const $gymName   = $gymInfoSection.querySelector('input[name="gymName"]');
         const activeVal = $myPageForm['active'].value;
 
         // 기본 유효성 검사
