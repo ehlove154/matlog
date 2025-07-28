@@ -180,7 +180,7 @@ function initGymInfo() {
                     memberships.push({
                         membershipCode: mCode,
                         displayText: displayText,
-                        durationDay: 30,      // 예: 기본 30일, 필요하면 다른 값으로 설정
+                        durationDay: duration,      // 예: 기본 30일, 필요하면 다른 값으로 설정
                         price: parseInt(price, 10)
                     });
                 }

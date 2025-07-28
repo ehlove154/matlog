@@ -7,6 +7,7 @@ import com.yjb.jiujitsumembership.results.CommonResult;
 import com.yjb.jiujitsumembership.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,26 +24,55 @@ public class MembershipService {
         return this.membershipMapper.selectAll();
     }
 
+//    public Result saveMemberships(UserEntity signedUser, List<MembershipEntity> memberships) {
+//        if (signedUser == null) {
+//            return CommonResult.FAILURE_SESSION_EXPIRED;
+//        }
+//        if (!"MASTER".equalsIgnoreCase(signedUser.getUserRole())) {
+//            return CommonResult.FAILURE;
+//        }
+//        if (memberships == null || memberships.isEmpty()) {
+//            return CommonResult.SUCCESS;
+//        }
+//
+//        for (MembershipEntity membership : memberships) {
+//            if (membership.getMembershipCode() != null && !membership.getMembershipCode().isBlank()) {
+//                if (membership.isDeleted()) {
+//                    membershipMapper.deleteByCode(membership.getMembershipCode());
+//                } else {
+//                    membershipMapper.update(membership);
+//                }
+//            } else {
+//                membershipMapper.insert(membership);
+//            }
+//        }
+//        return CommonResult.SUCCESS;
+//    }
+
+    @Transactional
     public Result saveMemberships(UserEntity signedUser, List<MembershipEntity> memberships) {
-        if (signedUser == null) {
-            return CommonResult.FAILURE_SESSION_EXPIRED;
-        }
-        if (!"MASTER".equalsIgnoreCase(signedUser.getUserRole())) {
-            return CommonResult.FAILURE;
-        }
-        if (memberships == null || memberships.isEmpty()) {
-            return CommonResult.SUCCESS;
-        }
+        if (signedUser == null) return CommonResult.FAILURE_SESSION_EXPIRED;
+        if (!"MASTER".equalsIgnoreCase(signedUser.getUserRole())) return CommonResult.FAILURE;
+        if (memberships == null || memberships.isEmpty()) return CommonResult.SUCCESS;
 
         for (MembershipEntity membership : memberships) {
+            int affected;
             if (membership.getMembershipCode() != null && !membership.getMembershipCode().isBlank()) {
                 if (membership.isDeleted()) {
-                    membershipMapper.deleteByCode(membership.getMembershipCode());
+                    affected = membershipMapper.deleteByCode(membership.getMembershipCode());
                 } else {
-                    membershipMapper.update(membership);
+                    affected = membershipMapper.update(membership);
+                    // 존재하지 않는 코드면 insert 처리
+                    if (affected == 0) {
+                        membershipMapper.insert(membership);
+                        affected = 1;
+                    }
                 }
             } else {
-                membershipMapper.insert(membership);
+                affected = membershipMapper.insert(membership);
+            }
+            if (affected == 0) {
+                return CommonResult.FAILURE;
             }
         }
         return CommonResult.SUCCESS;
