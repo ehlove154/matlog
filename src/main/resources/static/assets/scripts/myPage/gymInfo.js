@@ -112,6 +112,7 @@ function initGymInfo() {
                 list.forEach(m => {
                     if (m.membershipCode && m.membershipCode.toUpperCase() === 'NONE') return;
                     let $wrapper = first ? $priceTemplate : $priceTemplate.cloneNode(true);
+                    $wrapper.dataset.membershipCode = m.membershipCode;
                     const $name = $wrapper.querySelector('input[name="membershipName"]');
                     const $duration = $wrapper.querySelector('input[name="membershipDuration"]');
                     const $price = $wrapper.querySelector('input[name="membershipPrice"]');
@@ -128,6 +129,7 @@ function initGymInfo() {
 
         $addMembershipBtn?.addEventListener('click', () => {
             const $clone = $priceTemplate.cloneNode(true);
+            $clone.removeAttribute('data-membership-code');
             $clone.querySelectorAll('input').forEach($input => $input.value = '');
             attachDelete($clone);
             $addMembershipBtn.parentElement.before($clone);
