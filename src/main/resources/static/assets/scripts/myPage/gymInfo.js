@@ -55,6 +55,68 @@ function initGymInfo() {
         $addressFindDialog.show();
     });
 
+    // 멤버십 관리 초기화
+    const $membershipContainer = $myPageForm.querySelector('.membership-container');
+    const $addMembershipBtn = $membershipContainer?.querySelector('.button-container button[data-mt-color="simple"]');
+    const $priceTemplate = $membershipContainer?.querySelector('.price-wrapper');
+
+    function attachDelete($wrapper) {
+        const $btn = $wrapper.querySelector('.delete-price');
+        if ($btn) {
+            $btn.addEventListener('click', () => {
+                dialog.show({
+                    title: '회원권 삭제',
+                    content: '정말로 삭제하시겠습니까?',
+                    buttons: [
+                        { caption: '아니요', onClickCallback: ($m) => dialog.hide($m) },
+                        {
+                            caption: '네',
+                            color: 'green',
+                            onClickCallback: ($m) => {
+                                dialog.hide($m);
+                                $wrapper.remove();
+                            }
+                        }
+                    ]
+                });
+            });
+        }
+    }
+
+    if ($membershipContainer && $priceTemplate) {
+        $membershipContainer.querySelectorAll('.price-wrapper').forEach(($el, idx) => {
+            if (idx > 0) $el.remove();
+        });
+        attachDelete($priceTemplate);
+
+        fetch('/memberships')
+            .then(res => res.ok ? res.json() : [])
+            .then(list => {
+                if (!Array.isArray(list)) return;
+                let first = true;
+                list.forEach(m => {
+                    if (m.membershipCode && m.membershipCode.toUpperCase() === 'NONE') return;
+                    let $wrapper = first ? $priceTemplate : $priceTemplate.cloneNode(true);
+                    const $name = $wrapper.querySelector('input[name="membershipName"]');
+                    const $price = $wrapper.querySelector('input[name="coach"]');
+                    if ($name) $name.value = m.displayText ?? '';
+                    if ($price) $price.value = m.price ?? '';
+                    if (!first && $addMembershipBtn) {
+                        attachDelete($wrapper);
+                        $addMembershipBtn.parentElement.before($wrapper);
+                    }
+                    first = false;
+                });
+            });
+
+        $addMembershipBtn?.addEventListener('click', () => {
+            const $clone = $priceTemplate.cloneNode(true);
+            $clone.querySelectorAll('input').forEach($input => $input.value = '');
+            attachDelete($clone);
+            $addMembershipBtn.parentElement.before($clone);
+        });
+    }
+
     // 저장 버튼 클릭 핸들러
     const $saveButton = document.querySelector('[data-mt-name="gymInfoSave"][data-mt-object="button"]');
     $saveButton.addEventListener('click', (e) => {
@@ -92,6 +154,18 @@ function initGymInfo() {
         formData.append('addressPrimary', $primary.value.trim());
         formData.append('addressSecondary', $secondary.value.trim());
 
+        if ($membershipContainer) {
+            const memberships = [];
+            $membershipContainer.querySelectorAll('.price-wrapper').forEach($el => {
+                const name = $el.querySelector('input[name="membershipName"]')?.value.trim();
+                const price = $el.querySelector('input[name="coach"]')?.value.trim();
+                if (name && price) {
+                    memberships.push({name, price});
+                }
+            });
+            formData.append('memberships', JSON.stringify(memberships));
+        }
+
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== XMLHttpRequest.DONE) {
@@ -110,7 +184,7 @@ function initGymInfo() {
                 dialog.showSimpleOk('체육관 정보', '체육관 정보 등록에 실패하였습니다.\n잠시 후 다시 시도해 주세요.');
             }
         };
-        xhr.open('PATCH', '/user/myPage/gymInfo');
+        xhr.open('PATCH', '/user/myPage/memberships');
         xhr.send(formData);
         $loading.show();
     });

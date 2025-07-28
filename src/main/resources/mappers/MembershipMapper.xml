@@ -8,4 +8,22 @@
                `price`           as `price`
         from `jiujitsu`.`memberships`
     </select>
+
+    <insert id="insert" parameterType="com.yjb.jiujitsumembership.entities.MembershipEntity">
+        insert into `jiujitsu`.`memberships` (`membership_code`, `display_text`, `duration_month`, `price`)
+        values (#{membership.membershipCode}, #{membership.displayText}, #{membership.durationMonth}, #{membership.price})
+    </insert>
+
+    <update id="update" parameterType="com.yjb.jiujitsumembership.entities.MembershipEntity">
+        update `jiujitsu`.`memberships`
+        set `display_text`   = #{membership.displayText},
+            `duration_month` = #{membership.durationMonth},
+            `price`          = #{membership.price}
+        where `membership_code` = #{membership.membershipCode}
+    </update>
+
+    <delete id="deleteByCode" parameterType="string">
+        delete from `jiujitsu`.`memberships`
+        where `membership_code` = #{membershipCode}
+    </delete>
 </mapper>

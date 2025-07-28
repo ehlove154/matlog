@@ -15,4 +15,5 @@ public class MembershipEntity {
     private String displayText;
     private Integer durationMonth;
     private int price;
+    private boolean isDeleted;
 }
