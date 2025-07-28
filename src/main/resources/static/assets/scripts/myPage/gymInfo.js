@@ -98,8 +98,10 @@ function initGymInfo() {
                     if (m.membershipCode && m.membershipCode.toUpperCase() === 'NONE') return;
                     let $wrapper = first ? $priceTemplate : $priceTemplate.cloneNode(true);
                     const $name = $wrapper.querySelector('input[name="membershipName"]');
+                    const $duration = $wrapper.querySelector('input[name="membershipDuration"]');
                     const $price = $wrapper.querySelector('input[name="membershipPrice"]');
                     if ($name) $name.value = m.displayText ?? '';
+                    if ($duration) $duration.value = m.durationDay ?? '';
                     if ($price) $price.value = m.price ?? '';
                     if (!first && $addMembershipBtn) {
                         attachDelete($wrapper);
@@ -152,9 +154,14 @@ function initGymInfo() {
 
             $membershipContainer.querySelectorAll('.price-wrapper').forEach($el => {
                 const displayText = $el.querySelector('input[name="membershipName"]')?.value.trim();
+                const duration = $el.querySelector('input[name="membershipDuration"]')?.value.trim();
                 const price = $el.querySelector('input[name="membershipPrice"]')?.value.trim();
-                if (displayText && price) {
-                    memberships.push({ displayText, price: parseInt(price, 10) });
+                if (displayText && duration && price) {
+                    memberships.push({
+                        displayText,
+                        durationDay: parseInt(duration, 10),
+                        price: parseInt(price, 10)
+                    });
                 }
             });
         }

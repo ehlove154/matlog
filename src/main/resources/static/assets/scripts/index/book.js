@@ -329,7 +329,7 @@ import '../common.js';
                             }
                             const opt = document.createElement('option');
                             opt.value = m.membershipCode;
-                            const text = m.displayText ? `${m.displayText} | ${Number(m.price).toLocaleString()}원` : `${m.durationMonth}개월 | ${Number(m.price).toLocaleString()}원`;
+                            const text = m.displayText ? `${m.displayText} | ${Number(m.price).toLocaleString()}원` : `${m.durationDay}일 | ${Number(m.price).toLocaleString()}원`;
                             opt.textContent = text;
                             membershipPrices[m.membershipCode] = m.price;
                             $select.appendChild(opt);
