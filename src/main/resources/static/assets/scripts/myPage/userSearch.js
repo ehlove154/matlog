@@ -5,7 +5,7 @@
 //  5. 한페이지 당 최대 10명
 //  6. 회원 이름으로 검색
 {
-    if (document.querySelector('[data-mt-name="userSearch"][data-mt-visible]')) {
+    if (document.querySelector('[data-mt-name="userSearch"]')) {
         const $myPageForm = document.getElementById('myPageForm');
 
         window.$labelMap = Array.from($myPageForm.querySelectorAll('[data-mt-object="label"]')).reduce((map, $label) => {
@@ -299,3 +299,5 @@
         }
     }
 }
+
+window.initUserSearch = initUserSearch;

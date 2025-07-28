@@ -247,3 +247,5 @@ import '../common.js';
         }
     }
 }
+
+window.initSessionRegistration = initSessionRegistration;

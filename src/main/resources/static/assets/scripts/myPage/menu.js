@@ -39,6 +39,12 @@ import '../common.js';
                     if (targetName === 'userModify' && window.initUserModify) {
                         window.initUserModify();
                     }
+                    if (targetName === 'userSearch' && window.initUserSearch) {
+                        window.initUserSearch();
+                    }
+                    if (targetName === 'sessionRegistration' && window.initSessionRegistration) {
+                        window.initSessionRegistration();
+                    }
                 }
             });
         });
