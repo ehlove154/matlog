@@ -60,6 +60,13 @@ function initGymInfo() {
     const $addMembershipBtn = $membershipContainer?.querySelector('.button-container button[data-mt-color="simple"]');
     const $priceTemplate = $membershipContainer?.querySelector('.price-wrapper');
 
+    let nextCodeNum = 1;
+    function generateMembershipCode() {
+        const code = 'MS' + String(nextCodeNum).padStart(3, '0');
+        nextCodeNum++;
+        return code;
+    }
+
     function attachDelete($wrapper) {
         const $btn = $wrapper.querySelector('.delete-price');
         if ($btn) {
@@ -93,6 +100,14 @@ function initGymInfo() {
             .then(res => res.ok ? res.json() : [])
             .then(list => {
                 if (!Array.isArray(list)) return;
+                list.forEach(m => {
+                    if (m.membershipCode && m.membershipCode.startsWith('MS')) {
+                        const num = parseInt(m.membershipCode.substring(2), 10);
+                        if (!isNaN(num) && num >= nextCodeNum) {
+                            nextCodeNum = num + 1;
+                        }
+                    }
+                });
                 let first = true;
                 list.forEach(m => {
                     if (m.membershipCode && m.membershipCode.toUpperCase() === 'NONE') return;
@@ -157,9 +172,15 @@ function initGymInfo() {
                 const duration = $el.querySelector('input[name="membershipDuration"]')?.value.trim();
                 const price = $el.querySelector('input[name="membershipPrice"]')?.value.trim();
                 if (displayText && duration && price) {
+                    let mCode = $el.dataset.membershipCode;
+                    if (!mCode) {
+                        mCode = generateMembershipCode();
+                        $el.dataset.membershipCode = mCode;
+                    }
                     memberships.push({
-                        displayText,
-                        durationDay: parseInt(duration, 10),
+                        membershipCode: mCode,
+                        displayText: displayText,
+                        durationDay: 30,      // 예: 기본 30일, 필요하면 다른 값으로 설정
                         price: parseInt(price, 10)
                     });
                 }
