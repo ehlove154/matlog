@@ -72,7 +72,10 @@
         select count(0)
         from `jiujitsu`.`users` as `U`
         where `U`.`is_delete` = 0
-          and `U`.`gym_id` = (select `gym_id` from `jiujitsu`.`users` where `email` = #{email})
+          and (
+                (select `gym_id` from `jiujitsu`.`users` where `email` = #{email}) is null
+                or `U`.`gym_id` = (select `gym_id` from `jiujitsu`.`users` where `email` = #{email})
+            )
     </select>
 
     <select id="selectByEmail" resultType="com.yjb.jiujitsumembership.entities.UserEntity">
@@ -284,8 +287,12 @@
                             FROM `jiujitsu`.`class_reservations`
                             WHERE `is_attended` = 1
                             GROUP BY `user_email`) `AM` ON `U`.`email` = `AM`.`user_email`
-        WHERE `U`.`is_delete` = 0
-          AND `U`.`gym_id` = (SELECT `gym_id` FROM `jiujitsu`.`users` WHERE `email` = #{email})
+        where `U`.`is_delete` = 0
+          and (
+                (select `gym_id` from `jiujitsu`.`users` where `email` = #{email}) is null
+                or `U`.`gym_id` = (select `gym_id` from `jiujitsu`.`users` where `email` = #{email})
+            )
+        order by `U`.`created_at` desc
         LIMIT #{limit} OFFSET #{offset}
         ]]>
     </select>
@@ -341,9 +348,13 @@
             WHERE `is_attended` = 1
             GROUP BY `user_email`
         ) `AM` ON `U`.`email` = `AM`.`user_email`
-        WHERE `U`.`is_delete` = 0
-          AND `U`.`gym_id` = (SELECT `gym_id` FROM `jiujitsu`.`users` WHERE `email` = #{email})
-          AND `U`.`name` LIKE CONCAT('%', #{name}, '%')
+        where `U`.`is_delete` = 0
+          and (
+                (select `gym_id` from `jiujitsu`.`users` where `email` = #{email}) is null
+                or `U`.`gym_id` = (select `gym_id` from `jiujitsu`.`users` where `email` = #{email})
+            )
+          and `U`.`name` like concat('%', #{name}, '%')
+        order by `U`.`created_at` desc
         LIMIT #{limit} OFFSET #{offset}
         ]]>
     </select>
@@ -352,7 +363,10 @@
         select count(0)
         from `jiujitsu`.`users` as `U`
         where `U`.`is_delete` = 0
-          and `U`.`gym_id` = (select `gym_id` from `jiujitsu`.`users` where `email` = #{email})
+          and (
+                (select `gym_id` from `jiujitsu`.`users` where `email` = #{email}) is null
+                or `U`.`gym_id` = (select `gym_id` from `jiujitsu`.`users` where `email` = #{email})
+            )
           and `U`.`name` like concat('%', #{name}, '%')
     </select>
 </mapper>
