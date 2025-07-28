@@ -98,7 +98,7 @@ function initGymInfo() {
                     if (m.membershipCode && m.membershipCode.toUpperCase() === 'NONE') return;
                     let $wrapper = first ? $priceTemplate : $priceTemplate.cloneNode(true);
                     const $name = $wrapper.querySelector('input[name="membershipName"]');
-                    const $price = $wrapper.querySelector('input[name="coach"]');
+                    const $price = $wrapper.querySelector('input[name="membershipPrice"]');
                     if ($name) $name.value = m.displayText ?? '';
                     if ($price) $price.value = m.price ?? '';
                     if (!first && $addMembershipBtn) {
@@ -147,23 +147,29 @@ function initGymInfo() {
         }
 
         // 서버로 보낼 데이터 구성
-        const formData = new FormData();
-        formData.append('gymName', $gymName.value.trim());
-        formData.append('isActive', activeVal);
-        formData.append('addressPostal', $postal.value.trim());
-        formData.append('addressPrimary', $primary.value.trim());
-        formData.append('addressSecondary', $secondary.value.trim());
+        // const formData = new FormData();
+        // formData.append('gymName', $gymName.value.trim());
+        // formData.append('isActive', activeVal);
+        // formData.append('addressPostal', $postal.value.trim());
+        // formData.append('addressPrimary', $primary.value.trim());
+        // formData.append('addressSecondary', $secondary.value.trim());
+
+        const memberships = [];
 
         if ($membershipContainer) {
-            const memberships = [];
+            // const memberships = [];
             $membershipContainer.querySelectorAll('.price-wrapper').forEach($el => {
-                const name = $el.querySelector('input[name="membershipName"]')?.value.trim();
-                const price = $el.querySelector('input[name="coach"]')?.value.trim();
-                if (name && price) {
-                    memberships.push({name, price});
+                // const name = $el.querySelector('input[name="membershipName"]')?.value.trim();
+                // const price = $el.querySelector('input[name="membershipPrice"]')?.value.trim();
+                // if (name && price) {
+                //     memberships.push({name, price});
+                const displayText = $el.querySelector('input[name="membershipName"]')?.value.trim();
+                const price = $el.querySelector('input[name="membershipPrice"]')?.value.trim();
+                if (displayText && price) {
+                    memberships.push({ displayText, price: parseInt(price, 10) });
                 }
             });
-            formData.append('memberships', JSON.stringify(memberships));
+            // formData.append('memberships', JSON.stringify(memberships));
         }
 
         const xhr = new XMLHttpRequest();
@@ -185,7 +191,9 @@ function initGymInfo() {
             }
         };
         xhr.open('PATCH', '/user/myPage/memberships');
-        xhr.send(formData);
+        // xhr.send(formData);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(memberships));
         $loading.show();
     });
 }

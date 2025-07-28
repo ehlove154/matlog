@@ -11,7 +11,7 @@ create table `jiujitsu`.`memberships`
 (
     `membership_code` varchar(5) not null,
     `display_text`    varchar(5) not null,
-    `duration_month`  int,
+    `duration_day`  int(100) not null,
     `price`           int        not null,
     constraint primary key (`membership_code`)
 );
