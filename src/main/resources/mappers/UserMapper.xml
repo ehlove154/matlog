@@ -232,7 +232,7 @@
     <select id="selectByCode" resultType="com.yjb.jiujitsumembership.entities.MembershipEntity">
         select `membership_code` as `membershipCode`,
                `display_text`    as `displayText`,
-               `duration_month`  as `durationMonth`,
+               `duration_day`  as `durationDay`,
                `price`           as `price`
         from `jiujitsu`.`memberships`
         where `membership_code` = #{membershipCode}
