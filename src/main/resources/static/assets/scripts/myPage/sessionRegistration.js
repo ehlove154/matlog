@@ -1,6 +1,6 @@
 import '../common.js';
 
-{
+function initSessionRegistration() {
     const $registration = document.querySelector('[data-mt-name="registration"][data-mt-visible]');
     if ($registration) {
         window.dialog = new Dialog({
