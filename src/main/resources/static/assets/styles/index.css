@@ -2647,7 +2647,7 @@
   #main > #myPageForm > .container > .content-container > [data-mt-name=userSearch] > .userList > .table > thead > tr > th:nth-child(3) {
     display: none;
   }
-  #main > #myPageForm > .container > .content-container > [data-mt-name=userSearch] > .userList > .table > tbody > tr > td:nth-child(3) {
+  #main > #myPageForm > .container > .content-container > [data-mt-name=userSearch] > .userList > .table > tbody > tr > td:nth-child(4) {
     display: none;
   }
   #main > #myPageForm > .container > .content-container > [data-mt-name=userSearch] > .userList > .table > tbody > tr.info > td > .list {

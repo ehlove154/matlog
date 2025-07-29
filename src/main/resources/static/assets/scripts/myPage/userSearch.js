@@ -128,142 +128,156 @@ function initUserSearch() {
         });
     });
 
+    const $modifyButtons = document.querySelectorAll('[data-mt-name="userInfoModify"]');
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const $modifyButtons = document.querySelectorAll('[data-mt-name="userInfoModify"]');
+    $modifyButtons.forEach(($btn) => {
+        $btn.addEventListener('click', (e) => {
+            e.preventDefault();
 
-        $modifyButtons.forEach(($btn) => {
-            $btn.addEventListener('click', (e) => {
-                e.preventDefault();
+            // 버튼이 있는 <tr class="info"> 기준으로
+            // const $infoRow = e.target.closest('tr');
+            // if (!$infoRow) return;
+            //
+            // // 상단의 요약 정보 tr (data-* 속성 보유)
+            // const $buttonRow = $infoRow.previousElementSibling;
+            // if (!$buttonRow) return;
+            //
+            // const email = $buttonRow.dataset.email?.trim();
+            // const index = $buttonRow.dataset.index;
+            // if (!email || index === undefined) {
+            //     dialog.showSimpleOk('회원 정보 수정', '이메일 또는 인덱스 정보가 없습니다.');
+            //     return;
+            // }
 
-                // 버튼이 있는 <tr class="info"> 기준으로
-                const $infoRow = e.target.closest('tr');
-                if (!$infoRow) return;
-
-                // 상단의 요약 정보 tr (data-* 속성 보유)
-                const $buttonRow = $infoRow.previousElementSibling;
-                if (!$buttonRow) return;
-
-                const email = $buttonRow.dataset.email?.trim();
-                const index = $buttonRow.dataset.index;
-                if (!email || index === undefined) {
-                    dialog.showSimpleOk('회원 정보 수정', '이메일 또는 인덱스 정보가 없습니다.');
-                    return;
-                }
-
-                // infoRow 내부의 수정 가능한 필드
-                const $belt = $infoRow.querySelector('[data-mt-name="belt"]');
-                const $stripe = $infoRow.querySelector('[data-mt-name="stripe"]');
-                const $promotion = $infoRow.querySelector('[data-mt-name="promotion"]');
-
-                const belt = $belt?.value?.trim();
-                const stripe = $stripe?.value?.trim();
-                const promotion = $promotion?.value?.trim();
-
-                // 콘솔 디버깅
-                console.log('email:', email);
-                console.log('belt:', belt);
-                console.log('stripe:', stripe);
-                console.log('promotion:', promotion);
-
-                // 유효성 검사
-                if (!belt || stripe === '' || !promotion) {
-                    dialog.showSimpleOk('회원 정보 수정', '모든 필드를 입력해주세요.');
-                    return;
-                }
-
-                // 요청 전송
-                const xhr = new XMLHttpRequest();
-                const formData = new FormData();
-                formData.append('target', email);
-                formData.append('belt', belt);
-                formData.append('stripe', stripe);
-                formData.append('promotion', promotion);
-
-                xhr.onreadystatechange = () => {
-                    if (xhr.readyState !== XMLHttpRequest.DONE) return;
-
-                    if (xhr.status < 200 || xhr.status >= 300) {
-                        dialog.showSimpleOk('회원 정보 수정', '요청 처리 중 오류 발생. 잠시 후 시도해 주세요.');
-                        return;
-                    }
-
-                    const response = JSON.parse(xhr.responseText);
-                    switch (response.result) {
-                        case 'success':
-                            dialog.showSimpleOk('회원 정보 수정', '회원 정보 수정이 완료되었습니다.');
-                            break;
-                        case 'failure':
-                            dialog.showSimpleOk('회원 정보 수정', '회원 정보 수정에 실패하였습니다.');
-                            break;
-                        default:
-                            dialog.showSimpleOk('회원 정보 수정', '알 수 없는 이유로 실패하였습니다.');
-                    }
-                };
-
-                xhr.open('PATCH', '/user/myPage/userSearch/modify');
-                xhr.send(formData);
-            });
-        });
-
-        // 삭제 버튼 이벤트
-        const $userList = document.querySelector('.userList');
-
-        $userList.addEventListener('click', (e) => {
-            const $btn = e.target.closest('[data-mt-name="userInfoDelete"]');
-            if (!$btn) return;
-
-            const $infoRow = $btn.closest('tr.info');
+            const $infoRow = e.target.closest('tr.info');
             if (!$infoRow) return;
 
+            // info 행의 data-index를 이용해 상단 요약 행을 찾음
             const index = $infoRow.dataset.index;
-            const $mainRow = document.querySelector(`.userList tr[data-index="${index}"]:not(.info)`);
+            const $buttonRow = document.querySelector(`.userList tr[data-index="${index}"]:not(.info)`);
+            if (!$buttonRow) {
+                dialog.showSimpleOk('회원 정보 수정', '상단 회원 정보 행을 찾을 수 없습니다.');
+                return;
+            }
 
-            if (!$mainRow) return;
+            const email = $buttonRow.dataset.email?.trim();
+            if (!email) {
+                dialog.showSimpleOk('회원 정보 수정', '이메일 정보가 없습니다.');
+                return;
+            }
 
-            // 확인창
-            dialog.show({
-                title: '회원 정보 삭제',
-                content: '정말로 회원 정보를 삭제하시겠습니까?',
-                buttons: [
-                    {caption: '아니요', onClickCallback: ($modal) => dialog.hide($modal)},
-                    {
-                        caption: '네',
-                        color: 'green',
-                        onClickCallback: ($modal) => {
-                            dialog.hide($modal);
+            // infoRow 내부의 수정 가능한 필드
+            const $belt = $infoRow.querySelector('[data-mt-name="belt"]');
+            const $stripe = $infoRow.querySelector('[data-mt-name="stripe"]');
+            const $promotion = $infoRow.querySelector('[data-mt-name="promotion"]');
 
-                            const $infoRow = e.target.closest('tr');
-                            const $buttonRow = $infoRow.previousElementSibling;
-                            const email = $buttonRow.dataset.email?.trim();
+            const belt = $belt?.value?.trim();
+            const stripe = $stripe?.value?.trim();
+            const promotion = $promotion?.value?.trim();
 
-                            const xhr = new XMLHttpRequest();
-                            const formData = new FormData();
-                            formData.append('target', email); // ✅ 삭제할 유저의 email 필요
+            // 콘솔 디버깅
+            console.log('email:', email);
+            console.log('belt:', belt);
+            console.log('stripe:', stripe);
+            console.log('promotion:', promotion);
 
-                            xhr.onreadystatechange = () => {
-                                if (xhr.readyState !== XMLHttpRequest.DONE) return;
+            // 유효성 검사
+            if (!belt || stripe === '' || !promotion) {
+                dialog.showSimpleOk('회원 정보 수정', '모든 필드를 입력해주세요.');
+                return;
+            }
 
-                                if (xhr.status >= 200 && xhr.status < 300) {
-                                    const response = JSON.parse(xhr.responseText);
-                                    if (response.result === 'success') {
-                                        $infoRow.remove();
-                                        $mainRow.remove();
-                                        dialog.showSimpleOk('회원 정보 삭제', '회원 정보가 삭제되었습니다.');
-                                    } else {
-                                        dialog.showSimpleOk('회원 정보 삭제', '삭제에 실패했습니다.');
-                                    }
+            // 요청 전송
+            const xhr = new XMLHttpRequest();
+            const formData = new FormData();
+            formData.append('target', email);
+            formData.append('belt', belt);
+            formData.append('stripe', stripe);
+            formData.append('promotion', promotion);
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+                if (xhr.status < 200 || xhr.status >= 300) {
+                    dialog.showSimpleOk('회원 정보 수정', '요청 처리 중 오류 발생. 잠시 후 시도해 주세요.');
+                    return;
+                }
+
+                const response = JSON.parse(xhr.responseText);
+                switch (response.result) {
+                    case 'success':
+                        dialog.showSimpleOk('회원 정보 수정', '회원 정보 수정이 완료되었습니다.');
+                        break;
+                    case 'failure':
+                        dialog.showSimpleOk('회원 정보 수정', '회원 정보 수정에 실패하였습니다.');
+                        break;
+                    default:
+                        dialog.showSimpleOk('회원 정보 수정', '알 수 없는 이유로 실패하였습니다.');
+                }
+            };
+
+            xhr.open('PATCH', '/user/myPage/userSearch/modify');
+            xhr.send(formData);
+        });
+    });
+
+    // 삭제 버튼 이벤트
+    const $userList = document.querySelector('.userList');
+
+    $userList.addEventListener('click', (e) => {
+        const $btn = e.target.closest('[data-mt-name="userInfoDelete"]');
+        if (!$btn) return;
+
+        const $infoRow = $btn.closest('tr.info');
+        if (!$infoRow) return;
+
+        const index = $infoRow.dataset.index;
+        const $mainRow = document.querySelector(`.userList tr[data-index="${index}"]:not(.info)`);
+
+        if (!$mainRow) return;
+
+        // 확인창
+        dialog.show({
+            title: '회원 정보 삭제',
+            content: '정말로 회원 정보를 삭제하시겠습니까?',
+            buttons: [
+                {caption: '아니요', onClickCallback: ($modal) => dialog.hide($modal)},
+                {
+                    caption: '네',
+                    color: 'green',
+                    onClickCallback: ($modal) => {
+                        dialog.hide($modal);
+
+                        const $infoRow = e.target.closest('tr');
+                        const $buttonRow = $infoRow.previousElementSibling;
+                        const email = $buttonRow.dataset.email?.trim();
+
+                        const xhr = new XMLHttpRequest();
+                        const formData = new FormData();
+                        formData.append('target', email); // ✅ 삭제할 유저의 email 필요
+
+                        xhr.onreadystatechange = () => {
+                            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                const response = JSON.parse(xhr.responseText);
+                                if (response.result === 'success') {
+                                    $infoRow.remove();
+                                    $mainRow.remove();
+                                    dialog.showSimpleOk('회원 정보 삭제', '회원 정보가 삭제되었습니다.');
                                 } else {
-                                    dialog.showSimpleOk('회원 정보 삭제', '서버 오류로 삭제에 실패했습니다.');
+                                    dialog.showSimpleOk('회원 정보 삭제', '삭제에 실패했습니다.');
                                 }
-                            };
+                            } else {
+                                dialog.showSimpleOk('회원 정보 삭제', '서버 오류로 삭제에 실패했습니다.');
+                            }
+                        };
 
-                            xhr.open('DELETE', '/user/myPage/userSearch/delete');
-                            xhr.send(formData);
-                        }
+                        xhr.open('DELETE', '/user/myPage/userSearch/delete');
+                        xhr.send(formData);
                     }
-                ]
-            });
+                }
+            ]
         });
     });
 

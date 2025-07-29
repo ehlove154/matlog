@@ -20,23 +20,23 @@
             </thead>
             <tbody>
             <th:block th:each="user, iterStat : ${userList}">
-            <tr th:attr="data-index=${iterStat.index},
-            data-email=${user.email},
-            data-name=${user.name},
-            data-contact=${user.formattedContact},
-            data-promotion=${#temporals.format(user.promotionDate, 'yyyy-MM-dd')},
-            data-address=${user.address},
-            data-belt=${user.belt != null ? user.belt.toUpperCase() : '-1'},
-            data-stripe=${user.stripe != null ? user.stripe : '-1'},
-            data-expire=${#temporals.format(user.expireDate, 'yyyy-MM-dd')},
-            data-membershipName=${user.membershipName},
-            data-membership=${user.membership},
-            data-createdAt=${#temporals.format(user.createdAt, 'yyyy-MM-dd')},
-            data-attend-month=${user.monthlyAttendance},
-            data-attend-total=${user.totalAttendance},
-            data-attend-recent=${#temporals.format(user.recentAttendance, 'yyyy-MM-dd')},
-            data-status=${user.status}">
-                <td hidden="hidden" th:value="${user.email}"></td>
+            <tr th:data-index="${iterStat.index}"
+                th:data-email="${user.getEmail()}"
+                th:data-name="${user.name}"
+                th:data-contact="${user.getFormattedContact}"
+                th:data-promotion="${#temporals.format(user.promotionDate, 'yyyy-MM-dd')}"
+                th:data-address="${user.address}"
+                th:data-belt="${user.belt != null ? user.belt.toUpperCase() : '-1'}"
+                th:data-stripe="${user.stripe != null ? user.stripe : '-1'}"
+                th:data-expire="${#temporals.format(user.expireDate, 'yyyy-MM-dd')}"
+                th:data-membershipName="${user.membershipName}"
+                th:data-membership="${user.membership}"
+                th:data-createdAt="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}"
+                th:data-attend-month="${user.monthlyAttendance}"
+                th:data-attend-total="${user.totalAttendance}"
+                th:data-attend-recent="${#temporals.format(user.recentAttendance, 'yyyy-MM-dd')}"
+                th:data-status="${user.status}">
+                <td hidden="hidden" th:text="${user.getEmail()}"></td>
                 <td th:text="${user.name}"></td>
                 <td th:text="${user.getFormattedContact}">010-2918-0807</td>
                 <td th:text="${#temporals.format(user.expireDate, 'yyyy-MM-dd')}">2025-09-09</td>
@@ -46,10 +46,11 @@
                           data-mt-object="button">수강 중</span>
                 </td>
             </tr>
-            <tr class="info" th:attr="data-index=${iterStat.index}, data-email=${user.email}">
+            <tr class="info" th:data-index="${iterStat.index}"
+                th:data-email="${user.getEmail()}">
                 <td colspan="4">
                     <ul class="list">
-                        <input type="hidden" data-mt-name="email" th:value="${user.email}"/>
+                        <input type="hidden" data-mt-name="email" th:value="${user.getEmail()}"/>
                         <li class="item" data-mt-component="row">
                             <span class="caption">회원 이름</span>
                             <span class="description" data-mt-name="name"></span>

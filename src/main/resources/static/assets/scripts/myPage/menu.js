@@ -50,14 +50,15 @@ import '../common.js';
         });
 
         // 페이지 로드 시 URL 파라미터를 확인하여 회원 조회 섹션을 자동으로 표시합니다.
-        document.addEventListener('DOMContentLoaded', () => {
+        function activateUserSearchIfMaster() {
+            // 마스터 권한 여부에 따라 동작합니다.
             // 검색어(name) 또는 페이지(page)가 지정된 경우에만 처리합니다.
             const params = new URLSearchParams(window.location.search);
             // 페이지 파라미터가 1이 아닐 때도 userSearch로 이동시킵니다.
             const hasSearch = params.get('name');
             const hasPage = params.get('page') && params.get('page') !== '1';
-            // 마스터 권한을 가진 경우에만 자동으로 userSearch 탭을 띄웁니다.
-            if (isMaster && (hasSearch || hasPage)) {
+            // 마스터 권한 여부에 따라 동작합니다.
+            if (isMaster) {
                 const targetName = 'userSearch';
                 // 기존 활성화된 메뉴 클래스를 모두 제거하고
                 items.forEach(li => li.classList.remove('active'));
@@ -77,7 +78,11 @@ import '../common.js';
                     window.initUserSearch();
                 }
             }
-        });
+        }
+        document.addEventListener('DOMContentLoaded', activateUserSearchIfMaster);
+        if (document.readyState !== 'loading') {
+            activateUserSearchIfMaster();
+        }
     }
 }
 
