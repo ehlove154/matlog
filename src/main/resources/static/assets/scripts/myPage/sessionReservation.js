@@ -211,8 +211,8 @@ import '../common.js';
         const selectedDate = $dateInput?.value;
         if (selectedDate) {
             filtered = filtered.filter(item => {
-                if (!item.reservedAt) return false;
-                return item.reservedAt.startsWith(selectedDate);
+                if (!item.reservedAt || !item.day) return false;
+                return getSessionDate(item.reservedAt, item.day) === selectedDate;
             });
         }
         // 탭 필터
