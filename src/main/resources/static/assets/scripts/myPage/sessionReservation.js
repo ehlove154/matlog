@@ -60,7 +60,7 @@ import '../common.js';
         if (!item.startTime || !item.endTime || !item.reservedAt) {
             return { name: 'cancel', text: '예약 취소', color: 'red' };
         }
-        const dateStr = item.reservedAt.split('T')[0];
+        const dateStr = getSessionDate(item.reservedAt, item.day);
         const start = new Date(`${dateStr}T${item.startTime}`);
         const end = new Date(`${dateStr}T${item.endTime}`);
         const now = new Date();
