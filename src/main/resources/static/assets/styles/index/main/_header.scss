@@ -26,3 +26,20 @@
     }
   }
 }
+
+#headerMenu {
+  @include flex(column, stretch, flex-start, 1.5rem);
+  display: none;
+  position: absolute;
+  top: 4rem;
+  right: 1rem;
+  font-size: 1rem;
+  background-color: $global-color-background;
+  border: 0.0625rem solid $global-color-primary;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+#menuToggle:checked ~ #headerMenu {
+  display: flex;
+}

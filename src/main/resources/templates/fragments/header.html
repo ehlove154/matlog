@@ -7,5 +7,12 @@
     <label class="menu" for="menuToggle">
         <img alt="menu" class="icon" draggable="false" src="/assets/images/index/header/menu.png">
     </label>
+    <nav id="headerMenu" class="menu-list">
+        <a href="/">메인</a>
+        <a href="/user/myPage">마이페이지</a>
+        <a th:href="${session.signedUser == null ? '/user/login' : '/user_logout'}"
+           th:text="${session.signedUser == null ? '로그인' : '로그아웃'}"></a>
+    </nav>
+    <script defer src="/assets/scripts/header/menu.js" type="module"></script>
 </header>
 </html>

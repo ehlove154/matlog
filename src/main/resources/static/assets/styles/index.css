@@ -51,6 +51,80 @@
   object-position: center;
 }
 
+#headerMenu {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  justify-content: flex-start;
+  display: none;
+  position: absolute;
+  top: 4rem;
+  right: 1rem;
+  font-size: 1rem;
+  background-color: #f7f8fa;
+  border: 0.0625rem solid #1E2A38;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+#headerMenu > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#headerMenu > [data-mt-stretch] {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+#menuToggle:checked ~ #headerMenu {
+  display: flex;
+}
+
+#menuToggle:checked ~ #main > .content {
+  display: none !important;
+}
+#menuToggle:checked ~ #main > .content.menu {
+  display: flex !important;
+}
+
+#main > .content.menu {
+  display: none !important;
+  z-index: 2;
+}
+#main > .content.menu > .list {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  margin-bottom: 0.5rem;
+}
+#main > .content.menu > .list > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#main > .content.menu > .list > [data-mt-stretch] {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+#main > .content.menu > .list > .title {
+  border-bottom: 0.0625rem solid rgb(45.75, 45.75, 45.75);
+  color: hsl(210, 10.8108108108%, -15.4901960784%);
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+#main > .content.menu > .list > .item {
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+#main > .content.menu > .list > .item::before {
+  content: "-";
+  margin-right: 0.425rem;
+}
+
 #main > #timetableForm {
   align-items: stretch;
   display: flex;
