@@ -31,7 +31,7 @@ public class UserSearchController {
 
     @RequestMapping(value = "/userSearch/modify", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String patchUserModify(@SessionAttribute(value = "signedUser")UserEntity signedUser,
+    public String patchUserModify(@SessionAttribute(value = "signedUser", required = false)UserEntity signedUser,
                                   @RequestParam(value = "target")String targetEmail,
                                   @RequestParam(value = "belt")String belt,
                                   @RequestParam(value = "stripe")int stripe,
