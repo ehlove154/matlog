@@ -28,6 +28,21 @@ import '../common.js';
         return formatDateLocal(monday);
     }
 
+    // 모든 페이지의 예약을 순회하며 수집합니다.
+    async function fetchAllReservations() {
+        let page = 1;
+        let reservations = [];
+        while (true) {
+            const res = await fetch(`/user/myPage/reservations?page=${page}`);
+            if (!res.ok) break;
+            const data = await res.json();
+            if (!data || data.result !== 'success') break;
+            reservations = reservations.concat(data.reservations);
+            if (page >= data.maxPage) break;
+            page++;
+        }
+        return reservations;
+    }
 
     /**
      * sessionReservation 섹션이 표시되고 있을 때 해당 섹션의 루트 요소를 반환합니다.
@@ -223,10 +238,16 @@ import '../common.js';
         renderSessions(filtered);
     }
 
-    // 날짜와 탭 변경 시 필터 적용
-    $dateInput?.addEventListener('change', () => applyFilterAndRender());
+    // 날짜와 탭 변경 시 전체 목록을 다시 불러와 필터를 적용합니다.
+    $dateInput?.addEventListener('change', async () => {
+        allReservations = await fetchAllReservations();
+        applyFilterAndRender();
+    });
     $tabInputs.forEach(tab => {
-        tab.addEventListener('change', () => applyFilterAndRender());
+        tab.addEventListener('change', async () => {
+            allReservations = await fetchAllReservations();
+            applyFilterAndRender();
+        });
     });
 
     /**
@@ -235,6 +256,9 @@ import '../common.js';
     function ensureLoaded() {
         if (getWrapper()) {
             load(1);
+            fetchAllReservations().then(res => {
+                allReservations = res;
+            });
         }
     }
 
