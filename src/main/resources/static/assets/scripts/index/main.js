@@ -12,6 +12,12 @@ import '../common.js';
         });
         window.$loading = document.getElementById('loading');
 
+        function formatDateLocal(d) {
+            const pad = (n) => String(n).padStart(2, '0');
+            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        }
+
+
         const $title = $timetableForm.querySelector('.title-container > .title');
         const $dayButtons = Array.from($timetableForm.querySelectorAll('.title-container .day > button'));
         const $timeColumns = Array.from($timetableForm.querySelectorAll('.timetable [data-mt-day]'));
@@ -34,7 +40,7 @@ import '../common.js';
             date.setDate(monday.getDate() + idx);
             const daySpan = btn.querySelector('.day');
             if (daySpan) {
-                daySpan.textContent = date.getDate();
+                btn.dataset.date = formatDateLocal(date);
             }
             btn.dataset.date = date.toISOString().split('T')[0];
         });
@@ -61,7 +67,7 @@ import '../common.js';
                         $clone.dataset.classId = session.classId || '';
                         $clone.dataset.className = session.className || '';
                         $clone.dataset.coach = session.coach || '';
-                        $clone.dataset.date = date.toISOString().split('T')[0];
+                        $clone.dataset.date = formatDateLocal(date);
                         $clone.dataset.dayName = dayNames[dayIndex] || day;
                         if (start === prevStart) {
                             const startTimeEl = $clone.querySelector('.start-time');

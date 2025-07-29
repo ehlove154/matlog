@@ -126,7 +126,8 @@
           box-shadow: 0 0.125rem 0.5rem #eeecee;
           border-radius: 0.5rem;
           gap: 1rem;
-          padding: 0.6rem;
+          padding: 1rem;
+
 
           > .content {
             > .class {
@@ -137,7 +138,7 @@
 
             > .date,
             > .time {
-              font-size: 0.6rem;
+              font-size: 0.7rem;
               color: $global-color-border-lighten-50;
               margin-bottom: 0.2rem;
             }

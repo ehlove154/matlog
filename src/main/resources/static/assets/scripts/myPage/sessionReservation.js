@@ -10,6 +10,25 @@ import '../common.js';
     let currentPage = 1;
     let maxPage = 1;
 
+    function formatDateLocal(d) {
+        const pad = (n) => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    }
+
+    function getSessionDate(reservedAt, day) {
+        if (!reservedAt || !day) return '';
+        const date = new Date(reservedAt);
+        const monday = new Date(date);
+        monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+        const dayCodes = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+        const idx = dayCodes.indexOf(day);
+        if (idx >= 0) {
+            monday.setDate(monday.getDate() + idx);
+        }
+        return formatDateLocal(monday);
+    }
+
+
     /**
      * sessionReservation 섹션이 표시되고 있을 때 해당 섹션의 루트 요소를 반환합니다.
      */
@@ -90,7 +109,7 @@ import '../common.js';
             $session.className = 'session-container';
             $session.setAttribute('data-mt-component', 'column');
 
-            const reservedDate = item.reservedAt ? item.reservedAt.split('T')[0] : '';
+            const reservedDate = getSessionDate(item.reservedAt, item.day);
             const status = getStatus(item);
 
             $session.innerHTML = `

@@ -1,5 +1,10 @@
 import '../common.js';
 
+function formatDateLocal(d) {
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
 // 모든 예약 데이터를 페이지 단위로 수집합니다.
 async function fetchAllReservations() {
     let page = 1;
@@ -51,7 +56,7 @@ function computeAndRenderStats(wrapper, reservations) {
         const monday = new Date(date);
         monday.setDate(monday.getDate() - ((day + 6) % 7));
         monday.setHours(0, 0, 0, 0);
-        const key = monday.toISOString().split('T')[0];
+        const key = formatDateLocal(monday);
         weekCounts[key] = (weekCounts[key] || 0) + 1;
     });
     const weekKeys = Object.keys(weekCounts);

@@ -263,6 +263,3 @@ function initSessionRegistration() {
 window.initSessionRegistration = initSessionRegistration;
 
 document.addEventListener('DOMContentLoaded', initSessionRegistration);
-if (document.readyState !== 'loading') {
-    initSessionRegistration();
-}
