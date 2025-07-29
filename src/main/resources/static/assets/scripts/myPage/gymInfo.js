@@ -2,6 +2,11 @@ import '../common.js';
 import { isValidGymName } from "../common.js";
 
 function initGymInfo() {
+    // 이미 초기화되었다면 중복 실행을 방지합니다.
+    if (window.gymInfoInitialized) {
+        return;
+    }
+
     const $myPageForm = document.getElementById('myPageForm');
     // 다른 섹션에서 설정한 폼 제출 핸들러 초기화
     $myPageForm.onsubmit = null;
@@ -240,6 +245,8 @@ function initGymInfo() {
         gymXhr.send(gymFormData);
         $loading.show();
     });
+    // 초기화가 완료되었음을 표시합니다.
+    window.gymInfoInitialized = true;
 }
 
 // 전역 초기화 함수로 내보내기

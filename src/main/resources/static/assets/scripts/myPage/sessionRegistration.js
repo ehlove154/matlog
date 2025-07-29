@@ -1,6 +1,11 @@
 import '../common.js';
 
 function initSessionRegistration() {
+    // 이미 초기화된 경우 중복 실행을 방지합니다.
+    if (window.sessionRegistrationInitialized) {
+        return;
+    }
+
     const $registration = document.querySelector('.content-container [data-mt-name="registration"]');
     if (!$registration) {
         return;
@@ -250,6 +255,8 @@ function initSessionRegistration() {
                 xhr.send(JSON.stringify(payload));
             });
         }
+        // 모든 설정이 완료되었음을 표시합니다.
+        window.sessionRegistrationInitialized = true;
     }
 }
 
