@@ -78,7 +78,7 @@ public class ReservationService {
         return reservations;
     }
 
-    public ResultTuple<ReservationDto> reserve(int classId, UserEntity signedUser) {
+    public ResultTuple<ReservationDto> reserve(int classId, UserEntity signedUser, LocalDateTime sessionDate) {
         if (signedUser == null) {
             return ResultTuple.<ReservationDto>builder().result(CommonResult.FAILURE_SESSION_EXPIRED).build();
         }
@@ -103,7 +103,7 @@ public class ReservationService {
         ClassReservationEntity entity = ClassReservationEntity.builder()
                 .userEmail(signedUser.getEmail())
                 .classId(classId)
-                .reservedAt(LocalDateTime.now())
+                .reservedAt(sessionDate != null ? sessionDate : LocalDateTime.now())
                 .isAttended(false)
                 .build();
 

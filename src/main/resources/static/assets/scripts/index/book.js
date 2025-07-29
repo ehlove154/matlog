@@ -9,6 +9,7 @@ import '../common.js';
 
         const params = new URLSearchParams(location.search);
         const classId = params.get('classId');
+        const sessionDate = params.get('date');
         const $list = document.querySelector('.list');
         const $bookList = document.querySelector('.bookList');
         const $pageContainer = document.querySelector('.page-container');
@@ -277,7 +278,7 @@ import '../common.js';
                                         fetch('/book/reserve', {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                            body: new URLSearchParams({ classId }).toString()
+                                            body: new URLSearchParams({ classId, date: sessionDate || '' }).toString()
                                         })
                                             .then((res) => (res.ok ? res.json() : Promise.reject()))
                                             .then((reserveData) => {
@@ -360,7 +361,7 @@ import '../common.js';
                 fetch('/book/reserve', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: new URLSearchParams({classId}).toString()
+                    body: new URLSearchParams({classId, date: sessionDate || ''}).toString()
                 }).then(res => res.ok ? res.json() : Promise.reject())
                     .then(data => {
                         if (!data) {

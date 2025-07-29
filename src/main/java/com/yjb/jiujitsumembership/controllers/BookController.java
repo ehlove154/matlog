@@ -16,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Controller
 @RequestMapping(value = "/")
 public class BookController {
@@ -79,9 +82,22 @@ public class BookController {
     @RequestMapping(value = "/book/reserve", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String postReserve(@SessionAttribute(value = "signedUser", required = false) UserEntity signedUser,
-                              @RequestParam(value = "classId", required = false) Integer classId) {
+                              @RequestParam(value = "classId", required = false) Integer classId,
+                              @RequestParam(value = "date", required = false) String date) {
         JSONObject response = new JSONObject();
-        ResultTuple<ReservationDto> result = this.reservationService.reserve(classId == null ? 0 : classId, signedUser);
+        LocalDateTime sessionDate = null;
+        if (date != null && !date.isBlank()) {
+            try {
+                sessionDate = LocalDate.parse(date).atStartOfDay();
+            } catch (Exception ignored) {
+                try {
+                    sessionDate = LocalDateTime.parse(date);
+                } catch (Exception ignored2) {
+                    sessionDate = null;
+                }
+            }
+        }
+        ResultTuple<ReservationDto> result = this.reservationService.reserve(classId == null ? 0 : classId, signedUser, sessionDate);
         if (result.getResult() == CommonResult.FAILURE_MEMBERSHIP_REQUIRED) {
             response.put("result", "membership_required");
             return response.toString();
