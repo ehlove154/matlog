@@ -1,7 +1,7 @@
 import '../common.js';
 
 function initSessionRegistration() {
-    const $registration = document.querySelector('[data-mt-name="registration"]');
+    const $registration = document.querySelector('.content-container [data-mt-name="registration"]');
     if (!$registration) {
         return;
     }

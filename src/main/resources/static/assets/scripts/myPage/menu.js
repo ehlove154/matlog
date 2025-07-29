@@ -42,7 +42,7 @@ import '../common.js';
                     if (targetName === 'userSearch' && window.initUserSearch) {
                         window.initUserSearch();
                     }
-                    if (targetName === 'sessionRegistration' && window.initSessionRegistration) {
+                    if (targetName === 'registration' && window.initSessionRegistration) {
                         window.initSessionRegistration();
                     }
                 }
