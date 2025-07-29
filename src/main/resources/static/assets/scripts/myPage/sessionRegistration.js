@@ -23,6 +23,9 @@ function initSessionRegistration() {
 
     function init() {
         const $wrapper = $registration.querySelector('.common-wrapper');
+        if (!$wrapper) {
+            return;
+        }
         const $addButton = $registration.querySelector('.button-container button[data-mt-color="simple"]');
 
         let $template = $wrapper.querySelector('.session-wrapper');
@@ -252,6 +255,7 @@ function initSessionRegistration() {
 
 window.initSessionRegistration = initSessionRegistration;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', initSessionRegistration);
+if (document.readyState !== 'loading') {
     initSessionRegistration();
-});
+}
