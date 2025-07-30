@@ -1,14 +1,9 @@
 package com.yjb.jiujitsumembership.services;
 
 import com.yjb.jiujitsumembership.dtoes.SmsRequestDto;
-import com.yjb.jiujitsumembership.dtoes.SmsVerificationRequestDto;
 import com.yjb.jiujitsumembership.utils.SmsCertificationUtil;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

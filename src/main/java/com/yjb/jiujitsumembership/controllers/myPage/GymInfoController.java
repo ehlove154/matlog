@@ -41,10 +41,6 @@ public class GymInfoController {
                                                @RequestParam(value = "isActive", required = false) Boolean isActive,
                                                HttpSession session) {
 
-//        ResultTuple<GymEntity> result = this.userService.gymInfo(signedUser, gymName, addressPostal, addressPrimary, addressSecondary, isActive);
-//        JSONObject response = new JSONObject();
-//        response.put("result", result.getResult().name().toLowerCase());
-//        return result;
         ResultTuple result = userService.gymInfo(
                 signedUser, gymName, addressPostal, addressPrimary, addressSecondary, isActive
         );

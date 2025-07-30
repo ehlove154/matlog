@@ -24,31 +24,6 @@ public class MembershipService {
         return this.membershipMapper.selectAll();
     }
 
-//    public Result saveMemberships(UserEntity signedUser, List<MembershipEntity> memberships) {
-//        if (signedUser == null) {
-//            return CommonResult.FAILURE_SESSION_EXPIRED;
-//        }
-//        if (!"MASTER".equalsIgnoreCase(signedUser.getUserRole())) {
-//            return CommonResult.FAILURE;
-//        }
-//        if (memberships == null || memberships.isEmpty()) {
-//            return CommonResult.SUCCESS;
-//        }
-//
-//        for (MembershipEntity membership : memberships) {
-//            if (membership.getMembershipCode() != null && !membership.getMembershipCode().isBlank()) {
-//                if (membership.isDeleted()) {
-//                    membershipMapper.deleteByCode(membership.getMembershipCode());
-//                } else {
-//                    membershipMapper.update(membership);
-//                }
-//            } else {
-//                membershipMapper.insert(membership);
-//            }
-//        }
-//        return CommonResult.SUCCESS;
-//    }
-
     @Transactional
     public Result saveMemberships(UserEntity signedUser, List<MembershipEntity> memberships) {
         if (signedUser == null) return CommonResult.FAILURE_SESSION_EXPIRED;
