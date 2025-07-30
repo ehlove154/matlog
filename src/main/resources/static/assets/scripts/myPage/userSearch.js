@@ -87,14 +87,14 @@ function initUserSearch() {
                 createdat: 'createdAt',
                 expire: 'expire',
                 promotion: 'promotion',
-                'attend-month': 'attend-month',
-                'attend-total': 'attend-total',
-                'attend-recent': 'attend-recent'
+                attendMonth: 'attend-month',
+                attendTotal: 'attend-total',
+                attendRecent: 'attend-recent'
             };
 
-            for (const [key, mtName] of Object.entries(textMap)) {
+            for (const [dataKey, mtName] of Object.entries(textMap)) {
                 const $target = $infoRow.querySelector(`.description[data-mt-name="${mtName}"]`);
-                if ($target) $target.innerText = data[key] ?? '';
+                if ($target) $target.innerText = data[dataKey] ?? '';
             }
 
             // 벨트 디버깅

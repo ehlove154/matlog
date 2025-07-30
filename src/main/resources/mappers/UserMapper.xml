@@ -165,11 +165,11 @@
                             GROUP BY `user_email`) AS `PH` ON `U`.`email` = `PH`.`user_email`
                  LEFT JOIN (SELECT `user_email`,
                                    COUNT(*)           AS `totalCount`,
-                                   MAX(`attended_at`) AS `recentAttendance`,
+                                   MAX(`reserved_at`) AS `recentAttendance`,
                                    SUM(CASE
                                            WHEN `is_attended` = 1
-                                               AND MONTH(`attended_at`) = MONTH(CURDATE())
-                                               AND YEAR(`attended_at`) = YEAR(CURDATE())
+                                               AND MONTH(`reserved_at`) = MONTH(CURDATE())
+                                               AND YEAR(`reserved_at`) = YEAR(CURDATE())
                                                THEN 1
                                            ELSE 0
                                        END)           AS `thisMonthCount`
@@ -216,11 +216,11 @@
                             GROUP BY `user_email`) `PH` ON `U`.`email` = `PH`.`user_email`
                  LEFT JOIN (SELECT `user_email`,
                                    COUNT(*)           AS `totalCount`,
-                                   MAX(`attended_at`) AS `recentAttendance`,
+                                   MAX(`reserved_at`) AS `recentAttendance`,
                                    SUM(CASE
                                            WHEN `is_attended` = 1
-                                               AND MONTH(`attended_at`) = MONTH(CURDATE())
-                                               AND YEAR(`attended_at`) = YEAR(CURDATE())
+                                               AND MONTH(`reserved_at`) = MONTH(CURDATE())
+                                               AND YEAR(`reserved_at`) = YEAR(CURDATE())
                                                THEN 1
                                            ELSE 0
                                        END)           AS `thisMonthCount`
@@ -277,11 +277,11 @@
                             GROUP BY `user_email`) `PH` ON `U`.`email` = `PH`.`user_email`
                  LEFT JOIN (SELECT `user_email`,
                                    COUNT(*)           AS `totalCount`,
-                                   MAX(`attended_at`) AS `recentAttendance`,
+                                   MAX(`reserved_at`) AS `recentAttendance`,
                                    SUM(CASE
                                            WHEN `is_attended` = 1
-                                               AND MONTH(`attended_at`) = MONTH(CURDATE())
-                                               AND YEAR(`attended_at`) = YEAR(CURDATE())
+                                               AND MONTH(`reserved_at`) = MONTH(CURDATE())
+                                               AND YEAR(`reserved_at`) = YEAR(CURDATE())
                                                THEN 1
                                            ELSE 0
                                        END)           AS `thisMonthCount`
@@ -334,11 +334,11 @@
                             GROUP BY `user_email`) `PH` ON `U`.`email` = `PH`.`user_email`
                  LEFT JOIN (SELECT `user_email`,
                                    COUNT(*)           AS `totalCount`,
-                                   MAX(`attended_at`) AS `recentAttendance`,
+                                   MAX(`reserved_at`) AS `recentAttendance`,
                                    SUM(CASE
                                            WHEN `is_attended` = 1
-                                               AND MONTH(`attended_at`) = MONTH(CURDATE())
-                                               AND YEAR(`attended_at`) = YEAR(CURDATE())
+                                               AND MONTH(`reserved_at`) = MONTH(CURDATE())
+                                               AND YEAR(`reserved_at`) = YEAR(CURDATE())
                                                THEN 1
                                            ELSE 0
                                        END)           AS `thisMonthCount`
